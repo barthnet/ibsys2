@@ -3,7 +3,7 @@ package models;
 import javax.persistence.Entity;
 
 @Entity
-public class PurchasedPart {
+public class PurchasedPart extends AbstractPart {
 
 	private double deliveryTime;
 	private double variance;

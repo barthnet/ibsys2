@@ -1,6 +1,8 @@
 package models;
 
-public abstract class AbstractPart {
+import play.db.jpa.Model;
+
+public abstract class AbstractPart extends Model{
 
 	private Long id;
 	private String name;
