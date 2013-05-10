@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 import play.db.jpa.Model;
 
 /**
@@ -44,6 +46,11 @@ public abstract class AbstractPart extends Model {
 	 * Bezeichnung
 	 */
 	private String mName;
+	
+	/**
+	 * Teileverwendung
+	 */
+	private List<Integer> mUtilization;
 
 	/**
 	 * @return the id
@@ -148,6 +155,20 @@ public abstract class AbstractPart extends Model {
 	 */
 	public void setName(String name) {
 		this.mName = name;
+	}
+
+	/**
+	 * @return the utilization
+	 */
+	public List<Integer> getUtilization() {
+		return mUtilization;
+	}
+
+	/**
+	 * @param utilization the utilization to set
+	 */
+	public void setUtilization(List<Integer> utilization) {
+		this.mUtilization = utilization;
 	}
 
 }
