@@ -56,7 +56,7 @@ public abstract class AbstractPart extends Model {
 	 * @return the id
 	 */
 	public Long getId() {
-		return id;
+		return mId;
 	}
 
 	/**
