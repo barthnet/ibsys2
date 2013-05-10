@@ -3,42 +3,47 @@ package models;
 import play.db.jpa.Model;
 
 /**
- * Abstrakte Klasse fuer einen Artikel
- *
+ * A abstract class for all parts.
+ * @extends {@link Model}
  * @author Woda
- *
+ * 
  */
 public abstract class AbstractPart extends Model {
 
 	/**
 	 * Artikelnummer
 	 */
-	private Long id;
+	private Long mId;
 
 	/**
 	 * Lagerbestand
 	 */
-	private int amount;
+	private int mAmount;
 
 	/**
 	 * Lagerwert
 	 */
-	private double stockvalue;
+	private double mStockvalue;
 
 	/**
 	 * Startmenge
 	 */
-	private int startamount;
+	private int mStartamount;
 
 	/**
 	 * Menge/Startmenge
 	 */
-	private double pct;
+	private double mPct;
 
 	/**
 	 * Preis
 	 */
-	private double price;
+	private double mPrice;
+
+	/**
+	 * Bezeichnung
+	 */
+	private String mName;
 
 	/**
 	 * @return the id
@@ -59,7 +64,7 @@ public abstract class AbstractPart extends Model {
 	 * @return the amount
 	 */
 	public int getAmount() {
-		return amount;
+		return mAmount;
 	}
 
 	/**
@@ -67,14 +72,14 @@ public abstract class AbstractPart extends Model {
 	 *            the amount to set
 	 */
 	public void setAmount(int amount) {
-		this.amount = amount;
+		this.mAmount = amount;
 	}
 
 	/**
 	 * @return the stockvalue
 	 */
 	public double getStockvalue() {
-		return stockvalue;
+		return mStockvalue;
 	}
 
 	/**
@@ -82,14 +87,14 @@ public abstract class AbstractPart extends Model {
 	 *            the stockvalue to set
 	 */
 	public void setStockvalue(double stockvalue) {
-		this.stockvalue = stockvalue;
+		this.mStockvalue = stockvalue;
 	}
 
 	/**
 	 * @return the startamount
 	 */
 	public int getStartamount() {
-		return startamount;
+		return mStartamount;
 	}
 
 	/**
@@ -97,14 +102,14 @@ public abstract class AbstractPart extends Model {
 	 *            the startamount to set
 	 */
 	public void setStartamount(int startamount) {
-		this.startamount = startamount;
+		this.mStartamount = startamount;
 	}
 
 	/**
 	 * @return the pct
 	 */
 	public double getPct() {
-		return pct;
+		return mPct;
 	}
 
 	/**
@@ -112,14 +117,14 @@ public abstract class AbstractPart extends Model {
 	 *            the pct to set
 	 */
 	public void setPct(double pct) {
-		this.pct = pct;
+		this.mPct = pct;
 	}
 
 	/**
 	 * @return the price
 	 */
 	public double getPrice() {
-		return price;
+		return mPrice;
 	}
 
 	/**
@@ -127,7 +132,22 @@ public abstract class AbstractPart extends Model {
 	 *            the price to set
 	 */
 	public void setPrice(double price) {
-		this.price = price;
+		this.mPrice = price;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return mName;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.mName = name;
 	}
 
 }
