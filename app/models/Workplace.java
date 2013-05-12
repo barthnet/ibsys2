@@ -3,11 +3,16 @@
  */
 package models;
 
+import javax.persistence.Entity;
+
+import play.db.jpa.Model;
+
 /**
  * @author Woda
- *
+ * 
  */
-public class Workplace {
+@Entity
+public class Workplace extends Model {
 
 	private int Id;
 	private int idletime;
@@ -16,5 +21,5 @@ public class Workplace {
 	private double wageCosts;
 	private double wageIdleTimeCosts;
 	private int timeNeed;
-		
+
 }
