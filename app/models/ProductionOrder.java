@@ -5,13 +5,18 @@ package models;
 
 import java.util.List;
 
+import javax.persistence.Entity;
+
+import play.db.jpa.Model;
+
 /**
  * This class represents the completed production orders
  * 
  * @author Woda
  * 
  */
-public class ProductionOrder {
+@Entity
+public class ProductionOrder extends Model {
 
 	/**
 	 * Fertigungsauftragsnummer

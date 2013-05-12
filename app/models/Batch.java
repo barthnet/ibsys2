@@ -3,6 +3,8 @@
  */
 package models;
 
+import javax.persistence.Entity;
+
 /**
  * This Class represents a part of a production order. A pOrder consists of several batches. One
  * batch produces 10 items
@@ -10,6 +12,7 @@ package models;
  * @author Woda
  * 
  */
+@Entity
 public class Batch {
 
 	/**

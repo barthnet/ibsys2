@@ -1,5 +1,7 @@
 package models;
 
+import javax.persistence.Entity;
+
 /**
  * A class for the incoming orders in the stock.
  * 
@@ -8,6 +10,7 @@ package models;
  * @author Woda
  * 
  */
+@Entity
 public class ArrivedOrder extends AbstractOrder {
 
 	/**
