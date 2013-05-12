@@ -3,7 +3,7 @@ package models;
 import play.db.jpa.Model;
 
 /**
- * A abstract class for the real orders of the purchased parts and not a batch order.
+ * A abstract class for the real orders of purchased parts and not a batch order.
  * 
  * @extends {@link Model}
  * @author Woda
@@ -15,32 +15,26 @@ public abstract class AbstractOrder extends Model {
 	 * Eindeutige ID
 	 */
 	private Long mId;
-	
+
 	/**
 	 * Artikelnummer
 	 */
 	private int mArticle;
-	
+
 	/**
 	 * Menge
 	 */
 	private int mAmount;
-	
+
 	/**
 	 * Bestellperiode
 	 */
 	private int mOrderperiod;
-	
+
 	/**
-	 * Art der Bestellung
-	 * 5: normal
-	 * 4: fast
-	 * 3: JIT
-	 * 2: cheap vendor
-	 * 1: special order
+	 * Art der Bestellung 5: normal 4: fast 3: JIT 2: cheap vendor 1: special order
 	 */
 	private int mMode;
-	
 
 	/**
 	 * @return the id
@@ -110,7 +104,8 @@ public abstract class AbstractOrder extends Model {
 	}
 
 	/**
-	 * @param mMode the mMode to set
+	 * @param mMode
+	 *            the mMode to set
 	 */
 	public void setMode(int mode) {
 		this.mMode = mode;

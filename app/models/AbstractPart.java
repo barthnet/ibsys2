@@ -6,6 +6,7 @@ import play.db.jpa.Model;
 
 /**
  * A abstract class for all parts.
+ * 
  * @extends {@link Model}
  * @author Woda
  * 
@@ -46,7 +47,7 @@ public abstract class AbstractPart extends Model {
 	 * Bezeichnung
 	 */
 	private String mName;
-	
+
 	/**
 	 * Teileverwendung
 	 */
@@ -165,7 +166,8 @@ public abstract class AbstractPart extends Model {
 	}
 
 	/**
-	 * @param utilization the utilization to set
+	 * @param utilization
+	 *            the utilization to set
 	 */
 	public void setUtilization(List<Integer> utilization) {
 		this.mUtilization = utilization;
