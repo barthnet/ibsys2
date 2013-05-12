@@ -4,8 +4,9 @@
 package models;
 
 /**
- * This Class represents a part of a production order. A pOrder consists of several batches.
- * One batch produces 10 items
+ * This Class represents a part of a production order. A pOrder consists of several batches. One
+ * batch produces 10 items
+ * 
  * @author Woda
  * 
  */
