@@ -5,6 +5,8 @@ package models;
 
 import javax.persistence.Entity;
 
+import play.db.jpa.Model;
+
 /**
  * This Class represents a part of a production order. A pOrder consists of several batches. One
  * batch produces 10 items
@@ -13,7 +15,7 @@ import javax.persistence.Entity;
  * 
  */
 @Entity
-public class Batch {
+public class Batch extends Model{
 
 	/**
 	 * ID nur innnerhalb eines Produktionsauftrages eindeutig.
