@@ -22,5 +22,4 @@ public class Workplace extends Model {
 	private double wageIdleTimeCosts;
 	private int timeNeed;
 
-	
 }
