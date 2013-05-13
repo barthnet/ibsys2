@@ -3,9 +3,11 @@
  */
 package models;
 
+
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 import play.db.jpa.Model;
 
@@ -51,6 +53,7 @@ public class ProductionOrder extends Model {
 	/**
 	 * Fertigungslose
 	 */
+	@OneToMany
 	private List<Batch> mBatch;
 
 	/**
