@@ -1,5 +1,7 @@
 package models;
 
+import java.security.InvalidParameterException;
+
 /**
  * 
  * @author mopa
@@ -11,10 +13,12 @@ public class PeriodDate {
 	
 	private int day;
 	
-	private int hour;
+	public PeriodDate(int period, int day) {
+		this.period = period;
+		this.day = day;
+		validate();
+	}
 	
-	private int minute;
-
 	public int getPeriod() {
 		return period;
 	}
@@ -27,26 +31,13 @@ public class PeriodDate {
 		return day;
 	}
 
-	public void setDay(int day) {
+	public void setDay(int day) {		
 		this.day = day;
 	}
-
-	public int getHour() {
-		return hour;
-	}
-
-	public void setHour(int hour) {
-		this.hour = hour;
-	}
-
-	public int getMinute() {
-		return minute;
-	}
-
-	public void setMinute(int minute) {
-		this.minute = minute;
-	}
 	
-	
+	private void validate() {
+		if (day < 0 || day > 5)
+			throw new InvalidParameterException("Must between 0 and 5");
+	}
 
 }

@@ -5,6 +5,7 @@
 # Home page
 GET     /                                       Application.index
 GET		/test									Application.test
+POST	/upload									Application.uploadXML
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
