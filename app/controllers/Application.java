@@ -3,6 +3,7 @@ package controllers;
 import play.*;
 import play.data.Upload;
 import play.mvc.*;
+import utils.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,19 +46,10 @@ public class Application extends Controller {
 		}
 		Parser.parseDoc(doc);
 		renderText("");
-
 	}
 	
-	public static void loginFinal() {
-		StringWriter writer = new StringWriter();
-		try {
-			IOUtils.copy(request.body, writer);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String theString = writer.toString();
-		renderText(theString);
+	public static void loginFinal() {		
+		renderText(StringUtils.stringify(request.body));
 	}
 	
 	public static void login() {
