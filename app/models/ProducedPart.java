@@ -8,7 +8,7 @@ import javax.persistence.Entity;
  * A class for the self produced parts.
  * 
  * @extends {@link AbstractPart}
- * @author DaNieKL
+ * @author Woda
  * 
  */
 @Entity
