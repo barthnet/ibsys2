@@ -5,6 +5,7 @@
 # Home page
 GET     /                                       Application.index
 GET		/test									Application.test
+POST	/login									Application.login
 POST	/upload									Application.uploadXML
 
 # Ignore favicon requests
