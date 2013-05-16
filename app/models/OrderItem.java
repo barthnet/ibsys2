@@ -11,11 +11,11 @@ import play.db.jpa.Model;
 @Entity
 public class OrderItem extends Model {
 
-	Long id;
-	Item item;
-	int mode;
-	int deliverydays;
-	double deviance;
+	private Long id;
+	private Item item;
+	private int mode;
+	private int deliverydays;
+	private double deviance;
 
 	public Long getId() {
 		return id;

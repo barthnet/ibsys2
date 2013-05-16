@@ -11,10 +11,10 @@ import play.db.jpa.Model;
 @Entity
 public class Workstation extends Model {
 
-	Long id;
-	String name;
-	double machinecosts;
-	double idletimecosts;
+	private Long id;
+	private String name;
+	private double machinecosts;
+	private double idletimecosts;
 
 	public Long getId() {
 		return id;
