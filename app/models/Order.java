@@ -17,7 +17,7 @@ import org.hibernate.annotations.Cascade;
 import play.db.jpa.GenericModel;
 
 @Entity
-@Table(name="orders")
+@Table(name = "orders")
 public class Order extends GenericModel {
 
 	@Id

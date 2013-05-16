@@ -3,8 +3,11 @@
  */
 package models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import play.db.jpa.GenericModel;
@@ -19,8 +22,9 @@ public class Inwardstockmovement extends GenericModel {
 	@Id
 	private Long id;
 	private int period;
-	
-	@OneToOne
+
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "id")
 	private Order order;
 	private int time;
 	private double materialcosts;

@@ -34,7 +34,7 @@ public class Workstation extends GenericModel {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getName_en() {
 		return name_en;
 	}

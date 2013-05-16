@@ -3,8 +3,11 @@
  */
 package models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import play.db.jpa.GenericModel;
@@ -18,8 +21,9 @@ public class Warehousestock extends GenericModel {
 
 	@Id
 	private Long id;
-	
-	@OneToOne
+
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "id")
 	private Item item;
 	private int amount;
 	private int startamount;

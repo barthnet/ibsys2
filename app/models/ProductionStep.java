@@ -3,8 +3,11 @@
  */
 package models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import play.db.jpa.GenericModel;
@@ -19,16 +22,20 @@ public class ProductionStep extends GenericModel {
 	@Id
 	private Long id;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "id")
 	private Item item;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "id")
 	private Workstation workstation;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "id")
 	private ProductionStep prev_productionstep;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "id")
 	private ProductionStep next_productionstep;
 
 	private int production_time;
