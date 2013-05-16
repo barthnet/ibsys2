@@ -11,6 +11,6 @@ public class Bootstrap extends Job {
 	public void doJob() {
 
 		Fixtures.loadModels("initial-items.yml");
-		// Fixtures.loadModels("initial-workplaces.yml");
+		Fixtures.loadModels("initial-workstations.yml");
 	}
 }
