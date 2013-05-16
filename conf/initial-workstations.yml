@@ -1,0 +1,83 @@
+workstation(1):
+	id:	1
+	name: Vorderrad-Montage
+	machinecosts: 0.05
+	idletimecosts: 0.01
+	
+workstation(2):
+	id: 2
+	name: Hinterrad-Montage
+	machinecosts: 0.05
+	idletimecosts: 0.01
+	
+workstation(3):
+	id:	3
+	name: Montage
+	machinecosts: 0.05
+	idletimecosts: 0.01
+
+workstation(4):
+	id:	4
+	name: End-Montage
+	machinecosts: 0.05
+	idletimecosts: 0.01
+	
+workstation(6):
+	id:	6
+	name: Rohr-Biege-Maschine
+	machinecosts: 0.3
+	idletimecosts: 0.1
+	
+workstation(7):
+	id:	7
+	name: Schweiss-Platz
+	machinecosts: 0.3
+	idletimecosts: 0.1
+	
+workstation(8):
+	id:	8
+	name: Stanze
+	machinecosts: 0.3
+	idletimecosts: 0.1
+	
+workstation(9):
+	id:	9
+	name: Lackierplatz
+	machinecosts: 0.8
+	idletimecosts: 0.25
+	
+workstation(10):
+	id:	10
+	name: Rad-Montage
+	machinecosts: 0.3
+	idletimecosts: 0.1
+	
+workstation(11):
+	id:	11
+	name: Naben-Montage
+	machinecosts: 0.3
+	idletimecosts: 0.1
+	
+workstation(12):
+	id:	12
+	name: Blech-Biegemaschine
+	machinecosts: 0.3
+	idletimecosts: 0.1
+	
+workstation(13):
+	id:	13
+	name: Blechschere
+	machinecosts: 0.5
+	idletimecosts: 0.15
+	
+workstation(14):
+	id:	14
+	name: Lenkermontage
+	machinecosts: 0.05
+	idletimecosts: 0.01
+	
+workstation(15):
+	id:	15
+	name: Montage
+	machinecosts: 0.05
+	idletimecosts: 0.01
