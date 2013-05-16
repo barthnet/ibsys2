@@ -3,7 +3,7 @@ Item(1):
 	type: P
 	name: Kinderfahrrad
 	name_en: Children’s bicycle
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(2):	
@@ -11,7 +11,7 @@ Item(2):
 	type: P 
 	name: Damenfahrrad 
 	name_en: Ladies bicycle 
-	price:  
+	itemcosts:  
 	ordercosts: 
 
 Item(3):	
@@ -19,7 +19,7 @@ Item(3):
 	type: P 
 	name: Herrenfahrrad 
 	name_en: Men’s bicycle 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(4):	
@@ -27,7 +27,7 @@ Item(4):
 	type: E 
 	name: Hinterradgruppe 
 	name_en: Rear wheel group 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(5):	
@@ -35,7 +35,7 @@ Item(5):
 	type: E 
 	name: Hinterradgruppe 
 	name_en: Rear wheel group 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(6):	
@@ -43,7 +43,7 @@ Item(6):
 	type: E 
 	name: Hinterradgruppe 
 	name_en: Rear wheel group 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(7):	
@@ -51,7 +51,7 @@ Item(7):
 	type: E 
 	name: Vorderradgruppe 
 	name_en: Front wheel group 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(8):	
@@ -59,7 +59,7 @@ Item(8):
 	type: E 
 	name: Vorderradgruppe 
 	name_en: Front wheel group 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(9):		
@@ -67,7 +67,7 @@ Item(9):
 	type: E 
 	name: Vorderradgruppe 
 	name_en: Front wheel group 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(10):		
@@ -75,7 +75,7 @@ Item(10):
 	type: E 
 	name: Schutzblech h. 
 	name_en: Mudguard rear 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(11):	
@@ -83,7 +83,7 @@ Item(11):
 	type: E 
 	name: Schutzblech h. 
 	name_en: Mudguard rear 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(12):	
@@ -91,7 +91,7 @@ Item(12):
 	type: E 
 	name: Schutzblech h. 
 	name_en: Mudguard rear 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(13):	
@@ -99,7 +99,7 @@ Item(13):
 	type: E 
 	name: Schutzblech v. 
 	name_en: Mudguard front 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(14):	
@@ -107,7 +107,7 @@ Item(14):
 	type: E 
 	name: Schutzblech v. 
 	name_en: Mudguard front 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(15):	
@@ -115,7 +115,7 @@ Item(15):
 	type: E 
 	name: Schutzblech v. 
 	name_en: Mudguard front 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(16):	
@@ -123,7 +123,7 @@ Item(16):
 	type: E 
 	name: Lenker kpl. 
 	name_en: Handle complete 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(17):	
@@ -131,7 +131,7 @@ Item(17):
 	type: E 
 	name: Sattel kpl. 
 	name_en: Saddle complete 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(18):	
@@ -139,7 +139,7 @@ Item(18):
 	type: E 
 	name: Rahmen 
 	name_en: Frame 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(19):	
@@ -147,7 +147,7 @@ Item(19):
 	type: E 
 	name: Rahmen 
 	name_en: Frame 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(20):	
@@ -155,7 +155,7 @@ Item(20):
 	type: E 
 	name: Rahmen 
 	name_en: Frame 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(21):	
@@ -163,7 +163,7 @@ Item(21):
 	type: K 
 	name: Kette 
 	name_en: Chain 
-	price: 5 
+	itemcosts: 5 
 	ordercosts: 50
 
 Item(22):	
@@ -171,7 +171,7 @@ Item(22):
 	type: K 
 	name: Kette 
 	name_en: Chain 
-	price: 6.5
+	itemcosts: 6.5
 	ordercosts: 50 
 	
 Item(23):	
@@ -179,7 +179,7 @@ Item(23):
 	type: K 
 	name: Kette 
 	name_en: Chain 
-	price: 6.5
+	itemcosts: 6.5
 	ordercosts: 50 
 	
 Item(24):	
@@ -187,7 +187,7 @@ Item(24):
 	type: K 
 	name: Mutter 3/8“ 
 	name_en: Nut 3/8“ 
-	price: 0.06 
+	itemcosts: 0.06 
 	ordercosts: 100 
 	
 Item(25):	
@@ -195,7 +195,7 @@ Item(25):
 	type: K 
 	name: Scheibe 3/8“ 
 	name_en: Washer 3/8“ 
-	price: 0.06
+	itemcosts: 0.06
 	ordercosts: 50 
 	
 Item(26):	
@@ -203,7 +203,7 @@ Item(26):
 	type: E 
 	name: Pedal kpl. 
 	name_en: Pedal complete 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(27):	
@@ -211,7 +211,7 @@ Item(27):
 	type: K 
 	name: Schraube 3/8“ 
 	name_en: Screw 3/8“ 
-	price: 0.1
+	itemcosts: 0.1
 	ordercosts: 75 
 	
 Item(28):	
@@ -219,7 +219,7 @@ Item(28):
 	type: K 
 	name: Rohr 3/4“ 
 	name_en: Tube 3/4“ 
-	price: 1.2
+	itemcosts: 1.2
 	ordercosts: 50 
 	
 Item(29):	
@@ -227,7 +227,7 @@ Item(29):
 	type: E 
 	name: Vorderrad mont. 
 	name_en: Front wheel compl. 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(30):	
@@ -235,7 +235,7 @@ Item(30):
 	type: E 
 	name: Rahmen u. Räder 
 	name_en: Frame and wheels 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(31):	
@@ -243,7 +243,7 @@ Item(31):
 	type: E 
 	name: Fahrrad o. Ped. 
 	name_en: Bicycle w/o. pedals 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(32):	
@@ -251,7 +251,7 @@ Item(32):
 	type: K 
 	name: Farbe 
 	name_en: Paint 
-	price: 0.75
+	itemcosts: 0.75
 	ordercosts: 50 
 	
 Item(33):	
@@ -259,7 +259,7 @@ Item(33):
 	type: K 
 	name: Felge kpl. 
 	name_en: Rim compl. 
-	price: 22
+	itemcosts: 22
 	ordercosts: 75 
 	
 Item(34):	
@@ -267,7 +267,7 @@ Item(34):
 	type: K 
 	name: Speiche 
 	name_en: Spoke 
-	price: 0.1
+	itemcosts: 0.1
 	ordercosts: 50 
 	
 Item(35):	
@@ -275,7 +275,7 @@ Item(35):
 	type: K 
 	name: Konus 
 	name_en: Taper sleeve 
-	price: 1
+	itemcosts: 1
 	ordercosts: 75 
 	
 Item(36):	
@@ -283,7 +283,7 @@ Item(36):
 	type: K 
 	name: Freilauf 
 	name_en: Free wheel 
-	price: 8
+	itemcosts: 8
 	ordercosts: 100 
 	
 Item(37):	
@@ -291,7 +291,7 @@ Item(37):
 	type: K 
 	name: Gabel 
 	name_en: Fork 
-	price: 1.5
+	itemcosts: 1.5
 	ordercosts: 50 
 	
 Item(38):	
@@ -299,7 +299,7 @@ Item(38):
 	type: K 
 	name: Welle 
 	name_en: Axle 
-	price: 1.5
+	itemcosts: 1.5
 	ordercosts: 50 
 	
 Item(39):	
@@ -307,7 +307,7 @@ Item(39):
 	type: K 
 	name: Blech 
 	name_en: Sheet 
-	price: 1.5
+	itemcosts: 1.5
 	ordercosts: 75 
 	
 Item(40):	
@@ -315,7 +315,7 @@ Item(40):
 	type: K 
 	name: Lenker 
 	name_en: Handle bar 
-	price: 2.5
+	itemcosts: 2.5
 	ordercosts: 50 
 	
 Item(41):	
@@ -323,7 +323,7 @@ Item(41):
 	type: K 
 	name: Mutter 3/4“ 
 	name_en: Nut 3/4“ 
-	price: 0.06
+	itemcosts: 0.06
 	ordercosts: 50 
 	
 Item(42):	
@@ -331,7 +331,7 @@ Item(42):
 	type: K 
 	name: Griff 
 	name_en: Handle grip
-	price: 0.1
+	itemcosts: 0.1
 	ordercosts: 50 
 	
 Item(43):	
@@ -339,7 +339,7 @@ Item(43):
 	type: K 
 	name: Sattel 
 	name_en: Saddle
-	price: 5
+	itemcosts: 5
 	ordercosts: 75 
 	
 Item(44):	
@@ -347,7 +347,7 @@ Item(44):
 	type: K 
 	name: Stange 1/2“ 
 	name_en: Bar 1/2“ 
-	price: 0.5
+	itemcosts: 0.5
 	ordercosts: 50 
 
 Item(45):
@@ -355,7 +355,7 @@ Item(45):
 	type: K 
 	name: Mutter 1/4“ 
 	name_en: Nut 1/4“ 
-	price: 0.06
+	itemcosts: 0.06
 	ordercosts: 50 
 
 Item(46):
@@ -363,7 +363,7 @@ Item(46):
 	type: K 
 	name: Schraube 1/4“
 	name_en: Screw 1/4“
-	price: 0.1
+	itemcosts: 0.1
 	ordercosts: 50 
 	
 Item(47):	
@@ -371,7 +371,7 @@ Item(47):
 	type: K 
 	name: Zahnkranz 
 	name_en: Sprocket 
-	price: 3.5
+	itemcosts: 3.5
 	ordercosts: 50 
 
 Item(48):
@@ -379,7 +379,7 @@ Item(48):
 	type: K 
 	name: Pedal 
 	name_en: Pedal 
-	price: 1.5
+	itemcosts: 1.5
 	ordercosts: 75 
 	
 Item(49):	
@@ -387,7 +387,7 @@ Item(49):
 	type: E
 	name: Vorderrad kpl. 
 	name_en: Front wheel compl 
-	price: 
+	itemcosts: 
 	ordercosts:  
 
 Item(50):
@@ -395,7 +395,7 @@ Item(50):
 	type: E
 	name: Rahmen u. Räder
 	name_en: Frame and wheels 
-	price:
+	itemcosts:
 	ordercosts:  
 
 Item(51):
@@ -403,7 +403,7 @@ Item(51):
 	type: E 
 	name: Fahrrad o. Pedal
 	name_en: Bicycle w/o. pedals 
-	price: 
+	itemcosts: 
 	ordercosts:  
 
 Item(52):
@@ -411,7 +411,7 @@ Item(52):
 	type: K 
 	name: Felge kpl. 
 	name_en: Rim compl. 
-	price: 22
+	itemcosts: 22
 	ordercosts: 50 
 	
 Item(53):	
@@ -419,7 +419,7 @@ Item(53):
 	type: K 
 	name: Speiche 
 	name_en: Spoke 
-	price: 0.1
+	itemcosts: 0.1
 	ordercosts: 50 
 	
 Item(54):	
@@ -427,7 +427,7 @@ Item(54):
 	type: E
 	name: Vorderrad kpl. 
 	name_en: Front wheel compl 
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(55):	
@@ -435,7 +435,7 @@ Item(55):
 	type: E 
 	name: Rahmen u. Räder
 	name_en: Frame and wheels
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(56):	
@@ -443,7 +443,7 @@ Item(56):
 	type: E 
 	name: Fahrrad o. Pedal
 	name_en: Bicycle w/o. pedals
-	price:  
+	itemcosts:  
 	ordercosts:  
 	
 Item(57):	
@@ -451,7 +451,7 @@ Item(57):
 	type: K
 	name: Felge kpl.
 	name_en: Rim compl. 
-	price: 22
+	itemcosts: 22
 	ordercosts: 50 
 	
 Item(58):	
@@ -459,7 +459,7 @@ Item(58):
 	type: K 
 	name: Speiche 
 	name_en: Spoke 
-	price: 0.1
+	itemcosts: 0.1
 	ordercosts: 50 
 	
 Item(59):	
@@ -467,6 +467,6 @@ Item(59):
 	type: K 
 	name: Schweißdraht 
 	name_en: Welding wires 
-	price: 0.15
+	itemcosts: 0.15
 	ordercosts: 50
   	

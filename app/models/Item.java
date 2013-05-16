@@ -13,6 +13,7 @@ public class Item extends Model {
 
 	Long id;
 	String name;
+	String name_en;
 	String type;
 	double itemcosts;
 	double ordercosts;
@@ -31,6 +32,14 @@ public class Item extends Model {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getName_en() {
+		return name_en;
+	}
+
+	public void setName_en(String name_en) {
+		this.name_en = name_en;
 	}
 
 	public String getType() {
