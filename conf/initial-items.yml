@@ -4,7 +4,8 @@ Item(1):
     name: Kinderfahrrad
     name_en: Children’s bicycle
     itemcosts:  
-    ordercosts: 
+    ordercosts:
+    discountamount: 
 
 Item(2):    
     id: 2
@@ -13,7 +14,8 @@ Item(2):
     name_en: Ladies bicycle 
     itemcosts:  
     ordercosts: 
-
+    discountamount: 
+    
 Item(3):    
     id: 3 
     type: P 
@@ -21,7 +23,8 @@ Item(3):
     name_en: Men’s bicycle 
     itemcosts:  
     ordercosts:  
-    
+    discountamount: 
+        
 Item(4):    
     id: 4 
     type: E 
@@ -29,7 +32,8 @@ Item(4):
     name_en: Rear wheel group 
     itemcosts:  
     ordercosts:  
-    
+    discountamount: 
+        
 Item(5):    
     id: 5 
     type: E 
@@ -37,7 +41,8 @@ Item(5):
     name_en: Rear wheel group 
     itemcosts:  
     ordercosts:  
-    
+    discountamount: 
+        
 Item(6):    
     id: 6 
     type: E 
@@ -45,6 +50,7 @@ Item(6):
     name_en: Rear wheel group 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(7):    
     id: 7 
@@ -53,6 +59,7 @@ Item(7):
     name_en: Front wheel group 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(8):    
     id: 8 
@@ -61,6 +68,7 @@ Item(8):
     name_en: Front wheel group 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(9):        
     id: 9 
@@ -69,6 +77,7 @@ Item(9):
     name_en: Front wheel group 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(10):        
     id: 10 
@@ -77,6 +86,7 @@ Item(10):
     name_en: Mudguard rear 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(11):    
     id: 11 
@@ -85,6 +95,7 @@ Item(11):
     name_en: Mudguard rear 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(12):    
     id: 12 
@@ -93,6 +104,7 @@ Item(12):
     name_en: Mudguard rear 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(13):    
     id: 13 
@@ -101,6 +113,7 @@ Item(13):
     name_en: Mudguard front 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(14):    
     id: 14 
@@ -109,6 +122,7 @@ Item(14):
     name_en: Mudguard front 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(15):    
     id: 15 
@@ -117,6 +131,7 @@ Item(15):
     name_en: Mudguard front 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(16):    
     id: 16 
@@ -125,6 +140,7 @@ Item(16):
     name_en: Handle complete 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(17):    
     id: 17 
@@ -133,6 +149,7 @@ Item(17):
     name_en: Saddle complete 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(18):    
     id: 18 
@@ -141,6 +158,7 @@ Item(18):
     name_en: Frame 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(19):    
     id: 19 
@@ -149,6 +167,7 @@ Item(19):
     name_en: Frame 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(20):    
     id: 20 
@@ -157,6 +176,7 @@ Item(20):
     name_en: Frame 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(21):    
     id: 21 
@@ -165,7 +185,8 @@ Item(21):
     name_en: Chain 
     itemcosts: 5 
     ordercosts: 50
-
+    discountamount: 300
+    
 Item(22):    
     id: 22 
     type: K 
@@ -173,6 +194,7 @@ Item(22):
     name_en: Chain 
     itemcosts: 6.5
     ordercosts: 50 
+    discountamount: 300
     
 Item(23):    
     id: 23 
@@ -181,6 +203,7 @@ Item(23):
     name_en: Chain 
     itemcosts: 6.5
     ordercosts: 50 
+    discountamount: 300
     
 Item(24):    
     id: 24 
@@ -189,6 +212,7 @@ Item(24):
     name_en: Nut 3/8“ 
     itemcosts: 0.06 
     ordercosts: 100 
+    discountamount: 6100
     
 Item(25):    
     id: 25 
@@ -197,6 +221,7 @@ Item(25):
     name_en: Washer 3/8“ 
     itemcosts: 0.06
     ordercosts: 50 
+    discountamount: 3600
     
 Item(26):    
     id: 26 
@@ -205,6 +230,7 @@ Item(26):
     name_en: Pedal complete 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(27):    
     id: 27 
@@ -213,6 +239,7 @@ Item(27):
     name_en: Screw 3/8“ 
     itemcosts: 0.1
     ordercosts: 75 
+    discountamount: 1800
     
 Item(28):    
     id: 28 
@@ -221,6 +248,7 @@ Item(28):
     name_en: Tube 3/4“ 
     itemcosts: 1.2
     ordercosts: 50 
+    discountamount: 4500
     
 Item(29):    
     id: 29 
@@ -229,6 +257,7 @@ Item(29):
     name_en: Front wheel compl. 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(30):    
     id: 30 
@@ -237,6 +266,7 @@ Item(30):
     name_en: Frame and wheels 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(31):    
     id: 31 
@@ -245,6 +275,7 @@ Item(31):
     name_en: Bicycle w/o. pedals 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(32):    
     id: 32 
@@ -253,6 +284,7 @@ Item(32):
     name_en: Paint 
     itemcosts: 0.75
     ordercosts: 50 
+    discountamount: 2700
     
 Item(33):    
     id: 33 
@@ -261,6 +293,7 @@ Item(33):
     name_en: Rim compl. 
     itemcosts: 22
     ordercosts: 75 
+    discountamount: 900
     
 Item(34):    
     id: 34 
@@ -269,6 +302,7 @@ Item(34):
     name_en: Spoke 
     itemcosts: 0.1
     ordercosts: 50 
+    discountamount: 22000
     
 Item(35):    
     id: 35 
@@ -277,6 +311,7 @@ Item(35):
     name_en: Taper sleeve 
     itemcosts: 1
     ordercosts: 75 
+    discountamount: 3600
     
 Item(36):    
     id: 36 
@@ -285,6 +320,7 @@ Item(36):
     name_en: Free wheel 
     itemcosts: 8
     ordercosts: 100 
+    discountamount: 900
     
 Item(37):    
     id: 37 
@@ -293,6 +329,7 @@ Item(37):
     name_en: Fork 
     itemcosts: 1.5
     ordercosts: 50 
+    discountamount: 900
     
 Item(38):    
     id: 38 
@@ -301,6 +338,7 @@ Item(38):
     name_en: Axle 
     itemcosts: 1.5
     ordercosts: 50 
+    discountamount: 300
     
 Item(39):    
     id: 39 
@@ -309,6 +347,7 @@ Item(39):
     name_en: Sheet 
     itemcosts: 1.5
     ordercosts: 75 
+    discountamount: 1800
     
 Item(40):    
     id: 40 
@@ -317,6 +356,7 @@ Item(40):
     name_en: Handle bar 
     itemcosts: 2.5
     ordercosts: 50 
+    discountamount: 900
     
 Item(41):    
     id: 41 
@@ -325,6 +365,7 @@ Item(41):
     name_en: Nut 3/4“ 
     itemcosts: 0.06
     ordercosts: 50 
+    discountamount: 900
     
 Item(42):    
     id: 42 
@@ -333,6 +374,7 @@ Item(42):
     name_en: Handle grip
     itemcosts: 0.1
     ordercosts: 50 
+    discountamount: 1800
     
 Item(43):    
     id: 43
@@ -341,6 +383,7 @@ Item(43):
     name_en: Saddle
     itemcosts: 5
     ordercosts: 75 
+    discountamount: 2700
     
 Item(44):    
     id: 44
@@ -349,7 +392,8 @@ Item(44):
     name_en: Bar 1/2“ 
     itemcosts: 0.5
     ordercosts: 50 
-
+    discountamount: 900
+    
 Item(45):
     id: 45 
     type: K 
@@ -357,7 +401,8 @@ Item(45):
     name_en: Nut 1/4“ 
     itemcosts: 0.06
     ordercosts: 50 
-
+    discountamount: 900
+    
 Item(46):
     id: 46 
     type: K 
@@ -365,6 +410,7 @@ Item(46):
     name_en: Screw 1/4“
     itemcosts: 0.1
     ordercosts: 50 
+    discountamount: 900
     
 Item(47):    
     id: 47
@@ -373,7 +419,8 @@ Item(47):
     name_en: Sprocket 
     itemcosts: 3.5
     ordercosts: 50 
-
+    discountamount: 900
+    
 Item(48):
     id: 48
     type: K 
@@ -381,6 +428,7 @@ Item(48):
     name_en: Pedal 
     itemcosts: 1.5
     ordercosts: 75 
+    discountamount: 1800
     
 Item(49):    
     id: 49 
@@ -389,7 +437,8 @@ Item(49):
     name_en: Front wheel compl 
     itemcosts: 
     ordercosts:  
-
+    discountamount: 
+    
 Item(50):
     id: 50
     type: E
@@ -397,7 +446,8 @@ Item(50):
     name_en: Frame and wheels 
     itemcosts:
     ordercosts:  
-
+    discountamount: 
+    
 Item(51):
     id: 51
     type: E 
@@ -405,7 +455,8 @@ Item(51):
     name_en: Bicycle w/o. pedals 
     itemcosts: 
     ordercosts:  
-
+    discountamount: 
+    
 Item(52):
     id: 52 
     type: K 
@@ -413,6 +464,7 @@ Item(52):
     name_en: Rim compl. 
     itemcosts: 22
     ordercosts: 50 
+    discountamount: 600
     
 Item(53):    
     id: 53
@@ -421,6 +473,7 @@ Item(53):
     name_en: Spoke 
     itemcosts: 0.1
     ordercosts: 50 
+    discountamount: 22000
     
 Item(54):    
     id: 54 
@@ -429,6 +482,7 @@ Item(54):
     name_en: Front wheel compl 
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(55):    
     id: 55 
@@ -437,6 +491,7 @@ Item(55):
     name_en: Frame and wheels
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(56):    
     id: 56 
@@ -445,6 +500,7 @@ Item(56):
     name_en: Bicycle w/o. pedals
     itemcosts:  
     ordercosts:  
+    discountamount: 
     
 Item(57):    
     id: 57 
@@ -453,6 +509,7 @@ Item(57):
     name_en: Rim compl. 
     itemcosts: 22
     ordercosts: 50 
+    discountamount: 600
     
 Item(58):    
     id: 58 
@@ -461,6 +518,7 @@ Item(58):
     name_en: Spoke 
     itemcosts: 0.1
     ordercosts: 50 
+    discountamount: 22000
     
 Item(59):    
     id: 59 
@@ -469,4 +527,4 @@ Item(59):
     name_en: Welding wires 
     itemcosts: 0.15
     ordercosts: 50
-      
+    discountamount: 1800
