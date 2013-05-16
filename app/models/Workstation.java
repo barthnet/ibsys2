@@ -15,6 +15,7 @@ public class Workstation extends GenericModel {
 	@Id
 	private Long id;
 	private String name;
+	private String name_en;
 	private double machinecosts;
 	private double idletimecosts;
 
@@ -32,6 +33,14 @@ public class Workstation extends GenericModel {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getName_en() {
+		return name_en;
+	}
+
+	public void setName_en(String name_en) {
+		this.name_en = name_en;
 	}
 
 	public double getMachinecosts() {
