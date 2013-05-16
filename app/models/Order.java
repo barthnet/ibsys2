@@ -4,35 +4,49 @@
 
 package models;
 
-import models.Item;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
 
 import play.db.jpa.GenericModel;
 
 @Entity
+@Table(name="orders")
 public class Order extends GenericModel {
 
 	@Id
 	private Long id;
+
 	private int period;
 	private int order_id;
-	private int mode;
+	private String mode;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "id")
 	private Item item;
+	private int amount;
 
-	public Item getItem() {
-		return item;
-	}
-
-	public void setItem(Item item) {
+	public Order(Long id, Item item) {
+		super();
+		this.id = id;
 		this.item = item;
 	}
 
-	private int amount;
+	public Order() {
+		super();
+	}
+
+	public Order(Long id, String mowl) {
+		super();
+		this.id = id;
+		this.mode = mowl;
+	}
 
 	public Long getId() {
 		return id;
@@ -58,11 +72,11 @@ public class Order extends GenericModel {
 		this.order_id = order_id;
 	}
 
-	public int getMode() {
+	public String getMode() {
 		return mode;
 	}
 
-	public void setMode(int mode) {
+	public void setMode(String mode) {
 		this.mode = mode;
 	}
 
@@ -72,6 +86,14 @@ public class Order extends GenericModel {
 
 	public void setAmount(int amount) {
 		this.amount = amount;
+	}
+
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
 	}
 
 }
