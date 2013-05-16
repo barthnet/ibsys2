@@ -30,7 +30,11 @@ public class Application extends Controller {
 	}
 
 	public static void test() {
-		renderText("test2");
+		
+		Item test = Item.findById(21);
+		String name = test.getName();
+
+		renderText(name);
 	}
 
 	/**
