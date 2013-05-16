@@ -2,9 +2,9 @@ package models;
 
 import javax.persistence.Id;
 
-import play.db.jpa.Model;
+import play.db.jpa.GenericModel;
 
-public class ProductionStepItem extends Model {
+public class ProductionStepItem extends GenericModel {
 
 	@Id
 	private Long id;

@@ -7,10 +7,10 @@ package models;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import play.db.jpa.Model;
+import play.db.jpa.GenericModel;
 
 @Entity
-public class Workstation extends Model {
+public class Workstation extends GenericModel {
 
 	@Id
 	private Long id;

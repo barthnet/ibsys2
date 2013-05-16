@@ -7,10 +7,11 @@ package models;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import play.db.jpa.GenericModel;
 import play.db.jpa.Model;
 
 @Entity
-public class Item extends Model {
+public class Item extends GenericModel {
 
 	@Id
 	private Long id;

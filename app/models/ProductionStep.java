@@ -5,13 +5,13 @@ package models;
 
 import javax.persistence.Id;
 
-import play.db.jpa.Model;
+import play.db.jpa.GenericModel;
 
 /**
  * @author Woda
  * 
  */
-public class ProductionStep extends Model {
+public class ProductionStep extends GenericModel {
 
 	@Id
 	private Long id;
