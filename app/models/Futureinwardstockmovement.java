@@ -20,14 +20,14 @@ public class Futureinwardstockmovement extends GenericModel {
 	private Long id;
 
 	@OneToOne
-	private Order order;
+	private Order orders;
 
 	public Order getOrder() {
-		return order;
+		return orders;
 	}
 
 	public void setOrder(Order order) {
-		this.order = order;
+		this.orders = order;
 	}
 
 	private Long article_id;
