@@ -2,6 +2,8 @@
  * @author Boris 
  */
 
+import models.Item;
+import models.Workstation;
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
 import play.test.Fixtures;
@@ -10,7 +12,12 @@ import play.test.Fixtures;
 public class Bootstrap extends Job {
 	public void doJob() {
 
-		Fixtures.loadModels("initial-items.yml");
-		Fixtures.loadModels("initial-workstations.yml");
+		if (Item.count() == 0) {
+			Fixtures.loadModels("initial-items.yml");
+		}
+
+		if (Workstation.count() == 0) {
+			Fixtures.loadModels("initial-workstations.yml");
+		}
 	}
 }
