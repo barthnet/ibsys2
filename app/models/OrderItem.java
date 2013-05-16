@@ -6,6 +6,7 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.db.jpa.GenericModel;
 
@@ -14,6 +15,8 @@ public class OrderItem extends GenericModel {
 
 	@Id
 	private Long id;
+
+	@OneToOne
 	private Item item;
 	private int mode;
 	private int deliverydays;

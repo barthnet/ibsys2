@@ -5,19 +5,31 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.db.jpa.GenericModel;
 
 /**
  * @author Woda
- *
+ * 
  */
 @Entity
 public class Futureinwardstockmovement extends GenericModel {
 
 	@Id
 	private Long id;
-	private Long order_id;
+
+	@OneToOne
+	private Order order;
+
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+
 	private Long article_id;
 	private String mode;
 	private String orderperiod;
@@ -28,14 +40,6 @@ public class Futureinwardstockmovement extends GenericModel {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getOrder_id() {
-		return order_id;
-	}
-
-	public void setOrder_id(Long order_id) {
-		this.order_id = order_id;
 	}
 
 	public Long getArticle_id() {

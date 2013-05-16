@@ -1,14 +1,33 @@
 package models;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.db.jpa.GenericModel;
 
+/**
+ * 
+ * @author Wod
+ * 
+ */
+@Entity
 public class ProductionStepItem extends GenericModel {
 
 	@Id
 	private Long id;
-	private Long productionstep_id;
+
+	@OneToOne
+	private ProductionStep productionstep;
+
+	public ProductionStep getProductionstep() {
+		return productionstep;
+	}
+
+	public void setProductionstep(ProductionStep productionstep) {
+		this.productionstep = productionstep;
+	}
+
 	private Long item_id;
 	private int amount;
 
@@ -18,14 +37,6 @@ public class ProductionStepItem extends GenericModel {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getProductionstep_id() {
-		return productionstep_id;
-	}
-
-	public void setProductionstep_id(Long productionstep_id) {
-		this.productionstep_id = productionstep_id;
 	}
 
 	public Long getItem_id() {

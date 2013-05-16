@@ -3,7 +3,9 @@
  */
 package models;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.db.jpa.GenericModel;
 
@@ -11,16 +13,34 @@ import play.db.jpa.GenericModel;
  * @author Woda
  * 
  */
+@Entity
 public class ProductionStep extends GenericModel {
 
 	@Id
 	private Long id;
-	private Long item_id;
-	private Long workstation_id;
-	private Long prev_fertigungsschritt_id;
-	private Long next_fertigungsschritt_id;
+
+	@OneToOne
+	private Item item;
+
+	@OneToOne
+	private Workstation workstation;
+
+	@OneToOne
+	private ProductionStep prev_productionstep;
+
+	@OneToOne
+	private ProductionStep next_productionstep;
+
 	private int production_time;
 	private int setup_time;
+
+	public Workstation getWorkstation() {
+		return workstation;
+	}
+
+	public void setWorkstation(Workstation workstation) {
+		this.workstation = workstation;
+	}
 
 	public Long getId() {
 		return id;
@@ -30,36 +50,12 @@ public class ProductionStep extends GenericModel {
 		this.id = id;
 	}
 
-	public Long getItem_id() {
-		return item_id;
+	public Item getItem() {
+		return item;
 	}
 
-	public void setItem_id(Long item_id) {
-		this.item_id = item_id;
-	}
-
-	public Long getWorkstation_id() {
-		return workstation_id;
-	}
-
-	public void setWorkstation_id(Long workstation_id) {
-		this.workstation_id = workstation_id;
-	}
-
-	public Long getPrev_fertigungsschritt_id() {
-		return prev_fertigungsschritt_id;
-	}
-
-	public void setPrev_fertigungsschritt_id(Long prev_fertigungsschritt_id) {
-		this.prev_fertigungsschritt_id = prev_fertigungsschritt_id;
-	}
-
-	public Long getNext_fertigungsschritt_id() {
-		return next_fertigungsschritt_id;
-	}
-
-	public void setNext_fertigungsschritt_id(Long next_fertigungsschritt_id) {
-		this.next_fertigungsschritt_id = next_fertigungsschritt_id;
+	public void setItem(Item item) {
+		this.item = item;
 	}
 
 	public int getProduction_time() {
@@ -76,6 +72,22 @@ public class ProductionStep extends GenericModel {
 
 	public void setSetup_time(int setup_time) {
 		this.setup_time = setup_time;
+	}
+
+	public ProductionStep getPrev_productionstep() {
+		return prev_productionstep;
+	}
+
+	public void setPrev_productionstep(ProductionStep prev_productionstep) {
+		this.prev_productionstep = prev_productionstep;
+	}
+
+	public ProductionStep getNext_productionstep() {
+		return next_productionstep;
+	}
+
+	public void setNext_productionstep(ProductionStep next_productionstep) {
+		this.next_productionstep = next_productionstep;
 	}
 
 }

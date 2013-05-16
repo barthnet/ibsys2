@@ -5,6 +5,7 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.db.jpa.GenericModel;
 
@@ -17,7 +18,9 @@ public class Warehousestock extends GenericModel {
 
 	@Id
 	private Long id;
-	private Long item_id;
+	
+	@OneToOne
+	private Item item;
 	private int amount;
 	private int startamount;
 	private double pct;
@@ -32,12 +35,12 @@ public class Warehousestock extends GenericModel {
 		this.id = id;
 	}
 
-	public Long getItem_id() {
-		return item_id;
+	public Item getItem() {
+		return item;
 	}
 
-	public void setItem_id(Long item_id) {
-		this.item_id = item_id;
+	public void setItem(Item item) {
+		this.item = item;
 	}
 
 	public int getAmount() {

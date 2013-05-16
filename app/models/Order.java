@@ -8,18 +8,30 @@ import models.Item;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.db.jpa.GenericModel;
 
 @Entity
-public class Orders extends GenericModel {
+public class Order extends GenericModel {
 
 	@Id
 	private Long id;
 	private int period;
 	private int order_id;
 	private int mode;
-	// item hinzufügen
+
+	@OneToOne
+	private Item item;
+
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
 	private int amount;
 
 	public Long getId() {

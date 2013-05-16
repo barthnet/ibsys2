@@ -5,6 +5,7 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.db.jpa.GenericModel;
 
@@ -18,7 +19,9 @@ public class Inwardstockmovement extends GenericModel {
 	@Id
 	private Long id;
 	private int period;
-	private Long orders_id;
+	
+	@OneToOne
+	private Order order;
 	private int time;
 	private double materialcosts;
 	private double entirecosts;
@@ -40,12 +43,12 @@ public class Inwardstockmovement extends GenericModel {
 		this.period = period;
 	}
 
-	public Long getOrders_id() {
-		return orders_id;
+	public Order getOrder() {
+		return order;
 	}
 
-	public void setOrders_id(Long orders_id) {
-		this.orders_id = orders_id;
+	public void setOrders_id(Order order) {
+		this.order = order;
 	}
 
 	public int getTime() {
