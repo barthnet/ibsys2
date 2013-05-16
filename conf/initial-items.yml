@@ -1,11 +1,11 @@
-Item(l):
+Item(1):
     id: 1
     type: P
     name: Kinderfahrrad
     name_en: Children’s bicycle
     itemcosts:  
-    ordercosts:  
-    
+    ordercosts: 
+
 Item(2):    
     id: 2
     type: P 
