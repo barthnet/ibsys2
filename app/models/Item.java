@@ -1,3 +1,7 @@
+/**
+ * @author Boris
+ */
+
 package models;
 
 import javax.persistence.Entity;
