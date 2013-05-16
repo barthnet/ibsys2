@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import play.db.jpa.GenericModel;
-import play.db.jpa.Model;
 
 @Entity
 public class Item extends GenericModel {
@@ -20,6 +19,14 @@ public class Item extends GenericModel {
 	private String name_en;
 	private double itemcosts;
 	private double ordercosts;
+
+	public Item(Long id, String type, String name) {
+		super();
+
+		this.id = id;
+		this.type = type;
+		this.name = name;
+	}
 
 	public Long getId() {
 		return id;
