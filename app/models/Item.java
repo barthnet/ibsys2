@@ -5,16 +5,18 @@
 package models;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 import play.db.jpa.Model;
 
 @Entity
 public class Item extends Model {
 
+	@Id
 	private Long id;
+	private String type;
 	private String name;
 	private String name_en;
-	private String type;
 	private double itemcosts;
 	private double ordercosts;
 

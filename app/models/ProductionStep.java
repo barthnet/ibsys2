@@ -3,6 +3,8 @@
  */
 package models;
 
+import javax.persistence.Id;
+
 import play.db.jpa.Model;
 
 /**
@@ -11,6 +13,7 @@ import play.db.jpa.Model;
  */
 public class ProductionStep extends Model {
 
+	@Id
 	private Long id;
 	private Long item_id;
 	private Long workstation_id;

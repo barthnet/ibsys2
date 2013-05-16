@@ -1,9 +1,12 @@
 package models;
 
+import javax.persistence.Id;
+
 import play.db.jpa.Model;
 
 public class ProductionStepItem extends Model {
 
+	@Id
 	private Long id;
 	private Long productionstep_id;
 	private Long item_id;

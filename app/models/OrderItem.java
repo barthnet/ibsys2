@@ -5,12 +5,14 @@
 package models;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 import play.db.jpa.Model;
 
 @Entity
 public class OrderItem extends Model {
 
+	@Id
 	private Long id;
 	private Item item;
 	private int mode;
