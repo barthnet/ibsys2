@@ -5,7 +5,8 @@
 # Home page
 GET     /                                       Application.index
 GET		/test									Application.test
-POST	/login									Application.login
+GET		/login									Application.login(username:String, password:String)
+GET		/load									Application.loadXmlFromSite(username:String, password:String)
 POST	/upload									Application.uploadXML
 
 # Ignore favicon requests
