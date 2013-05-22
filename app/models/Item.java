@@ -19,6 +19,10 @@ public class Item extends GenericModel {
 	private String name_en;
 	private double itemcosts;
 	private double ordercosts;
+	
+	public Item() {
+		
+	}
 
 	public Item(Long id, String type, String name) {
 		super();

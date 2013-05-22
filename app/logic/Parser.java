@@ -1,12 +1,16 @@
 package logic;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import models.Item;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -20,10 +24,14 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 public class Parser {
 
 	public static Document parseFromXml(File file) throws ParserConfigurationException, SAXException, IOException {
-
+		InputStream in = new FileInputStream(file);
+		in.close();		
+		return parseFromXml(in);
+	}
+	
+	public static Document parseFromXml(InputStream in) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		Document doc = dBuilder.parse(file);
-//		printXmlDocument(doc);
+		Document doc = dBuilder.parse(in);
 		return doc;
 	}
 
@@ -32,6 +40,8 @@ public class Parser {
 		for (int i = 0; i < nList.getLength(); i++) {
 			Node node = nList.item(i);
 			Logger.log("node:" + node.getNodeName());
+			Item test = new Item();
+			
 		}
 	}
 
