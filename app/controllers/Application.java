@@ -49,7 +49,7 @@ public class Application extends Controller {
 		// ", password: " + password);
 		// renderText(Crawler.checkLogin(username, password));
 		Crawler cr = new Crawler(username, password);
-		cr.checkLogin();
+		renderText(cr.checkLogin());
 	}
 
 	public static void loadXmlFromSite(String username, String password) {
