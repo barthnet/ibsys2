@@ -44,18 +44,23 @@ public class Application extends Controller {
 	 * @param username
 	 * @param password
 	 */
-	public static void login(String username, String password) {
+	public static void login(String username, String password, String callback) {
 		// renderText("GET /login with params: username: " + username +
 		// ", password: " + password);
 		// renderText(Crawler.checkLogin(username, password));
+		Logger.info("login callback: %S", callback);
 		Crawler cr = new Crawler(username, password);
-		renderText(cr.checkLogin());
+//		renderText(cr.checkLogin());
+//		renderJSON(cr.checkLogin());
+		renderJSON(callback+"("+cr.checkLogin()+")");
 	}
 
 	public static void loadXmlFromSite(String username, String password) {
 		// Crawler.loadXML(username, password);
 		Crawler cr = new Crawler(username, password);
 		InputStream fileStream = cr.importFileFromWeb();
+		
+		
 		String file = StringUtils.toString(fileStream);
 		Logger.info("file:\n%s", file);
 		renderText(file);
