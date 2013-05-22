@@ -4,8 +4,16 @@
 
 package models;
 
+
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import play.db.jpa.GenericModel;
 
@@ -18,6 +26,10 @@ public class Workstation extends GenericModel {
 	private String name_en;
 	private double machinecosts;
 	private double idletimecosts;
+	private int timeneed;
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	private List<Waitinglist> waitinglist;
 
 	public Long getId() {
 		return id;
@@ -57,6 +69,26 @@ public class Workstation extends GenericModel {
 
 	public void setIdletimecosts(double idletimecosts) {
 		this.idletimecosts = idletimecosts;
+	}
+
+	public int getTimeneed() {
+		return timeneed;
+	}
+
+	public void setTimeneed(int timeneed) {
+		this.timeneed = timeneed;
+	}
+
+	public List<Waitinglist> getWaitinglist() {
+		return waitinglist;
+	}
+
+	public void setWaitinglist(List<Waitinglist> waitinglist) {
+		this.waitinglist = waitinglist;
+	}
+	
+	public void addWaitinglist(Waitinglist waitinglist){
+		this.waitinglist.add(waitinglist);
 	}
 
 }
