@@ -2,7 +2,8 @@ package controllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -14,16 +15,32 @@ import org.xml.sax.SAXException;
 
 import play.Logger;
 import play.mvc.Controller;
-import utils.StringUtils;
+import play.templates.Template;
+import play.templates.TemplateLoader;
 
 public class Application extends Controller {
 
 	public static void index() {
 		render();
 	}
+	
+	public static void site() {
+		render("test.html");
+	}
+	
+	/**
+	 * Testmethod to develop xml parser with local xml file
+	 * doesnt load everytime the xml from the scsim website
+	 */
+	public static void parseXML() {
+		Template template = TemplateLoader.load("229_9_7result.xml");
+		String xmlFile = template.render();
+		renderText(xmlFile);
+	}
 
 	/**
-	 * receives XML File
+	 * upload latest result xml file manualy
+	 * @param file
 	 */
 	public static void uploadXML(File file) {
 		Document doc = null;
@@ -38,9 +55,7 @@ public class Application extends Controller {
 	}
 
 	/**
-	 * http url looks like
-	 * http://localhost:9000/login?username=test&password=testetst
-	 * 
+	 * http url looks like http://localhost:9000/login?username=p005&password=snake 
 	 * @param username
 	 * @param password
 	 */
@@ -50,18 +65,22 @@ public class Application extends Controller {
 		// renderText(Crawler.checkLogin(username, password));
 		Logger.info("login callback: %S", callback);
 		Crawler cr = new Crawler(username, password);
-//		renderText(cr.checkLogin());
-//		renderJSON(cr.checkLogin());
-		renderJSON(callback+"("+cr.checkLogin()+")");
+		// renderText(cr.checkLogin());
+		// renderJSON(cr.checkLogin());
+		// String test = "true) {console.log(\"schadcode\");} if (re";
+		renderJSON(callback + "(" + cr.checkLogin() + ")");
+		// renderJSON(callback+"("+test+")");
+
 	}
 
+	/**	
+	 * crawling scsim.de to download the latest result xml file
+	 * @param username
+	 * @param password
+	 */
 	public static void loadXmlFromSite(String username, String password) {
-		// Crawler.loadXML(username, password);
 		Crawler cr = new Crawler(username, password);
-		InputStream fileStream = cr.importFileFromWeb();
-		
-		
-		String file = StringUtils.toString(fileStream);
+		String file = cr.importFileFromWeb();
 		Logger.info("file:\n%s", file);
 		renderText(file);
 	}

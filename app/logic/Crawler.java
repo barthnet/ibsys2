@@ -23,6 +23,12 @@ import play.Logger;
 import utils.Constants;
 import utils.StringUtils;
 
+/**
+ * Page crawler - test for correct login - load the latest xml file from website
+ * 
+ * @author mopa
+ * 
+ */
 public class Crawler {
 
 	private String username;
@@ -36,8 +42,13 @@ public class Crawler {
 		this.password = password;
 		this.sessionId = getSessionId();
 	}
-	
-	public InputStream importFileFromWeb() {
+
+	/**
+	 * load the latest xml file
+	 * 
+	 * @return
+	 */
+	public String importFileFromWeb() {
 		if (checkLogin()) {
 			HttpPost httppost = new HttpPost(Constants.simulate);
 			httppost.addHeader("Cookie", this.sessionId);
@@ -53,87 +64,93 @@ public class Crawler {
 			reqEntity.addPart("source", res);
 			reqEntity.addPart("period", per);
 			httppost.setEntity(reqEntity);
-			HttpResponse response = doRequest(httppost);
-			String responseStr = StringUtils.toString(toStream(response));
+			HttpResponse response = doRequest(httppost, true);
+			String responseStr = StringUtils.toString(response);
 			if (responseStr.contains("<title>Simulation result</title>")) {
 				Logger.info("simulate erfolgreich", 0);
 				HttpGet httpget = new HttpGet(Constants.xmlFile);
 				httpget.setHeader("Cookie", sessionId);
-				HttpResponse fileResp = doFileRequest(httpget);
-				return toStream(fileResp);
-			}			
+				HttpResponse fileResp = doRequest(httpget, false);
+				return StringUtils.toString(fileResp);
+			}
 		}
 		return null;
 	}
 
+	/**
+	 * check for correct login data
+	 * 
+	 * @return
+	 */
 	public boolean checkLogin() {
 		HttpPost httppost = new HttpPost(buildLoginUrl());
 		httppost.addHeader("Cookie", this.sessionId);
 		httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
-		String response = StringUtils.toString(toStream(doRequest(httppost)));		
+		String response = StringUtils.toString(doRequest(httppost, true));
 		Pattern pattern = Pattern.compile("<option selected value=\\\"([0-9]{1,2})\\\">[0-9]{1,2}</option>");
 		Matcher matcher = pattern.matcher(response);
-		if (matcher.find())	{
+		if (matcher.find()) {
 			this.period = matcher.group(1);
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * at first get sessionId
+	 * 
+	 * @return
+	 */
 	private String getSessionId() {
 		HttpGet httpget = new HttpGet(Constants.startPage);
-		HttpResponse response = doRequest(httpget);
+		HttpResponse response = doRequest(httpget, true);
 		String sessionId = response.getFirstHeader("Set-Cookie").getValue();
 		return sessionId.substring(0, sessionId.indexOf(";"));
 	}
-	
-	private HttpResponse doFileRequest(HttpGet get) {
-		HttpResponse response = null;
-		client = new DefaultHttpClient();
-		try {
-			response = client.execute(get);
-		} catch (IOException e) {
-			return null;
-		}
-		return response;
-	}
 
-	private HttpResponse doRequest(HttpRequestBase request) {
+	/**
+	 * do http request with redirection
+	 * 
+	 * @param request
+	 * @return
+	 */
+	private HttpResponse doRequest(HttpRequestBase request, boolean redirect) {
 		HttpResponse response = null;
 		client = new DefaultHttpClient();
 		try {
 			response = client.execute(request);
 		} catch (IOException e) {
 			return null;
-		} finally {
+		}
+		if (redirect) {
 			client.getConnectionManager().shutdown();
 			if (response.getStatusLine().getStatusCode() == 302) {
 				HttpGet httpget = new HttpGet(response.getFirstHeader("Location").getValue());
 				httpget.setHeader("Cookie", this.sessionId);
-				response = doRequest(httpget);
+				response = doRequest(httpget, true);
 			}
 		}
 		return response;
 	}
-	
+
+	/**
+	 * build the login url with username and password
+	 * 
+	 * @return
+	 */
+	private String buildLoginUrl() {
+		return Constants.authUrl + this.username + "&j_password=" + this.password + "&btnSubmit=Login";
+	}
+
+	/**
+	 * only for testing
+	 * 
+	 * @param headers
+	 */
 	@SuppressWarnings("all")
-	private void printHeaders(Header[] headers){
+	private void printHeaders(Header[] headers) {
 		for (Header h : headers) {
 			Logger.info("%s : %s", h.getName(), h.getValue());
 		}
-	}
-
-	private InputStream toStream(HttpResponse response) {
-		InputStream stream = null;
-		try {
-			stream = response.getEntity().getContent();
-		} catch (IllegalStateException | IOException e) {
-			e.printStackTrace();
-		}
-		return stream;
-	}
-
-	private String buildLoginUrl() {
-		return Constants.authUrl + this.username + "&j_password=" + this.password + "&btnSubmit=Login";
 	}
 }
