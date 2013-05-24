@@ -1,65 +1,103 @@
 package logic;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import models.Item;
+import models.OpenOrder;
+//import models.Order;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.jamonapi.utils.Logger;
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+import play.Logger;
 
 public class Parser {
 
-	public static Document parseFromXml(File file) throws ParserConfigurationException, SAXException, IOException {
-		InputStream in = new FileInputStream(file);
-		in.close();		
-		return parseFromXml(in);
+	private Document document = null;
+
+	public Parser(InputStream in) {
+		try {
+			DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			document = dBuilder.parse(in);
+			document.normalize();
+			Logger.info("test: %s", document.getElementsByTagName("order").getLength());
+		} catch (ParserConfigurationException e) {
+			Logger.error("Couldnt get DocumentBuilder", e);
+		} catch (SAXException | IOException e) {
+			Logger.error("Couldnt parse InputStream to Document", e);
+		}
+	}
+
+	public void parseDoc() {
+		parseArticles();
+		parseOpenOrders();
+	}
+
+	private void parseArticles() {
+		NodeList articles = document.getElementsByTagName("article");
+		for (int i = 0, length = articles.getLength(); i < length; i++) {
+			Node node = articles.item(i);
+			NamedNodeMap att = node.getAttributes();
+			Item item = Item.find("byItemId",getInteger(att, "id")).first();
+			if (item == null) {
+				item = new Item();
+				item.itemId = getInteger(att, "id");
+			}
+			item.amount = getInteger(att, "amount");
+			item.price = getDouble(att, "price");
+			item = item.merge();
+			item.save();
+		}
 	}
 	
-	public static Document parseFromXml(InputStream in) throws ParserConfigurationException, SAXException, IOException {
-		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		Document doc = dBuilder.parse(in);
-		return doc;
-	}
-
-	public static void parseDoc(Document doc) {
-		NodeList nList = doc.getElementsByTagName("results");
-		for (int i = 0; i < nList.getLength(); i++) {
-			Node node = nList.item(i);
-			Logger.log("node:" + node.getNodeName());
-			Item test = new Item();
-			
+	private void parseOpenOrders() {
+		NodeList openOrders = document.getElementsByTagName("futureinwardstockmovement");
+		NodeList orders = openOrders.item(0).getChildNodes();
+		for (int i = 0, length = orders.getLength(); i < length; i++) {
+			Node node = orders.item(i);
+			NamedNodeMap att = node.getAttributes();
+			OpenOrder order = new OpenOrder();
+			order.orderperiod = getInteger(att, "orderperiod");
+			order.mode = getInteger(att, "mode");
+			order.amount = getInteger(att, "amount");
+			order.item = Item.find("byItemId", getInteger(att, "article")).first();
+			order.save();
 		}
 	}
 
-	public static void printXmlDocument(Document doc) {
-		Logger.log(stringifyXml(doc));
-	}
-
-	public static String stringifyXml(Document doc) {
-		OutputFormat format = new OutputFormat(doc);
-		format.setIndenting(true);
-		XMLSerializer serializer = new XMLSerializer(System.out, format);
+	private Double getDouble(NamedNodeMap node, String attribute) {
 		try {
-			serializer.serialize(doc);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			NumberFormat format = NumberFormat.getInstance(Locale.GERMAN);
+			return format.parse(node.getNamedItem(attribute).getNodeValue()).doubleValue();
+		} catch (DOMException | ParseException e) {
+			Logger.error("cant convert %s to double", node.getNamedItem(attribute).getNodeValue());
+			return null;
 		}
-		return serializer.toString();
+	}
+
+	private int getInteger(NamedNodeMap node, String attribute) {
+		return Integer.parseInt(node.getNamedItem(attribute).getNodeValue());
+	}
+
+	private Long getLong(NamedNodeMap node, String attribute) {
+		return Long.parseLong(node.getNamedItem(attribute).getNodeValue());
+	}
+
+	private String getString(NamedNodeMap node, String attribute) {
+		return node.getNamedItem(attribute).getNodeValue();
 	}
 
 }
