@@ -1,0 +1,8 @@
+DistributionWish(d1):
+    item: P1
+    
+DistributionWish(d2):
+    item: P2
+
+DistributionWish(d3):
+    item: P3

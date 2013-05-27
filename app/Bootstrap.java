@@ -12,6 +12,6 @@ public class Bootstrap extends Job {
 	public void doJob() {
 		Logger.info("Bootstrap");
 		Fixtures.deleteAllModels();
-		Fixtures.loadModels("initial-items.yml");
+		Fixtures.loadModels("initial-items.yml", "initial-distributions.yml");	
 	}
 }

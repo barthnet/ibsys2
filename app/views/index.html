@@ -1,33 +1,145 @@
 <!DOCTYPE html>
-
 <html>
-<head>
-<title>Test</title>
+    <head>
+        <meta charset='utf-8'>
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+        <link href="@{'/public/stylesheets/style.css'}" rel='stylesheet' type='text/css' />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <script src="@{'/public/javascripts/jquery-2.0.0.min.js'}" type="text/javascript"></script>
+        <script src="@{'/public/javascripts/language.jsonp'}" type="application/javascript"></script>
+        <script src="@{'/public/javascripts/beautiful_login.js'}" type="text/javascript"></script> 
+		<script>
+            $(document).ready(function(){
+                var username;
 
-<script src="http://code.jquery.com/jquery-1.9.1.min.js"
-	type="text/javascript"></script>
-<script>
-	$(document).ready(function() {
-		console.log("ready");
+                $("#login_submit").click(function(e) {
+                    console.log("clickit");
+                    e.preventDefault();
+                    
+                    $('#login_submit').css("background-image", "url(public/images/loading.gif)");
 
-		$.ajax({
-			type : "POST",
-			url : "http://localhost:9000/testCORS",
-			data : {
-				"key" : "value",
-				"key2" : "test"
-			},
-			success : function(re) {
-				console.log("succ: " + re);
-			},
-			error : function(re) {
-				console.log("err: " + re);
+                    username = $('#login_input_username').val();
 
-			}
-		});
-	});
-</script>
-</head>
-<body>ysvy
-</body>
-</html>
+                    var passwort = $('#login_input_password').val();
+
+                    if(username === "" || passwort === ""){
+                        alert("Username oder Passwort leer");
+                        $('#login_submit').css("background-image", "url(public/images/icon_lock.png)");
+                        return;
+                    }
+
+
+                    var urlx = "http://localhost:9000/login?username=" + username + "&password=" + passwort;
+                
+                    $.ajax({
+                        url: urlx,
+                        success: function(re) {
+                            console.log(re);
+                            if (re === true) {
+                            	console.log("true");
+								$('#login_box').css("display", "none");
+								$('#wrapper_in').css("display", "block");
+								$('#login_error').css("display", "none");
+                                $('#login_box_header').css("display", "block");
+                                $('#language').css("margin-right", "250px");
+                                $('#login_user').text("Hi, " + username);
+                            }
+							else if (re === false){
+								console.log("false");
+								$('#login_submit').css("background-image", "url(public/images/icon_lock.png)");
+								$('#wrapper_in').css("display", "none");
+								$('#login_box').css("display", "block");
+                                $('#login_error').css("display", "block");
+
+							
+							};
+                        },
+                        error: function(re) {
+                            console.log("err: " + re);
+							
+                        }
+                    });
+
+    
+                }); 
+
+                $("ul.lng img").bind("click", function(event){
+                    console.log("click");
+                    event.preventDefault();
+                    translate( $(this).prop('name'), translation); 
+                    //translate("en", translation);
+                });
+
+                function translate( lng,translationObj ){
+                    console.log("translate: " + lng);
+                    if( lng && translationObj[lng] ) {
+                        console.log(translationObj);
+                        return $.each(translationObj[lng], function(k,v){
+                             $('#'+k).text(v);  
+                        });
+                    }else{
+                        console.log("trans error")
+                        return $.error("fail");
+                    }
+                }
+            });
+        </script>
+		<title>Supply Chain Simulator</title>     
+    </head>
+<body>	
+    <div id="header_wrapper">
+        <div class="header"><a href="/"><h1> Supply Chain Simulator</h1></a></div>       
+        
+        <div id="language" style="margin-right:0px;">
+        <ul class="lng">
+            <a href="#de" name="de"><img src="public/images/lang_de.jpg" alt="Deutsch" width="50" name="de"></a>
+            <a href="#en" name="en"><img src="public/images/lang_en.jpg" alt="English" width="50" name="en"></a>
+        </ul>
+    </div>
+
+        
+     
+	
+	</div>	
+	        <div id="login_box_header" style="display:none;">
+            <div id="login_avatar" style="width:50px; height:50px; float:left; margin:0; background-image: url(public/images/logoHS.jpg)"></div>
+            <div id="login_user"></div>
+            <div class="login_logout"> <a href="index.html" style="width:49px; height:19px; padding-top: 31px; display:block; text-align: center; font-size:10px; font-family: 'Droid Sans', sans-serif; color:#666666; border:0; background: transparent; cursor: pointer;" >Logout</a>
+            </div>
+        </div> 
+            <div class="clear"></div>
+    </div>
+
+	
+	
+    <div class="login_wrapper" id="login_box">    
+	
+	            <form method="get" action="" name="loginform" id="loginform">
+            <div class="login">
+                <div id="login_avatar" style="background-image: url(public/images/logoHS.jpg);"></div>
+                <div id="user_pass">
+                    <div id="user_box">
+                        <input id="login_input_username" class="login_input" type="text" name="username"/>
+                    </div>
+                    <div id="pass_box">
+                        <input id="login_input_password_label" class="login_input" type="text" value="Password" />
+                        <input id="login_input_password" class="login_input" type="password" name="password" autocomplete="off" />
+                    </div>
+                </div>
+                <div id="submit_box">
+                    <div id="login_submit">
+                        <input type="submit" style="width:124px; height:125px; padding-top: 60px;  text-align: center; font-size:11px; font-family: 'Droid Sans', sans-serif; color:#666666; border:0; background: transparent; cursor: pointer;" value="Login" />            
+                    </div>        
+                </div>
+            </div>    
+
+            </form>
+			<div id="login_error" style="display:none">Username oder Passwort falsch!</div>	
+        </div>
+		<div id="wrapper_in" style="display: none;">
+		</div>
+		
+		
+    </body>
+</html> 

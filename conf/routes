@@ -7,11 +7,15 @@ GET     /                                       Application.index
 GET		/doku									Application.doku
 
 # Test methods
+GET		/test									Application.test
 GET		/parse									Application.parseXML
+GET		/wish									Application.getDistributenWishs
+GET		/testLogin								Application.testLogin
+POST	/wish									Application.postDistributionWish
 
 # methods
-GET		/login									Application.login(username:'String' password:'String')
-GET		/load									Application.loadXmlFromSite(username:'String' password:'String')
+GET		/login									Application.login
+GET		/load									Application.loadXmlFromSite
 POST	/upload									Application.uploadXML
 
 # Ignore favicon requests
