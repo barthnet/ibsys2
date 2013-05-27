@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import logic.Crawler;
 import logic.Parser;
@@ -17,50 +18,27 @@ import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import flexjson.JSONDeserializer;
-import flexjson.JSONSerializer;
-
 import play.Logger;
 import play.mvc.Controller;
 import play.templates.Template;
 import play.templates.TemplateLoader;
+import play.test.Fixtures;
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
 
 public class Application extends Controller {
 
 	public static void index() {
-		render("index.html");
+		render();
 	}
 
 	public static void doku() {
-		render("Application/index.html");
+		index();
 	}
 	
 	public static void test(){
-		List<Item> items = Item.findAll();
-		
-		Item item = items.get(0);
-		
-		Logger.info("item: %s", item);
-		
-		Item item2 = new Item();
-		item2.id = item.id;
-		item2.name = "ifiuwpak";
-		
-		
-		Logger.info("item2 before merge: %S", item2);
-		Logger.info("item before merge: %s", Item.findById(item.id));
-//		item2.em().merge(item);
-		item.em().merge(item2);
-		Logger.info("item2 before save: %S", item2);
-		Logger.info("item before save: %s", Item.findById(item.id));
-		item.save();
-		Logger.info("item2 after save: %S", item2);
-		Logger.info("item after save: %s", Item.findById(item.id));
-		
-		ok();
+		List<Item> items = Item.find("byItemId", "P1").fetch();
+		renderJSON(items);
 	}
 	
 	public static void testLogin() {

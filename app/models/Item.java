@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -27,6 +28,13 @@ public class Item extends Model {
 	public String toString() {
 		return "Item [itemId=" + itemId + ", name=" + name + ", name_en=" + name_en + ", type=" + type + ", amount=" + amount + ", price=" + price + ", id="
 				+ id + "]";
+	}
+	
+	public void addComp(Component comp) {
+		if (components == null) {
+			components = new ArrayList<>();
+		}
+		components.add(comp);
 	}
 	
 //	@JSON

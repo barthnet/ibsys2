@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+    <component>
+        <id>P1</id>
+        <item>K21</item>
+        <amount>1</amount>
+    </component>
+    <component>
+        <id>P1</id>
+        <item>K24</item>
+        <amount>1</amount>
+    </component>
+    <component>
+        <id>P1</id>
+        <item>K27</item>
+        <amount>1</amount>
+    </component>
+    <component>
+        <id>P1</id>
+        <item>E26</item>
+        <amount>1</amount>
+    </component>
+    <component>
+        <id>E26</id>
+        <item>K44</item>
+        <amount>2</amount>
+    </component>
+    <component>
+        <id>E26</id>
+        <item>K47</item>
+        <amount>1</amount>
+    </component>
+    <component>
+        <id>E26</id>
+        <item>K48</item>
+        <amount>2</amount>
+    </component>
+</components>
