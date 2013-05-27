@@ -1,9 +1,11 @@
 package models;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+
+import play.db.jpa.Model;
 
 @Entity
-public class Workplace {
+public class Workplace extends Model {
 	
 	public int workplaceId;
 	public String name;
