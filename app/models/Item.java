@@ -12,7 +12,7 @@ import play.db.jpa.*;
 @Entity
 public class Item extends Model {
 
-	public int itemId;
+	public String itemId;
 	public String name;
 	public String name_en;
 	public String type;
