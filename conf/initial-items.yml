@@ -1,30 +1,353 @@
 Item(P1):
-    itemId: 1
+    itemId: P1
     type: P
     name: Kinderfahrrad
     name_en: Children’s bicycle
 
 Item(P2):    
-    itemId: 2
+    itemId: P2
     type: P 
     name: Damenfahrrad 
-    name_en: Ladies bicycle 
+    name_en: Ladies bicycle  
     
 Item(P3):    
-    itemId: 3 
+    itemId: P3 
     type: P 
     name: Herrenfahrrad 
     name_en: Men’s bicycle 
         
 Item(E4):    
-    itemId: 4 
-    type: E 
-    name: Hinterradgruppe 
-    name_en: Rear wheel group  
-        
-Item(E5):    
-    itemId: 5 
+    itemId: E4 
     type: E 
     name: Hinterradgruppe 
     name_en: Rear wheel group 
         
+Item(E5):    
+    itemId: E5 
+    type: E 
+    name: Hinterradgruppe 
+    name_en: Rear wheel group 
+        
+Item(E6):    
+    itemId: E6 
+    type: E 
+    name: Hinterradgruppe 
+    name_en: Rear wheel group 
+    
+Item(E7):    
+    itemId: E7 
+    type: E 
+    name: Vorderradgruppe 
+    name_en: Front wheel group 
+
+Item(E8):    
+    itemId: E8 
+    type: E 
+    name: Vorderradgruppe 
+    name_en: Front wheel group 
+    
+Item(E9):        
+    itemId: E9 
+    type: E 
+    name: Vorderradgruppe 
+    name_en: Front wheel group 
+    
+Item(E10):        
+    itemId: E10 
+    type: E 
+    name: Schutzblech h. 
+    name_en: Mudguard rear 
+
+Item(E11):    
+    itemId: E11 
+    type: E 
+    name: Schutzblech h. 
+    name_en: Mudguard rear 
+ 
+Item(E12):    
+    itemId: E12 
+    type: E 
+    name: Schutzblech h. 
+    name_en: Mudguard rear 
+   
+Item(E13):    
+    itemId: E13 
+    type: E 
+    name: Schutzblech v. 
+    name_en: Mudguard front 
+  
+Item(E14):    
+    itemId: E14 
+    type: E 
+    name: Schutzblech v. 
+    name_en: Mudguard front 
+  
+Item(E15):    
+    itemId: E15 
+    type: E 
+    name: Schutzblech v. 
+    name_en: Mudguard front 
+ 
+Item(E16):    
+    itemId: E16 
+    type: E 
+    name: Lenker kpl. 
+    name_en: Handle complete 
+ 
+Item(E17):    
+    itemId: E17 
+    type: E 
+    name: Sattel kpl. 
+    name_en: Saddle complete 
+    
+Item(E18):    
+    itemId: E18 
+    type: E 
+    name: Rahmen 
+    name_en: Frame 
+   
+Item(E19):    
+    itemId: E19 
+    type: E 
+    name: Rahmen 
+    name_en: Frame 
+  
+Item(E20):    
+    itemId: E20 
+    type: E 
+    name: Rahmen 
+    name_en: Frame 
+  
+Item(K21):    
+    itemId: K21 
+    type: K 
+    name: Kette 
+    name_en: Chain 
+ 
+Item(K22):    
+    itemId: K22 
+    type: K 
+    name: Kette 
+    name_en: Chain 
+ 
+Item(K23):    
+    itemId: K23 
+    type: K 
+    name: Kette 
+    name_en: Chain 
+ 
+Item(K24):    
+    itemId: K24 
+    type: K 
+    name: Mutter 3/8“ 
+    name_en: Nut 3/8“ 
+  
+Item(K25):    
+    itemId: K25 
+    type: K 
+    name: Scheibe 3/8“ 
+    name_en: Washer 3/8“ 
+  
+Item(E26):    
+    itemId: E26 
+    type: E 
+    name: Pedal kpl. 
+    name_en: Pedal complete 
+ 
+Item(K27):    
+    itemId: K27 
+    type: K 
+    name: Schraube 3/8“ 
+    name_en: Screw 3/8“ 
+ 
+Item(K28):    
+    itemId: K28 
+    type: K 
+    name: Rohr 3/4“ 
+    name_en: Tube 3/4“ 
+   
+Item(E29):    
+    itemId: E29 
+    type: E 
+    name: Vorderrad mont. 
+    name_en: Front wheel compl. 
+
+Item(E30):    
+    itemId: E30 
+    type: E 
+    name: Rahmen u. Räder 
+    name_en: Frame and wheels 
+  
+Item(E31):    
+    itemId: E31 
+    type: E 
+    name: Fahrrad o. Ped. 
+    name_en: Bicycle w/o. pedals 
+   
+Item(K32):    
+    itemId: K32 
+    type: K 
+    name: Farbe 
+    name_en: Paint 
+   
+Item(K33):    
+    itemId: K33 
+    type: K 
+    name: Felge kpl. 
+    name_en: Rim compl. 
+ 
+Item(K34):    
+    itemId: K34 
+    type: K 
+    name: Speiche 
+    name_en: Spoke 
+   
+Item(K35):    
+    itemId: K35 
+    type: K 
+    name: Konus 
+    name_en: Taper sleeve 
+ 
+Item(K36):    
+    itemId: K36 
+    type: K 
+    name: Freilauf 
+    name_en: Free wheel 
+
+Item(K37):    
+    itemId: K37 
+    type: K 
+    name: Gabel 
+    name_en: Fork 
+ 
+Item(K38):    
+    itemId: K38 
+    type: K 
+    name: Welle 
+    name_en: Axle 
+
+Item(K39):    
+    itemId: K39 
+    type: K 
+    name: Blech 
+    name_en: Sheet 
+
+Item(K40):    
+    itemId: K40 
+    type: K 
+    name: Lenker 
+    name_en: Handle bar 
+ 
+Item(K41):    
+    itemId: K41 
+    type: K 
+    name: Mutter 3/4“ 
+    name_en: Nut 3/4“ 
+ 
+Item(K42):    
+    itemId: K42 
+    type: K 
+    name: Griff 
+    name_en: Handle grip
+
+Item(K43):    
+    itemId: K43
+    type: K 
+    name: Sattel 
+    name_en: Saddle
+  
+Item(K44):    
+    itemId: K44
+    type: K 
+    name: Stange 1/2“ 
+    name_en: Bar 1/2“ 
+
+Item(K45):
+    itemId: K45 
+    type: K 
+    name: Mutter 1/4“ 
+    name_en: Nut 1/4“ 
+
+Item(K46):
+    itemId: K46 
+    type: K 
+    name: Schraube 1/4“
+    name_en: Screw 1/4“
+
+Item(K47):    
+    itemId: K47
+    type: K 
+    name: Zahnkranz 
+    name_en: Sprocket 
+
+Item(K48):
+    itemId: K48
+    type: K 
+    name: Pedal 
+    name_en: Pedal 
+
+Item(E49):    
+    itemId: E49 
+    type: E
+    name: Vorderrad kpl. 
+    name_en: Front wheel compl 
+
+Item(E50):
+    itemId: E50
+    type: E
+    name: Rahmen u. Räder
+    name_en: Frame and wheels 
+
+Item(E51):
+    itemId: E51
+    type: E 
+    name: Fahrrad o. Pedal
+    name_en: Bicycle w/o. pedals 
+
+Item(K52):
+    itemId: K52 
+    type: K 
+    name: Felge kpl. 
+    name_en: Rim compl. 
+
+Item(K53):    
+    itemId: K53
+    type: K 
+    name: Speiche 
+    name_en: Spoke 
+
+Item(E54):    
+    itemId: E54 
+    type: E
+    name: Vorderrad kpl. 
+    name_en: Front wheel compl 
+ 
+Item(E55):    
+    itemId: E55 
+    type: E 
+    name: Rahmen u. Räder
+    name_en: Frame and wheels
+ 
+Item(E56):    
+    itemId: E56 
+    type: E 
+    name: Fahrrad o. Pedal
+    name_en: Bicycle w/o. pedals
+
+Item(K57):    
+    itemId: K57 
+    type: K
+    name: Felge kpl.
+    name_en: Rim compl. 
+ 
+Item(K58):    
+    itemId: K58 
+    type: K 
+    name: Speiche 
+    name_en: Spoke 
+
+Item(K59):    
+    itemId: K59 
+    type: K 
+    name: Schweißdraht 
+    name_en: Welding wires 
