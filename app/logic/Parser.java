@@ -51,10 +51,10 @@ public class Parser {
 		for (int i = 0, length = articles.getLength(); i < length; i++) {
 			Node node = articles.item(i);
 			NamedNodeMap att = node.getAttributes();
-			Item item = Item.find("byItemId",getInteger(att, "id")).first();
+			Item item = Item.find("byItemId",getString(att, "id")).first();
 			if (item == null) {
 				item = new Item();
-				item.itemId = getInteger(att, "id");
+				item.itemId = getString(att, "id");
 			}
 			item.amount = getInteger(att, "amount");
 			item.price = getDouble(att, "price");
