@@ -4,6 +4,11 @@ import javax.persistence.*;
 
 import play.db.jpa.Model;
 
+/**
+ * 
+ * @author sven
+ *
+ */
 @Entity
 public class WaitingList extends Model {
 	
