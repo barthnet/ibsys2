@@ -1,10 +1,11 @@
 package models;
 
-import javax.persistence.*;
+import java.util.List;
 
-import flexjson.JSON;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
-import play.db.jpa.*;
+import play.db.jpa.Model;
 
 /**
  * @author Boris
@@ -18,6 +19,10 @@ public class Item extends Model {
 	public String type;
 	public int amount;
 	public double price;
+	
+	@OneToMany
+	public List<Component> components;
+	
 	@Override
 	public String toString() {
 		return "Item [itemId=" + itemId + ", name=" + name + ", name_en=" + name_en + ", type=" + type + ", amount=" + amount + ", price=" + price + ", id="
