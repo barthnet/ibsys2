@@ -14,8 +14,7 @@ public class ItemTime extends Model {
 	@OneToOne
 	public Item item;
 	
-	public int setupTime;
-	
+	public int setupTime;	
 	public int processTime;
 	
 }
