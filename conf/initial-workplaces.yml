@@ -1,0 +1,69 @@
+Workplace(W1):
+     wworkplaceId: 1
+     name: Vorderrad-Montage
+     name_en: Front wheel installation
+     
+Workplace(W2):
+     workplaceId: 2
+     name: Hinterrad-Montage
+     name_en: Rear wheel assembly
+     
+Workplace(W3):
+     workplaceId: 3
+     name: Montage
+     name_en: Assembly
+
+Workplace(W4):
+     workplaceId: 4
+     name: End-Montage
+     name_en: Final assembly
+   
+Workplace(W6):
+     workplaceId:     6
+     name: Rohr-Biege-Maschine
+     name_en: Tube bending machine
+   
+Workplace(W7):
+     workplaceId:     7
+     name: Schweiss-Platz
+     name_en: Welding station
+    
+Workplace(W8):
+     workplaceId:     8
+     name: Stanze
+     name_en: Punching machine
+    
+Workplace(W9):
+     workplaceId:     9
+     name: Lackierplatz
+     name_en: Finishing station
+    
+Workplace(W10):
+     workplaceId: 10
+     name: Rad-Montage
+     name_en: Wheel assembly
+    
+Workplace(W11):
+     workplaceId: 11
+     name: Naben-Montage
+     name_en: Hub assembly
+   
+Workplace(W12):
+     workplaceId: 12
+     name: Blech-Biegemaschine
+     name_en: Sheet forming machine
+    
+Workplace(W13):
+     workplaceId: 13
+     name: Blechschere
+     name_en: Sheet cutting machine
+          
+Workplace(W14):
+     workplaceId: 14
+     name: Lenkermontage
+     name_en: Handle bars installation
+    
+Workplace(W15):
+     workplaceId: 15
+     name: Montage
+     name_en: Assembly
