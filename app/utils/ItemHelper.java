@@ -6,6 +6,11 @@ import models.ItemTime;
 
 import play.db.jpa.Model;
 
+/**
+ * 
+ * @author sven
+ *
+ */
 public class ItemHelper {
 	
 	public static int getSetupTime(Workplace workplace, Item item) {

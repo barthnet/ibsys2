@@ -4,9 +4,15 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import play.db.jpa.Model;
 
+/**
+ * 
+ * @author sven
+ *
+ */
 @Entity
 public class Workplace extends Model {
 	
@@ -16,8 +22,8 @@ public class Workplace extends Model {
 	
 	@OneToMany
 	public List<WaitingList> waitingList;	
-	@OneToMany
-	public List<WaitingList> processList;
+	@OneToOne
+	public WaitingList processList;
 	@OneToMany
 	public List<WaitingList> productionPlanList;
 	
