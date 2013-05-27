@@ -3,13 +3,13 @@ ItemTime(W1-E49):
     Item: E49
     setupTime: 20
     processTime: 6
-	
+
 ItemTime(W1-E54):
     Workplace: W1
     Item: E54
     setupTime: 20
     processTime: 6
-	
+
 ItemTime(W1-E29):
     Workplace: W1
     Item: E29
@@ -189,7 +189,7 @@ ItemTime(W8-E15):
     Item: E15
     setupTime: 15 
     processTime: 2
-	
+
 ItemTime(W8-E18):
     Workplace: W8
     Item: E18
@@ -345,49 +345,49 @@ ItemTime(W12-E11):
     Item: E11
     setupTime: 0
     processTime: 3
-	
+
 ItemTime(W12-E12):
     Workplace: W12
     Item: E12
     setupTime: 0
     processTime: 3
-	
+
 ItemTime(W12-E13):
     Workplace: W12
     Item: E13
     setupTime: 0
     processTime: 3
-	
+
 ItemTime(W12-E14):
     Workplace: W12
     Item: E14
     setupTime: 0
     processTime: 3
-	
+
 ItemTime(W12-E15):
     Workplace: W12
     Item: E15
     setupTime: 0
     processTime: 3
-	
+
 ItemTime(W13-E10):
     Workplace: W13
     Item: E10
     setupTime: 0
     processTime: 2
-	
+
 ItemTime(W13-E11):
     Workplace: W13
     Item: E11
     setupTime: 0
     processTime: 2
-	
+
 ItemTime(W13-E12):
     Workplace: W13
     Item: E12
     setupTime: 0
     processTime: 2
-	
+
 ItemTime(W13-E13):
     Workplace: W13
     Item: E13
@@ -399,25 +399,25 @@ ItemTime(W13-E14):
     Item: E14
     setupTime: 0
     processTime: 2
-	
+
 ItemTime(W13-E15):
     Workplace: W13
     Item: E15
     setupTime: 0
     processTime: 2
-	
+
 ItemTime(W14-E16):
     Workplace: W14
     Item: E16
     setupTime: 0
     processTime: 3
-	
+
 ItemTime(W15-E17):
     Workplace: W15
     Item: E17
     setupTime: 15
     processTime: 3
-	
+
 ItemTime(W115-E26):
     Workplace: W15
     Item: E26
