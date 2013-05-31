@@ -1,0 +1,10 @@
+DispositionOrder(dk22):
+    item: K22
+    usedP1: 0
+    usedP2: 1
+    usedP3: 0
+    price: 6.5
+    deliveryCost: 50
+    deliveryTime: 1.7
+    deliveryVariance: 0.4
+    discount: 300
