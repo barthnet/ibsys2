@@ -42,6 +42,13 @@ public class Application extends Controller {
 		List<ProductionPlan> items = ProductionPlan.findAll();
 	}
 	
+	public static void test2(){
+		setHeader();
+		String body = getBodyAsString();
+		ArrayList<ProductionPlan> plans =  new JSONDeserializer<ArrayList<ProductionPlan>>().use("values", ProductionPlan.class).deserialize(body);
+		renderText(plans);
+	}
+	
 	public static void testLogin() {
 		setHeader();
 		renderJSON(true);
@@ -50,7 +57,13 @@ public class Application extends Controller {
 	public static void postDistributionWish() {
 		setHeader();
 		String body = getBodyAsString();
+		DistributionWish oldWish = null;
 		ArrayList<DistributionWish> wishs =  new JSONDeserializer<ArrayList<DistributionWish>>().use("values", DistributionWish.class).deserialize(body);
+		
+		for (DistributionWish wish : wishs) {
+			oldWish = DistributionWish.findById(wish.id);
+			oldWish.merge(wish);
+		}
 		renderText(wishs);
 	}
 	

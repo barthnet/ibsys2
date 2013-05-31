@@ -10,18 +10,25 @@ import play.db.jpa.Model;
 /**
  * 
  * @author sven
- *
+ * 
  */
 @Entity
 public class ProductionPlan extends Model {
-	
+
 	@OneToMany
 	public List<DispositionManufacture> dispositionManufacture;
-	
+
 	public String product;
-//	@OneToMany
-//	public List<DispositionManufacture> dispositionManufactureP2;
-//	@OneToMany
-//	public List<DispositionManufacture> dispositionManufactureP3;
-	
+
+	// @OneToMany
+	// public List<DispositionManufacture> dispositionManufactureP2;
+	// @OneToMany
+	// public List<DispositionManufacture> dispositionManufactureP3;
+
+	@Override
+	public String toString() {
+		return "ProductionPlan [dispositionManufacture="
+				+ dispositionManufacture + ", product=" + product + "]";
+	}
+
 }
