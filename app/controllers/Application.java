@@ -60,7 +60,7 @@ public class Application extends Controller {
 		if (wishs == null || wishs.size() == 0) {
 			error("Keine Distributionswünsche vorhanden");
 		}
-		renderJSON(new JSONSerializer().include("item.itemId", "period", "period1", "period2", "period3").exclude("*").serialize(wishs));
+		renderJSON(new JSONSerializer().include("id", "item.itemId", "period", "period1", "period2", "period3").exclude("*").serialize(wishs));
 	}
 	
 	public static void getProductionPlan() {
