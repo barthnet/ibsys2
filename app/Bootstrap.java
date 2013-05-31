@@ -32,7 +32,7 @@ public class Bootstrap extends Job {
 	public void doJob() {
 		Logger.info("Bootstrap");
 		Fixtures.deleteAllModels();
-		Fixtures.loadModels("initial-items.yml", "initial-distributions.yml", "initial-workplaces.yml", "ItemTime.yml", "initial-dispositionOrder.yml");
+		Fixtures.loadModels("initial-items.yml", "initial-distributions.yml", "initial-workplaces.yml", "ItemTime.yml", "initial-dispositionOrder.yml", "initial-productionPlan.yml");
 		createComponents();
 	}
 
