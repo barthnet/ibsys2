@@ -12,7 +12,7 @@ import play.db.jpa.Model;
 @Entity
 public class WaitingList extends Model {
 	
-//	public int order;
+	public int orderNumber;
 	public int period;
 	public int amount;
 	
