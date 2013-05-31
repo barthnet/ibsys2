@@ -57,7 +57,13 @@ public class Application extends Controller {
 	public static void postDistributionWish() {
 		setHeader();
 		String body = getBodyAsString();
+		DistributionWish oldWish = null;
 		ArrayList<DistributionWish> wishs =  new JSONDeserializer<ArrayList<DistributionWish>>().use("values", DistributionWish.class).deserialize(body);
+		
+		for (DistributionWish wish : wishs) {
+			oldWish = DistributionWish.findById(wish.id);
+			oldWish.merge(wish);
+		}
 		renderText(wishs);
 	}
 	
