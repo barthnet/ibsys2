@@ -13,6 +13,7 @@ import logic.Parser;
 import models.DistributionWish;
 import models.Item;
 import models.OpenOrder;
+import models.ProductionPlan;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -37,8 +38,9 @@ public class Application extends Controller {
 	}
 	
 	public static void test(){
-		List<Item> items = Item.find("byItemId", "P1").fetch();
-		renderJSON(items);
+//		List<Item> items = Item.find("byItemId", "P1").fetch();
+		List<ProductionPlan> items = ProductionPlan.findAll();
+		renderJSON(new JSONSerializer().exclude("dispositionManufacture.item.components").serialize(items));
 	}
 	
 	public static void testLogin() {

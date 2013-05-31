@@ -16,10 +16,10 @@ import play.db.jpa.Model;
 public class ProductionPlan extends Model {
 	
 	@OneToMany
-	public List<DispositionManufacture> dispositionManufactureP1;
-	@OneToMany
-	public List<DispositionManufacture> dispositionManufactureP2;
-	@OneToMany
-	public List<DispositionManufacture> dispositionManufactureP3;
+	public List<DispositionManufacture> dispositionManufacture;
+//	@OneToMany
+//	public List<DispositionManufacture> dispositionManufactureP2;
+//	@OneToMany
+//	public List<DispositionManufacture> dispositionManufactureP3;
 	
 }

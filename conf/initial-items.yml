@@ -351,32 +351,3 @@ Item(K59):
     type: K 
     name: Schweißdraht 
     name_en: Welding wires 
-    
-Component(C1):
-    item: K21
-    amount: 1
-    
-Component(C2):
-    item: K24
-    amount: 1
-    
-Component(C3):
-    item: K27
-    amount: 1
-    
-Component(C4):
-    item: E26
-    amount: 1
-    
-Component(C5):
-    item: K44
-    amount: 2
-    
-Component(C6):
-    item: K47
-    amount: 1
-    
-Component(C7):
-    item: K48
-    amount: 2
-    
