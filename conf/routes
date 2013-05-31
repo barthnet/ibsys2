@@ -8,6 +8,7 @@ GET		/doku									Application.doku
 
 # Test methods
 GET		/test									Application.test
+POST	/test2									Application.test2
 GET		/parse									Application.parseXML
 GET		/wish									Application.getDistributenWishs
 GET		/testLogin								Application.testLogin

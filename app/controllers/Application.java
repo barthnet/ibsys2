@@ -42,6 +42,13 @@ public class Application extends Controller {
 		List<ProductionPlan> items = ProductionPlan.findAll();
 	}
 	
+	public static void test2(){
+		setHeader();
+		String body = getBodyAsString();
+		ArrayList<ProductionPlan> plans =  new JSONDeserializer<ArrayList<ProductionPlan>>().use("values", ProductionPlan.class).deserialize(body);
+		renderText(plans);
+	}
+	
 	public static void testLogin() {
 		setHeader();
 		renderJSON(true);
