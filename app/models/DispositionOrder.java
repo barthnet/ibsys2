@@ -13,7 +13,7 @@ public class DispositionOrder extends Model {
 	public int usedP3;
 	
 	public double price;
-	public int deliveryCost;
+	public double deliveryCost;
 	public double deliveryTime;
 	public double deliveryVariance;
 	public int discount;
