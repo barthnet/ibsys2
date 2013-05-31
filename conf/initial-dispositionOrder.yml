@@ -1,3 +1,14 @@
+DispositionOrder(dk21):
+    item: K21
+    usedP1: 1
+    usedP2: 0
+    usedP3: 0
+    price: 5
+    deliveryCost: 50
+    deliveryTime: 1.8
+    deliveryVariance: 0.4
+    discount: 300
+
 DispositionOrder(dk22):
     item: K22
     usedP1: 0
@@ -8,3 +19,300 @@ DispositionOrder(dk22):
     deliveryTime: 1.7
     deliveryVariance: 0.4
     discount: 300
+
+DispositionOrder(dk23):
+    item: K23
+    usedP1: 0
+    usedP2: 0
+    usedP3: 1
+    price: 6.5
+    deliveryCost: 50
+    deliveryTime: 1.2
+    deliveryVariance: 0.2
+    discount: 300
+
+DispositionOrder(dk24):
+    item: K24
+    usedP1: 7
+    usedP2: 7
+    usedP3: 7
+    price: 0.06
+    deliveryCost: 100
+    deliveryTime: 3.2
+    deliveryVariance: 0.3
+    discount: 6100
+   
+DispositionOrder(dk25):
+    item: K25
+    usedP1: 4
+    usedP2: 4
+    usedP3: 4
+    price: 0.06
+    deliveryCost: 50
+    deliveryTime: 0.9
+    deliveryVariance: 0.2
+    discount: 3600
+
+DispositionOrder(dk27):
+    item: K27
+    usedP1: 2
+    usedP2: 2
+    usedP3: 2
+    price: 0.1
+    deliveryCost: 75
+    deliveryTime: 0.9
+    deliveryVariance: 0.2
+    discount: 1800
+
+DispositionOrder(dk28):
+    item: K28
+    usedP1: 4
+    usedP2: 5
+    usedP3: 6
+    price: 1.2
+    deliveryCost: 50
+    deliveryTime: 1.7
+    deliveryVariance: 0.4
+    discount: 4500
+
+DispositionOrder(dk32):
+    item: K32
+    usedP1: 3
+    usedP2: 3
+    usedP3: 3
+    price: 0.75
+    deliveryCost: 50
+    deliveryTime: 2.1
+    deliveryVariance: 0.5
+    discount: 2700
+
+DispositionOrder(dk33):
+    item: K33
+    usedP1: 0
+    usedP2: 0
+    usedP3: 2
+    price: 22
+    deliveryCost: 75
+    deliveryTime: 1.9
+    deliveryVariance: 0.5
+    discount: 900
+
+DispositionOrder(dk34):
+    item: K34
+    usedP1: 0
+    usedP2: 0
+    usedP3: 72
+    price: 0.1
+    deliveryCost: 50
+    deliveryTime: 1.6
+    deliveryVariance: 0.3
+    discount: 22000
+
+DispositionOrder(dk35):
+    item: K35
+    usedP1: 4
+    usedP2: 4
+    usedP3: 4
+    price: 1
+    deliveryCost: 75
+    deliveryTime: 2.2
+    deliveryVariance: 0.4
+    discount: 3600
+
+DispositionOrder(dk36):
+    item: K36
+    usedP1: 1
+    usedP2: 1
+    usedP3: 1
+    price: 8
+    deliveryCost: 100
+    deliveryTime: 1.2
+    deliveryVariance: 0.1
+    discount: 900
+
+DispositionOrder(dk37):
+    item: K37
+    usedP1: 1
+    usedP2: 1
+    usedP3: 1
+    price: 1.5
+    deliveryCost: 50
+    deliveryTime: 1.5
+    deliveryVariance: 0.3
+    discount: 900
+
+DispositionOrder(dk38):
+    item: K38
+    usedP1: 1
+    usedP2: 1
+    usedP3: 1
+    price: 1.5
+    deliveryCost: 50
+    deliveryTime: 1.7
+    deliveryVariance: 0.4
+    discount: 300
+
+DispositionOrder(dk39):
+    item: K39
+    usedP1: 2
+    usedP2: 2
+    usedP3: 2
+    price: 1.5
+    deliveryCost: 75
+    deliveryTime: 1.5
+    deliveryVariance: 0.3
+    discount: 1800
+
+DispositionOrder(dk40):
+    item: K40
+    usedP1: 1
+    usedP2: 1
+    usedP3: 1
+    price: 2.5
+    deliveryCost: 50
+    deliveryTime: 1.7
+    deliveryVariance: 0.2
+    discount: 900
+
+DispositionOrder(dk41):
+    item: K41
+    usedP1: 1
+    usedP2: 1
+    usedP3: 1
+    price: 0.06
+    deliveryCost: 50
+    deliveryTime: 0.9
+    deliveryVariance: 0.2
+    discount: 900
+
+DispositionOrder(dk42):
+    item: K42
+    usedP1: 2
+    usedP2: 2
+    usedP3: 2
+    price: 0.1
+    deliveryCost: 50
+    deliveryTime: 1.2
+    deliveryVariance: 0.3
+    discount: 1800
+
+DispositionOrder(dk43):
+    item: K43
+    usedP1: 1
+    usedP2: 1
+    usedP3: 1
+    price: 5
+    deliveryCost: 75
+    deliveryTime: 2.0
+    deliveryVariance: 0.5
+    discount: 2700
+
+DispositionOrder(dk44):
+    item: K44
+    usedP1: 3
+    usedP2: 3
+    usedP3: 3
+    price: 0.5
+    deliveryCost: 50
+    deliveryTime: 1.0
+    deliveryVariance: 0.2
+    discount: 900
+
+DispositionOrder(dk45):
+    item: K45
+    usedP1: 1
+    usedP2: 1
+    usedP3: 1
+    price: 0.06
+    deliveryCost: 50
+    deliveryTime: 1.7
+    deliveryVariance: 0.3
+    discount: 900
+
+DispositionOrder(dk46):
+    item: K46
+    usedP1: 1
+    usedP2: 1
+    usedP3: 1
+    price: 0.1
+    deliveryCost: 50
+    deliveryTime: 0.9
+    deliveryVariance: 0.3
+    discount: 900
+
+DispositionOrder(dk47):
+    item: K47
+    usedP1: 1
+    usedP2: 1
+    usedP3: 1
+    price: 3.5
+    deliveryCost: 50
+    deliveryTime: 1.1
+    deliveryVariance: 0.1
+    discount: 900
+
+DispositionOrder(dk48):
+    item: K48
+    usedP1: 2
+    usedP2: 2
+    usedP3: 2
+    price: 1.5
+    deliveryCost: 75
+    deliveryTime: 1.0
+    deliveryVariance: 0.2
+    discount: 1800
+
+DispositionOrder(dk52):
+    item: K52
+    usedP1: 2
+    usedP2: 0
+    usedP3: 0
+    price: 22
+    deliveryCost: 50
+    deliveryTime: 1.6
+    deliveryVariance: 0.4
+    discount: 600
+
+DispositionOrder(dk53):
+    item: K53
+    usedP1: 72
+    usedP2: 0
+    usedP3: 0
+    price: 0.1
+    deliveryCost: 50
+    deliveryTime: 1.6
+    deliveryVariance: 0.2
+    discount: 22000
+
+DispositionOrder(dk57):
+    item: K57
+    usedP1: 0
+    usedP2: 2
+    usedP3: 0
+    price: 22
+    deliveryCost: 50
+    deliveryTime: 1.7
+    deliveryVariance: 0.3
+    discount: 600
+
+DispositionOrder(dk58):
+    item: K58
+    usedP1: 0
+    usedP2: 72
+    usedP3: 0
+    price: 0.1
+    deliveryCost: 50
+    deliveryTime: 1.6
+    deliveryVariance: 0.5
+    discount: 22000
+
+DispositionOrder(dk59):
+    item: K59
+    usedP1: 2
+    usedP2: 2
+    usedP3: 2
+    price: 0.15
+    deliveryCost: 50
+    deliveryTime: 0.7
+    deliveryVariance: 0.2
+    discount: 1800
