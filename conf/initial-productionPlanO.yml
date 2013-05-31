@@ -1,8 +1,11 @@
 ProductionPlan(Plan1):
     dispositionManufacture: [dm1, dm26_P1, dm51, dm16_P1, dm17_P1, dm50, dm4, dm10, dm49, dm7, dm13, dm18]
+    product: P1
 
 ProductionPlan(Plan2):
     dispositionManufacture: [dm2, dm26_P2, dm56, dm16_P2, dm17_P2, dm55, dm5, dm11, dm54, dm8, dm14, dm19]
+    product: P2
 
 ProductionPlan(Plan3):
     dispositionManufacture: [dm3, dm26_P3, dm31, dm16_P3, dm17_P3, dm30, dm6, dm12, dm29, dm9, dm15, dm20]
+    product: P3

@@ -17,6 +17,8 @@ public class ProductionPlan extends Model {
 	
 	@OneToMany
 	public List<DispositionManufacture> dispositionManufacture;
+	
+	public String product;
 //	@OneToMany
 //	public List<DispositionManufacture> dispositionManufactureP2;
 //	@OneToMany

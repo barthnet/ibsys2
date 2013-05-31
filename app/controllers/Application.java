@@ -79,7 +79,7 @@ public class Application extends Controller {
 				"dispositionManufacture.item.amount",
 				"dispositionManufacture.item.price",
 				"dispositionManufacture.item.type",
-				"dispositionManufacture.item.itemId")
+				"dispositionManufacture.item.id")
 				.serialize(pPlans));
 	}
 
