@@ -11,6 +11,7 @@ public class DispositionManufacture extends Model {
 	@OneToOne
 	public Item item;
 	
+	public int distributionWish;
 	public int stock;
 	public int safetyStock;
 	public int waitingList;

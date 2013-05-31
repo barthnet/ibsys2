@@ -1,0 +1,334 @@
+ProductionPlan():
+    dispositionManufactureP1: [dm1, dm26_P1, dm51, dm16_P1, dm17_P1, dm50, dm4, dm10, dm49, dm7, dm13, dm18]
+    dispositionManufactureP2: [dm2, dm26_P2, dm56, dm16_P2, dm17_P2, dm55, dm5, dm11, dm54, dm8, dm14, dm19]
+    dispositionManufactureP3: [dm3, dm26_P3, dm31, dm16_P3, dm17_P3, dm30, dm6, dm12, dm29, dm9, dm15, dm20]
+
+# Start parts P1
+
+DispositionManufacture(dm1):
+    item: P1
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm26_P1):
+    item: E26
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm51):
+    item: E51
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm16_P1):
+    item: E16
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm17_P1):
+    item: E17
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm50):
+    item: E50
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm4):
+    item: E4
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm10):
+    item: E10
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm49):
+    item: E49
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm7):
+    item: E7
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm13):
+    item: E13
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm18):
+    item: E18
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+# Start parts P2
+
+DispositionManufacture(dm2):
+    item: P2
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm26_P2):
+    item: E26
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm56):
+    item: E56
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm16_P2):
+    item: E16
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm17_P2):
+    item: E17
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm55):
+    item: E55
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm5):
+    item: E5
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm11):
+    item: E11
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm54):
+    item: E54
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm8):
+    item: E8
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm14):
+    item: E14
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm19):
+    item: E19
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+# Start parts P3
+
+DispositionManufacture(dm3):
+    item: P3
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm26_P3):
+    item: E26
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm31):
+    item: E31
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm16_P3):
+    item: E16
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm17_P3):
+    item: E17
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm30):
+    item: E30
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm6):
+    item: E6
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm12):
+    item: E12
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm29):
+    item: E29
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm9):
+    item: E9
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm15):
+    item: E15
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
+
+DispositionManufacture(dm20):
+    item: E20
+    stock:
+    safetyStock:
+    waitingList:
+    processList:
+    production:
+    distributionWish:
