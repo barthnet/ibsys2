@@ -12,6 +12,7 @@ GET		/parse									Application.parseXML
 GET		/wish									Application.getDistributenWishs
 GET		/testLogin								Application.testLogin
 POST	/wish									Application.postDistributionWish
+GET		/production								Application.getProductionPlan
 
 # methods
 GET		/login									Application.login

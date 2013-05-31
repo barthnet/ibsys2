@@ -40,7 +40,6 @@ public class Application extends Controller {
 	public static void test(){
 //		List<Item> items = Item.find("byItemId", "P1").fetch();
 		List<ProductionPlan> items = ProductionPlan.findAll();
-		renderJSON(new JSONSerializer().exclude("dispositionManufacture.item.components").serialize(items));
 	}
 	
 	public static void testLogin() {
@@ -62,6 +61,26 @@ public class Application extends Controller {
 			error("Keine Distributionswünsche vorhanden");
 		}
 		renderJSON(new JSONSerializer().include("item.itemId", "period", "period1", "period2", "period3").exclude("*").serialize(wishs));
+	}
+	
+	public static void getProductionPlan() {
+		setHeader();
+		List<ProductionPlan> pPlans = ProductionPlan.findAll();
+		if (pPlans == null || pPlans.size() == 0) {
+			error("Keine Produktionspläne vorhanden");
+		}
+		renderJSON(new JSONSerializer().exclude(
+				"*.class",
+				"*.entityId",
+				"*.persistent",
+				"dispositionManufacture.id",
+				"dispositionManufacture.item.name",
+				"dispositionManufacture.item.name_en",
+				"dispositionManufacture.item.amount",
+				"dispositionManufacture.item.price",
+				"dispositionManufacture.item.type",
+				"dispositionManufacture.item.itemId")
+				.serialize(pPlans));
 	}
 
 	/**
