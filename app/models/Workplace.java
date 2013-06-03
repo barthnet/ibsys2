@@ -25,6 +25,6 @@ public class Workplace extends Model {
 	@OneToOne
 	public WaitingList processList;
 	@OneToMany
-	public List<WaitingList> productionPlanList;
+	public List<ProductionOrder> productionPlanList;
 	
 }
