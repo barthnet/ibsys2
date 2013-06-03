@@ -6,19 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import javax.print.attribute.standard.PDLOverrideSupported;
-
-import logic.ApplicationLogic;
 import logic.Crawler;
 import logic.Parser;
 import models.DispositionManufacture;
 import models.DistributionWish;
 import models.Item;
 import models.OpenOrder;
-import models.ProductionOrder;
-import models.ProductionPlan;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -28,7 +22,6 @@ import play.Logger;
 import play.mvc.Controller;
 import play.templates.Template;
 import play.templates.TemplateLoader;
-import play.test.Fixtures;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
@@ -44,22 +37,21 @@ public class Application extends Controller {
 	
 	public static void test(){
 //		List<Item> items = Item.find("byItemId", "P1").fetch();
-		List<ProductionPlan> items = ProductionPlan.findAll();
-		renderJSON(items);
+		renderJSON(null);
 	}
 	
 	public static void postProductionPlan(){
 		setHeader();
-		String body = getBodyAsString();
-		ArrayList<ProductionPlan> plansIn =  new JSONDeserializer<ArrayList<ProductionPlan>>().use("values", ProductionPlan.class).deserialize(body);
-		for (ProductionPlan productionPlan : plansIn) {
-			ProductionPlan exist = ProductionPlan.find("byProduct", productionPlan.product).first();
-			if (exist != null) {
-				exist.merge(productionPlan);
-			}
-		}
-		List<ProductionPlan> li = ProductionPlan.findAll();
-		renderText(li);
+//		String body = getBodyAsString();
+//		ArrayList<ProductionPlan> plansIn =  new JSONDeserializer<ArrayList<ProductionPlan>>().use("values", ProductionPlan.class).deserialize(body);
+//		for (ProductionPlan productionPlan : plansIn) {
+//			ProductionPlan exist = ProductionPlan.find("byProduct", productionPlan.product).first();
+//			if (exist != null) {
+//				exist.merge(productionPlan);
+//			}
+//		}
+//		List<ProductionPlan> li = ProductionPlan.findAll();
+//		renderText(li);
 	}
 	
 	public static void testLogin() {
@@ -92,23 +84,25 @@ public class Application extends Controller {
 	
 	public static void getProductionPlan() {
 		setHeader();
-		List<ProductionPlan> pPlans = ProductionPlan.findAll();
-		
-		if (pPlans == null || pPlans.size() == 0) {
-			error("Keine Produktionspläne vorhanden");
-		}
-		renderJSON(new JSONSerializer().include("dispositionManufacture.childs").exclude(
-				"*.class",
-				"*.entityId",
-				"*.persistent",
-//				"dispositionManufacture.id",
-				"dispositionManufacture.item.name",
-				"dispositionManufacture.item.name_en",
-				"dispositionManufacture.item.amount",
-				"dispositionManufacture.item.price",
-				"dispositionManufacture.item.type")
-//				"dispositionManufacture.item.id")
-				.serialize(pPlans));
+		List<DispositionManufacture> disps = DispositionManufacture.findAll();
+		renderJSON(disps);
+//		List<ProductionPlan> pPlans = ProductionPlan.findAll();
+//		
+//		if (pPlans == null || pPlans.size() == 0) {
+//			error("Keine Produktionspläne vorhanden");
+//		}
+//		renderJSON(new JSONSerializer().include("dispositionManufacture.childs").exclude(
+//				"*.class",
+//				"*.entityId",
+//				"*.persistent",
+////				"dispositionManufacture.id",
+//				"dispositionManufacture.item.name",
+//				"dispositionManufacture.item.name_en",
+//				"dispositionManufacture.item.amount",
+//				"dispositionManufacture.item.price",
+//				"dispositionManufacture.item.type")
+////				"dispositionManufacture.item.id")
+//				.serialize(pPlans));
 	}
 
 	/**

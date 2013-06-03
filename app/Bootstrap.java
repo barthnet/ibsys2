@@ -33,8 +33,8 @@ public class Bootstrap extends Job {
 		Logger.info("Bootstrap");
 		Fixtures.deleteAllModels();
 		Fixtures.loadModels("initial-items.yml", "initial-distributions.yml", "initial-workplaces.yml", "ItemTime.yml", "initial-dispositionOrder.yml",
-				"initial-productionPlan.yml", "initial-productionPlanO.yml");
-		createComponents();
+				"initial-productionPlan.yml");
+//		createComponents();
 	}
 
 	public static void createComponents() {
@@ -68,7 +68,7 @@ public class Bootstrap extends Job {
 
 				comp.amount = Integer.parseInt(amount);
 				List<Item> items = Item.find("byItemId", item).fetch();
-				comp.item = items.get(0);
+//				comp.item = items.get(0);
 				comp.save();
 
 				comp.amount = Integer.parseInt(amount);

@@ -21,7 +21,7 @@ public class Item extends Model {
 	public int amount;
 	public double price;
 	
-	public List<String> components;
+	public String[] components;
 	
 	@Override
 	public String toString() {
@@ -31,7 +31,7 @@ public class Item extends Model {
 	
 	public void addComp(Component comp) {
 		if (components == null) {
-			components = new ArrayList<>();
+//			components = new ArrayList<>();
 		}
 //		components.add(comp);
 	}

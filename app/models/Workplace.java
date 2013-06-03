@@ -21,10 +21,10 @@ public class Workplace extends Model {
 	public String name_en;
 	
 	
-	public List<String> waitingList;	
+	public String[] waitingList;	
 	
-	public String processList;
+	public String inWork;
 	
-	public List<String> productionPlanList;
+	public String[] productionPlanList;
 	
 }
