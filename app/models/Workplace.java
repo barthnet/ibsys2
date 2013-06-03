@@ -17,9 +17,7 @@ import play.db.jpa.Model;
 public class Workplace extends Model {
 	
 	public int workplaceId;
-	public String name;
-	public String name_en;
-	
+	public String name;	
 	
 	public String[] waitingList;	
 	
