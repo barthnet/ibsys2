@@ -1,10 +1,11 @@
 package utils;
 
-import models.Item;
-import models.Workplace;
-import models.ItemTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import play.db.jpa.Model;
+import models.Item;
+import models.ItemTime;
+import models.Workplace;
 
 /**
  * 
@@ -25,4 +26,18 @@ public class ItemHelper {
 		return itemTime.processTime;
 	}
 
+	public static List<Workplace> getWorkplaces(Item item) {
+		List<Workplace> result = new ArrayList<Workplace>();
+		
+		//ItemTimes suchen anhand des Items aus den ItemTimes
+		//die Workplaces zurückschicken
+		
+		List<ItemTime> times = ItemTime.find("byItem", item).fetch();
+		for (ItemTime itemTime : times) {
+			result.add(itemTime.workplace);
+		}
+		
+		result = Workplace.find("byItem", item).fetch();		
+		return result;
+	}
 }
