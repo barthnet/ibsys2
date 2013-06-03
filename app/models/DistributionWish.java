@@ -29,10 +29,10 @@ public class DistributionWish extends Model {
 		this.period2 = other.period2;
 		this.period3 = other.period3;
 
-		this.item.name = other.item.name;
-		this.item.name_en = other.item.name_en;
-		this.item.price = other.item.price;
-		this.item.type = other.item.type;
+//		this.item.name = other.item.name;
+//		this.item.name_en = other.item.name_en;
+//		this.item.price = other.item.price;
+//		this.item.type = other.item.type;
 		this.save();
 	}
 

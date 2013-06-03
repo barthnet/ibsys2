@@ -2,6 +2,9 @@
 
 DispositionManufacture(dm1):
     item: P1
+    childs: 
+        - E26
+        - E51
     stock:
     safetyStock:
     waitingList:
@@ -20,6 +23,10 @@ DispositionManufacture(dm26_P1):
 
 DispositionManufacture(dm51):
     item: E51
+    childs: 
+        - E16
+        - E17 
+        - E50
     stock:
     safetyStock:
     waitingList:
@@ -47,6 +54,10 @@ DispositionManufacture(dm17_P1):
 
 DispositionManufacture(dm50):
     item: E50
+    childs: 
+        - E4
+        - E10
+        - E49
     stock:
     safetyStock:
     waitingList:
@@ -74,6 +85,10 @@ DispositionManufacture(dm10):
 
 DispositionManufacture(dm49):
     item: E49
+    childs: 
+        - E7
+        - E13
+        - E18
     stock:
     safetyStock:
     waitingList:
@@ -112,6 +127,9 @@ DispositionManufacture(dm18):
 
 DispositionManufacture(dm2):
     item: P2
+    childs: 
+        - E26
+        - E56
     stock:
     safetyStock:
     waitingList:
@@ -130,6 +148,10 @@ DispositionManufacture(dm26_P2):
 
 DispositionManufacture(dm56):
     item: E56
+    childs: 
+        - E16
+        - E17
+        - E55
     stock:
     safetyStock:
     waitingList:
@@ -157,6 +179,10 @@ DispositionManufacture(dm17_P2):
 
 DispositionManufacture(dm55):
     item: E55
+    childs: 
+        - E5
+        - E11
+        - E54
     stock:
     safetyStock:
     waitingList:
@@ -184,6 +210,10 @@ DispositionManufacture(dm11):
 
 DispositionManufacture(dm54):
     item: E54
+    childs: 
+        - E8
+        - E14
+        - E19
     stock:
     safetyStock:
     waitingList:
@@ -222,6 +252,9 @@ DispositionManufacture(dm19):
 
 DispositionManufacture(dm3):
     item: P3
+    childs: 
+        - E26
+        - E31
     stock:
     safetyStock:
     waitingList:
@@ -240,6 +273,10 @@ DispositionManufacture(dm26_P3):
 
 DispositionManufacture(dm31):
     item: E31
+    childs: 
+        - E16
+        - E17
+        - E30
     stock:
     safetyStock:
     waitingList:
@@ -267,6 +304,10 @@ DispositionManufacture(dm17_P3):
 
 DispositionManufacture(dm30):
     item: E30
+    childs: 
+        - E6
+        - E12
+        - E29
     stock:
     safetyStock:
     waitingList:
@@ -294,6 +335,10 @@ DispositionManufacture(dm12):
 
 DispositionManufacture(dm29):
     item: E29
+    childs: 
+        - E9
+        - E15
+        - E20
     stock:
     safetyStock:
     waitingList:

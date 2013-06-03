@@ -40,6 +40,7 @@ public class Application extends Controller {
 	public static void test(){
 //		List<Item> items = Item.find("byItemId", "P1").fetch();
 		List<ProductionPlan> items = ProductionPlan.findAll();
+		renderJSON(items);
 	}
 	
 	public static void test2(){
@@ -67,6 +68,7 @@ public class Application extends Controller {
 		renderText(wishs);
 	}
 	
+	
 	public static void getDistributenWishs() {
 		setHeader();
 		List<DistributionWish> wishs = DistributionWish.findAll();
@@ -82,7 +84,7 @@ public class Application extends Controller {
 		if (pPlans == null || pPlans.size() == 0) {
 			error("Keine Produktionspläne vorhanden");
 		}
-		renderJSON(new JSONSerializer().exclude(
+		renderJSON(new JSONSerializer().include("dispositionManufacture.childs").exclude(
 				"*.class",
 				"*.entityId",
 				"*.persistent",
@@ -113,7 +115,7 @@ public class Application extends Controller {
 	}
 
 	/**
-	 * upload latest result xml file manualy
+	 * upload latest result xml file manually
 	 * 
 	 * @param file
 	 */

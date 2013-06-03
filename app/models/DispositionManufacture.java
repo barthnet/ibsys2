@@ -1,6 +1,9 @@
 package models;
 
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import play.db.jpa.Model;
@@ -10,6 +13,9 @@ public class DispositionManufacture extends Model {
 
 	@OneToOne
 	public Item item;
+	
+//	@OneToMany
+	public String[] childs;
 
 	public int distributionWish;
 	public int stock;
