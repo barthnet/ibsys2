@@ -13,6 +13,7 @@ public class DispositionManufacture extends Model {
 
 	
 	public String item;
+	public String product;
 	
 //	@OneToMany
 	public String[] childs;
