@@ -16,8 +16,7 @@ public class OpenOrder extends Model {
 	public int orderperiod;
 	public int amount;
 
-	@OneToOne
-	public Item item;
+	public String item;
 
 	@Override
 	public String toString() {

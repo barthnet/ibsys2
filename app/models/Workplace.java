@@ -20,11 +20,11 @@ public class Workplace extends Model {
 	public String name;
 	public String name_en;
 	
-	@OneToMany
-	public List<WaitingList> waitingList;	
-	@OneToOne
-	public WaitingList processList;
-	@OneToMany
-	public List<ProductionOrder> productionPlanList;
+	
+	public List<String> waitingList;	
+	
+	public String processList;
+	
+	public List<String> productionPlanList;
 	
 }

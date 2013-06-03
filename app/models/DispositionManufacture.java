@@ -11,8 +11,8 @@ import play.db.jpa.Model;
 @Entity
 public class DispositionManufacture extends Model {
 
-	@OneToOne
-	public Item item;
+	
+	public String item;
 	
 //	@OneToMany
 	public String[] childs;
@@ -32,5 +32,6 @@ public class DispositionManufacture extends Model {
 				+ ", processList=" + processList + ", production=" + production
 				+ "]";
 	}
+	
 
 }

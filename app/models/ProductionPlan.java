@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -15,8 +16,8 @@ import play.db.jpa.Model;
 @Entity
 public class ProductionPlan extends Model {
 
-	@OneToMany
-	public List<DispositionManufacture> dispositionManufacture;
+	
+	public List<String> dispositionManufacture;
 
 	public String product;
 
@@ -24,6 +25,8 @@ public class ProductionPlan extends Model {
 	// public List<DispositionManufacture> dispositionManufactureP2;
 	// @OneToMany
 	// public List<DispositionManufacture> dispositionManufactureP3;
+	
+	
 
 	@Override
 	public String toString() {

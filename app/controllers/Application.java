@@ -8,11 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.print.attribute.standard.PDLOverrideSupported;
+
+import logic.ApplicationLogic;
 import logic.Crawler;
 import logic.Parser;
+import models.DispositionManufacture;
 import models.DistributionWish;
 import models.Item;
 import models.OpenOrder;
+import models.ProductionOrder;
 import models.ProductionPlan;
 
 import org.apache.commons.io.IOUtils;
@@ -43,11 +48,18 @@ public class Application extends Controller {
 		renderJSON(items);
 	}
 	
-	public static void test2(){
+	public static void postProductionPlan(){
 		setHeader();
 		String body = getBodyAsString();
-		ArrayList<ProductionPlan> plans =  new JSONDeserializer<ArrayList<ProductionPlan>>().use("values", ProductionPlan.class).deserialize(body);
-		renderText(plans);
+		ArrayList<ProductionPlan> plansIn =  new JSONDeserializer<ArrayList<ProductionPlan>>().use("values", ProductionPlan.class).deserialize(body);
+		for (ProductionPlan productionPlan : plansIn) {
+			ProductionPlan exist = ProductionPlan.find("byProduct", productionPlan.product).first();
+			if (exist != null) {
+				exist.merge(productionPlan);
+			}
+		}
+		List<ProductionPlan> li = ProductionPlan.findAll();
+		renderText(li);
 	}
 	
 	public static void testLogin() {
@@ -81,6 +93,7 @@ public class Application extends Controller {
 	public static void getProductionPlan() {
 		setHeader();
 		List<ProductionPlan> pPlans = ProductionPlan.findAll();
+		
 		if (pPlans == null || pPlans.size() == 0) {
 			error("Keine Produktionspläne vorhanden");
 		}
@@ -88,13 +101,13 @@ public class Application extends Controller {
 				"*.class",
 				"*.entityId",
 				"*.persistent",
-				"dispositionManufacture.id",
+//				"dispositionManufacture.id",
 				"dispositionManufacture.item.name",
 				"dispositionManufacture.item.name_en",
 				"dispositionManufacture.item.amount",
 				"dispositionManufacture.item.price",
-				"dispositionManufacture.item.type",
-				"dispositionManufacture.item.id")
+				"dispositionManufacture.item.type")
+//				"dispositionManufacture.item.id")
 				.serialize(pPlans));
 	}
 

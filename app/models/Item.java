@@ -21,8 +21,7 @@ public class Item extends Model {
 	public int amount;
 	public double price;
 	
-	@OneToMany
-	public List<Component> components;
+	public List<String> components;
 	
 	@Override
 	public String toString() {
@@ -34,7 +33,7 @@ public class Item extends Model {
 		if (components == null) {
 			components = new ArrayList<>();
 		}
-		components.add(comp);
+//		components.add(comp);
 	}
 	
 //	@JSON

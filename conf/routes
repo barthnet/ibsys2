@@ -14,6 +14,7 @@ GET		/wish									Application.getDistributenWishs
 GET		/testLogin								Application.testLogin
 POST	/wish									Application.postDistributionWish
 GET		/production								Application.getProductionPlan
+POST	/production								Application.postProductionPlan
 
 # methods
 GET		/login									Application.login

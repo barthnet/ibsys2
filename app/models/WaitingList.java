@@ -16,7 +16,7 @@ public class WaitingList extends Model {
 	public int period;
 	public int amount;
 	
-	@OneToOne
-	public Item item;
+	
+	public String item;
 
 }

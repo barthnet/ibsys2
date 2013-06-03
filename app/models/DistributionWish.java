@@ -8,8 +8,7 @@ import play.db.jpa.Model;
 @Entity
 public class DistributionWish extends Model {
 
-	@OneToOne
-	public Item item;
+	public String item;
 
 	public int period;
 	public int period1;

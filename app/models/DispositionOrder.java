@@ -18,7 +18,6 @@ public class DispositionOrder extends Model {
 	public double deliveryVariance;
 	public int discount;
 	
-	@OneToOne
-	public Item item;
+	public String item;
 	
 }

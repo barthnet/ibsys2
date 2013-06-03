@@ -8,8 +8,7 @@ import play.db.jpa.Model;
 @Entity
 public class Component extends Model {
 
-	@OneToOne
-	public Item item;
+	public String item;
 	public int amount;
 	
 }
