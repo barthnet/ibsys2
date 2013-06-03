@@ -10,34 +10,33 @@ import models.Workplace;
 /**
  * 
  * @author sven
- *
+ * 
  */
 public class ItemHelper {
-	
-	public static int getSetupTime(Workplace workplace, Item item) {
-		
+
+	public static int getSetupTime(String workplace, String item) {
+
 		ItemTime itemTime = ItemTime.find("byWorkplaceAndItem", workplace, item).first();
 		return itemTime.setupTime;
 	}
-	
+
 	public static int getProcessTime(Workplace workplace, Item item) {
-		
+
 		ItemTime itemTime = ItemTime.find("byWorkplaceAndItem", workplace, item).first();
 		return itemTime.processTime;
 	}
 
-	public static List<Workplace> getWorkplaces(Item item) {
+	public static List<Workplace> getWorkplaces(String item) {
 		List<Workplace> result = new ArrayList<Workplace>();
-		
-		//ItemTimes suchen anhand des Items aus den ItemTimes
-		//die Workplaces zurückschicken
-		
+
+		// ItemTimes suchen anhand des Items aus den ItemTimes
+		// die Workplaces zurückschicken
+
 		List<ItemTime> times = ItemTime.find("byItem", item).fetch();
 		for (ItemTime itemTime : times) {
-			result.add(itemTime.workplace);
+			Workplace wp = Workplace.find("byWorkplaceId", itemTime.workplace).first();
+			result.add(wp);
 		}
-		
-		result = Workplace.find("byItem", item).fetch();		
 		return result;
 	}
 }
