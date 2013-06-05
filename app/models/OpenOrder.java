@@ -6,21 +6,26 @@ import play.db.jpa.*;
 
 /**
  * muss OpenOrder heißen, da es mit Order anscheinend zu Namenkonflikten kommt
+ * 
  * @author mopa
- *
+ * 
  */
 @Entity
 public class OpenOrder extends Model {
-	
-	public int mode;
-	public int orderperiod;
-	public int amount;
 
 	public String item;
 
+	public int mode;
+	public int orderPeriod;
+	public int amount;
+
+	public Item getItemAsObject() {
+		return Item.find("byItemId", this.item).first();
+	}
+
 	@Override
 	public String toString() {
-		return "OpenOrder [mode=" + mode + ", orderperiod=" + orderperiod + ", amount=" + amount + "item=" + item + "]";
+		return "OpenOrder [item=" + item + ", mode=" + mode + ", orderPeriod=" + orderPeriod + ", amount=" + amount + "]";
 	}
-	
+
 }

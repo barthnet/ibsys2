@@ -1,10 +1,14 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import javassist.NotFoundException;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 
 import play.db.jpa.Model;
 
@@ -15,31 +19,54 @@ import play.db.jpa.Model;
 public class Item extends Model {
 
 	public String itemId;
-	public String name;
+	public int itemNumber;
 	public String type;
+	public String name;
+
 	public int amount;
 	public double price;
-	
+
 	public String[] components;
+	public String[] usedIn;
+
+	public Item getItemAsObject() {
+		return Item.find("byItemId", this.itemId).first();
+	}
+
+	public List<Component> getItemComponentsAsObjectList() {
+		List<Component> itemComponentObjects = new ArrayList<>();
+		Component item = null;
+		for (int count = 0, length = this.components.length; count < length; count++) {
+			item = Component.find("byItem", this.components[count]).first();
+			itemComponentObjects.add(item);
+		}
+		return itemComponentObjects;
+	}
 	
+	public List<Component> getItemsUsedInAsObjectList() {
+		List<Component> itemsUsedInAsObjectList = new ArrayList<>();
+		Component item = null;
+		for (int count = 0, length = this.usedIn.length; count < length; count++) {
+			item = Component.find("byItem", this.usedIn[count]).first();
+			itemsUsedInAsObjectList.add(item);
+		}
+		return itemsUsedInAsObjectList;
+	}
+
+	public void addComp(Component comp) {
+		String[] newComponentList = Arrays.copyOf(this.components, this.components.length + 1);
+		newComponentList[this.components.length] = comp.item;
+	}
+	
+	@PrePersist
+	protected void onCreate() {
+		this.itemId = type + itemNumber;
+	}
+
 	@Override
 	public String toString() {
-		return "Item [itemId=" + itemId + ", name=" + name + ", type=" + type + ", amount=" + amount + ", price=" + price + ", id="
-				+ id + "]";
+		return "Item [itemId=" + itemId + ", itemNumber=" + itemNumber + ", type=" + type + ", name=" + name + ", amount=" + amount + ", price=" + price
+				+ ", components=" + Arrays.toString(components) + "]";
 	}
-	
-	public void addComp(Component comp) {
-		if (components == null) {
-//			components = new ArrayList<>();
-		}
-//		components.add(comp);
-	}
-	
-//	@JSON
-//	public String getItemId() {
-//		return type + itemId;
-//	}
-
-	
 
 }

@@ -1,294 +1,294 @@
 Item(P1):
-    itemId: 1
+    itemNumber: 1
     type: P
     name: Children’s bicycle
 
 Item(P2):    
-    itemId: 2
+    itemNumber: 2
     type: P 
     name: Ladies bicycle  
     
 Item(P3):    
-    itemId: 3 
+    itemNumber: 3 
     type: P 
     name: Men’s bicycle 
         
 Item(E4):    
-    itemId: 4 
+    itemNumber: 4 
     type: E 
     name: Rear wheel group 
         
 Item(E5):    
-    itemId: 5 
+    itemNumber: 5 
     type: E 
     name: Rear wheel group 
         
 Item(E6):    
-    itemId: 6 
+    itemNumber: 6 
     type: E 
     name: Rear wheel group 
     
 Item(E7):    
-    itemId: 7 
+    itemNumber: 7 
     type: E 
     name: Front wheel group 
 
 Item(E8):    
-    itemId: 8 
+    itemNumber: 8 
     type: E 
     name: Front wheel group 
     
 Item(E9):        
-    itemId: 9 
+    itemNumber: 9 
     type: E  
     name: Front wheel group 
     
 Item(E10):        
-    itemId: 10 
+    itemNumber: 10 
     type: E  
     name: Mudguard rear 
 
 Item(E11):    
-    itemId: 11 
+    itemNumber: 11 
     type: E 
     name: Mudguard rear 
  
 Item(E12):    
-    itemId: 12 
+    itemNumber: 12 
     type: E 
     name: Mudguard rear 
    
 Item(E13):    
-    itemId: 13 
+    itemNumber: 13 
     type: E 
     name: Mudguard front 
   
 Item(E14):    
-    itemId: 14 
+    itemNumber: 14 
     type: E 
     name: Mudguard front 
   
 Item(E15):    
-    itemId: 15 
+    itemNumber: 15 
     type: E 
     name: Mudguard front 
  
 Item(E16):    
-    itemId: 16 
+    itemNumber: 16 
     type: E  
     name: Handle complete 
  
 Item(E17):    
-    itemId: 17 
+    itemNumber: 17 
     type: E 
     name: Saddle complete 
     
 Item(E18):    
-    itemId: 18 
+    itemNumber: 18 
     type: E 
     name: Frame 
    
 Item(E19):    
-    itemId: 19 
+    itemNumber: 19 
     type: E  
     name: Frame 
   
 Item(E20):    
-    itemId: 20 
+    itemNumber: 20 
     type: E 
     name: Frame 
   
 Item(K21):    
-    itemId: 21 
+    itemNumber: 21 
     type: K 
     name: Chain 
  
 Item(K22):    
-    itemId: 22 
+    itemNumber: 22 
     type: K 
     name: Chain 
  
 Item(K23):    
-    itemId: 23 
+    itemNumber: 23 
     type: K 
     name: Chain 
  
 Item(K24):    
-    itemId: 24 
+    itemNumber: 24 
     type: K 
     name: Nut 3/8“ 
   
 Item(K25):    
-    itemId: 25 
+    itemNumber: 25 
     type: K 
     name: Washer 3/8“ 
   
 Item(E26):    
-    itemId: 26 
+    itemNumber: 26 
     type: E  
     name: Pedal complete 
  
 Item(K27):    
-    itemId: 27 
+    itemNumber: 27 
     type: K  
     name: Screw 3/8“ 
  
 Item(K28):    
-    itemId: 28 
+    itemNumber: 28 
     type: K  
     name: Tube 3/4“ 
    
 Item(E29):    
-    itemId: 29 
+    itemNumber: 29 
     type: E 
     name: Front wheel compl. 
 
 Item(E30):    
-    itemId: 30 
+    itemNumber: 30 
     type: E 
     name: Frame and wheels 
   
 Item(E31):    
-    itemId: 31 
+    itemNumber: 31 
     type: E  
     name: Bicycle w/o. pedals 
    
 Item(K32):    
-    itemId: K32 
+    itemNumber: K32 
     type: K 
     name: Paint 
    
 Item(K33):    
-    itemId: 33 
+    itemNumber: 33 
     type: K 
     name: Rim compl. 
  
 Item(K34):    
-    itemId: 34 
+    itemNumber: 34 
     type: K 
     name: Spoke 
    
 Item(K35):    
-    itemId: 35 
+    itemNumber: 35 
     type: K 
     name: Taper sleeve 
  
 Item(K36):    
-    itemId: 36 
+    itemNumber: 36 
     type: K  
     name: Free wheel 
 
 Item(K37):    
-    itemId: 37 
+    itemNumber: 37 
     type: K 
     name: Fork 
  
 Item(K38):    
-    itemId: 38 
+    itemNumber: 38 
     type: K  
     name: Axle 
 
 Item(K39):    
-    itemId: 39 
+    itemNumber: 39 
     type: K 
     name: Sheet 
 
 Item(K40):    
-    itemId: 40 
+    itemNumber: 40 
     type: K 
     name: Handle bar 
  
 Item(K41):    
-    itemId: 41 
+    itemNumber: 41 
     type: K  
     name: Nut 3/4“ 
  
 Item(K42):    
-    itemId: 42 
+    itemNumber: 42 
     type: K 
     name: Handle grip
 
 Item(K43):    
-    itemId: 43
+    itemNumber: 43
     type: K 
     name: Saddle
   
 Item(K44):    
-    itemId: 44
+    itemNumber: 44
     type: K 
     name: Bar 1/2“ 
 
 Item(K45):
-    itemId: 45 
+    itemNumber: 45 
     type: K 
     name: Nut 1/4“ 
 
 Item(K46):
-    itemId: 46 
+    itemNumber: 46 
     type: K 
     name: Screw 1/4“
 
 Item(K47):    
-    itemId: 47
+    itemNumber: 47
     type: K 
     name: Sprocket 
 
 Item(K48):
-    itemId: 48
+    itemNumber: 48
     type: K 
     name: Pedal 
 
 Item(E49):    
-    itemId: 49 
+    itemNumber: 49 
     type: E 
     name: Front wheel compl 
 
 Item(E50):
-    itemId: 50
+    itemNumber: 50
     type: E
     name: Frame and wheels 
 
 Item(E51):
-    itemId: 51
+    itemNumber: 51
     type: E 
     name: Bicycle w/o. pedals 
 
 Item(K52):
-    itemId: 52 
+    itemNumber: 52 
     type: K  
     name: Rim compl. 
 
 Item(K53):    
-    itemId: 53
+    itemNumber: 53
     type: K  
     name: Spoke 
 
 Item(E54):    
-    itemId: 54 
+    itemNumber: 54 
     type: E
     name: Front wheel compl 
  
 Item(E55):    
-    itemId: 55 
+    itemNumber: 55 
     type: E 
     name: Frame and wheels
  
 Item(E56):    
-    itemId: 56 
+    itemNumber: 56 
     type: E 
     name: Bicycle w/o. pedals
 
 Item(K57):    
-    itemId: 57 
+    itemNumber: 57 
     type: K
     name: Rim compl. 
  
 Item(K58):    
-    itemId: 58 
+    itemNumber: 58 
     type: K  
     name: Spoke 
 
 Item(K59):    
-    itemId: 59 
+    itemNumber: 59 
     type: K 
     name: Welding wires 

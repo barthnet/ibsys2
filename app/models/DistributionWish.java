@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
@@ -10,29 +12,35 @@ public class DistributionWish extends Model {
 
 	public String item;
 
-	public int period;
+	public int period0;
 	public int period1;
 	public int period2;
 	public int period3;
 
-	@Override
-	public String toString() {
-		return "DistributionWish [item=" + item + ", period=" + period + ", period1=" + period1
-				+ ", period2=" + period2 + ", period3=" + period3 + "]";
+	public Item getItemAsObject() {
+		return Item.find("byItemId", this.item).first();
 	}
 
-	public void merge(DistributionWish other) {
+	public static void merge(List<DistributionWish> listToMerge) {
+		for (DistributionWish dist : listToMerge) {
+			DistributionWish d = DistributionWish.find("byItem", dist.item).first();
+			if (d == null) d = new DistributionWish();
+			d.merge(dist);
+			d.save();
+		}
+	}
 
-		this.period = other.period;
-		this.period1 = other.period1;
-		this.period2 = other.period2;
-		this.period3 = other.period3;
+	public void merge(DistributionWish dist) {
+		this.item = dist.item;
+		this.period0 = dist.period0;
+		this.period1 = dist.period1;
+		this.period2 = dist.period2;
+		this.period3 = dist.period3;
+	}
 
-//		this.item.name = other.item.name;
-//		this.item.name_en = other.item.name_en;
-//		this.item.price = other.item.price;
-//		this.item.type = other.item.type;
-		this.save();
+	@Override
+	public String toString() {
+		return "DistributionWish [item=" + item + ", period0=" + period0 + ", period1=" + period1 + ", period2=" + period2 + ", period3=" + period3 + "]";
 	}
 
 }

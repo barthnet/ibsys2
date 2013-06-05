@@ -14,13 +14,13 @@ import models.Workplace;
  */
 public class ItemHelper {
 
-	public static int getSetupTime(String workplace, String item) {
+	public static int getSetupTime(int workplace, String item) {
 
 		ItemTime itemTime = ItemTime.find("byWorkplaceAndItem", workplace, item).first();
 		return itemTime.setupTime;
 	}
 
-	public static int getProcessTime(Workplace workplace, Item item) {
+	public static int getProcessTime(int workplace, String item) {
 
 		ItemTime itemTime = ItemTime.find("byWorkplaceAndItem", workplace, item).first();
 		return itemTime.processTime;

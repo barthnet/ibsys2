@@ -4,22 +4,29 @@
 
 # Home page
 GET     /                                       Application.index
-GET		/doku									Application.doku
 
 # Test methods
 GET		/test									Application.test
-POST	/test2									Application.test2
+GET		/test2									Application.test2
 GET		/parse									Application.parseXML
-GET		/wish									Application.getDistributenWishs
 GET		/testLogin								Application.testLogin
-POST	/wish									Application.postDistributionWish
-GET		/production								Application.getProductionPlan
-POST	/production								Application.postProductionPlan
 
 # methods
 GET		/login									Application.login
 GET		/load									Application.loadXmlFromSite
 POST	/upload									Application.uploadXML
+
+# simulate methods
+GET		/wish									Application.getDistributenWishs
+POST	/wish									Application.postDistributionWishs
+GET		/production								Application.getProductionPlan
+POST	/production								Application.postProductionPlan
+GET		/order 									Application.getProductionOrders
+POST	/order									Application.postProductionOrders
+GET		/capacity								Application.getCapacity
+POST	/capacity								Application.postCapacity
+GET		/disposition							Application.getDisposition
+POST	/disposition							Application.postDisposition
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

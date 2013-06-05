@@ -7,12 +7,17 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import logic.ApplicationLogic;
 import logic.Crawler;
 import logic.Parser;
+import models.Capacity;
 import models.DispositionManufacture;
+import models.DispositionOrder;
 import models.DistributionWish;
 import models.Item;
 import models.OpenOrder;
+import models.ProductionOrder;
+import models.Workplace;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -22,6 +27,7 @@ import play.Logger;
 import play.mvc.Controller;
 import play.templates.Template;
 import play.templates.TemplateLoader;
+import play.test.Fixtures;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
@@ -30,79 +36,140 @@ public class Application extends Controller {
 	public static void index() {
 		render();
 	}
+	
+	public static void test() {
+		List<Workplace> places = Workplace.findAll();
+		renderText(places);
+	}
+	
+	public static void test2() {
+		List<DispositionManufacture> disps = DispositionManufacture.find("byItem", "E26").fetch();
+		renderJSON(disps);
+	}
 
-	public static void doku() {
-		index();
-	}
-	
-	public static void test(){
-//		List<Item> items = Item.find("byItemId", "P1").fetch();
-		renderJSON(null);
-	}
-	
-	public static void postProductionPlan(){
-		setHeader();
-//		String body = getBodyAsString();
-//		ArrayList<ProductionPlan> plansIn =  new JSONDeserializer<ArrayList<ProductionPlan>>().use("values", ProductionPlan.class).deserialize(body);
-//		for (ProductionPlan productionPlan : plansIn) {
-//			ProductionPlan exist = ProductionPlan.find("byProduct", productionPlan.product).first();
-//			if (exist != null) {
-//				exist.merge(productionPlan);
-//			}
-//		}
-//		List<ProductionPlan> li = ProductionPlan.findAll();
-//		renderText(li);
-	}
-	
+
 	public static void testLogin() {
 		setHeader();
 		renderJSON(true);
 	}
 	
-	public static void postDistributionWish() {
+	/**
+	 * save disposition orders
+	 */
+	public static void postDispositionOrders() {
 		setHeader();
 		String body = getBodyAsString();
-		DistributionWish oldWish = null;
-		ArrayList<DistributionWish> wishs =  new JSONDeserializer<ArrayList<DistributionWish>>().use("values", DistributionWish.class).deserialize(body);
-		
-		for (DistributionWish wish : wishs) {
-			oldWish = DistributionWish.findById(wish.id);
-			oldWish.merge(wish);
-		}
-		renderText(wishs);
+		ArrayList<DispositionOrder> orders = new JSONDeserializer<ArrayList<DispositionOrder>>().use("values", DispositionOrder.class).deserialize(body);
+		DispositionOrder.merge(orders);
+		ok();
 	}
 	
-	
-	public static void getDistributenWishs() {
+	/**
+	 * get disposition orders
+	 */
+	public static void getDispositionOrders() {
 		setHeader();
-		List<DistributionWish> wishs = DistributionWish.findAll();
-		if (wishs == null || wishs.size() == 0) {
-			error("Keine Distributionswünsche vorhanden");
-		}
-		renderJSON(new JSONSerializer().include("id", "item.itemId", "period", "period1", "period2", "period3").exclude("*").serialize(wishs));
+		List<DispositionOrder> orders = DispositionOrder.findAll();
+		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(orders));
 	}
 	
+	/**
+	 * save capacities
+	 */
+	public static void postCapacity() {
+		setHeader();
+		String body = getBodyAsString();
+		ArrayList<Capacity> capacities = new JSONDeserializer<ArrayList<Capacity>>().use("values", Capacity.class).deserialize(body);
+		Capacity.merge(capacities);
+		ok();
+	}
+	
+	/**
+	 * get calculated capacities of all workplaces
+	 */
+	public static void getCapacity() {
+		setHeader();
+		List<Capacity> capacities = Capacity.findAll();
+		renderJSON(new JSONSerializer().exclude("workplaceAsObject").serialize(capacities));
+	}
+	
+	/**
+	 * save productionOrders
+	 */
+	public static void postProductionOrders() {
+		setHeader();
+		String body = getBodyAsString();
+		ArrayList<ProductionOrder> orders = new JSONDeserializer<ArrayList<ProductionOrder>>().use("values", ProductionOrder.class).deserialize(body);
+		if (orders != null && !orders.isEmpty()) {
+			ProductionOrder.deleteAll();
+			ProductionOrder.saveAll(orders);
+		}
+		ApplicationLogic.calculateCapacity();
+		ok();
+	}
+	
+	/**
+	 * get all saved productionOrders
+	 */
+	public static void getProductionOrders() {
+		setHeader();
+		List<ProductionOrder> orders = ProductionOrder.find("order by orderNumber asc").fetch();
+		if (orders == null || orders.isEmpty()) {
+			ApplicationLogic.planToOrder();
+			orders = ProductionOrder.find("order by orderNumber asc").fetch();
+		}
+		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(orders));
+	}
+
+	/**
+	 * save productionplan
+	 */
+	public static void postProductionPlan() {
+		setHeader();
+		String body = getBodyAsString();
+		ArrayList<DispositionManufacture> plan = new JSONDeserializer<ArrayList<DispositionManufacture>>().use("values", DispositionManufacture.class).deserialize(body);
+		DispositionManufacture.merge(plan);	
+		ok();
+	}
+
+	/**
+	 * get productionplan
+	 */
 	public static void getProductionPlan() {
 		setHeader();
 		List<DispositionManufacture> disps = DispositionManufacture.findAll();
-		renderJSON(disps);
-//		List<ProductionPlan> pPlans = ProductionPlan.findAll();
-//		
-//		if (pPlans == null || pPlans.size() == 0) {
-//			error("Keine Produktionspläne vorhanden");
-//		}
-//		renderJSON(new JSONSerializer().include("dispositionManufacture.childs").exclude(
-//				"*.class",
-//				"*.entityId",
-//				"*.persistent",
-////				"dispositionManufacture.id",
-//				"dispositionManufacture.item.name",
-//				"dispositionManufacture.item.name_en",
-//				"dispositionManufacture.item.amount",
-//				"dispositionManufacture.item.price",
-//				"dispositionManufacture.item.type")
-////				"dispositionManufacture.item.id")
-//				.serialize(pPlans));
+		renderJSON(new JSONSerializer().exclude("itemAsObject", "ItemChildsAsObject").serialize(disps));
+	}	
+
+	/**
+	 * deliver saved distributionWishs, if necessary create them first
+	 */
+	public static void getDistributenWishs() {
+		setHeader();
+		List<DistributionWish> wishs = DistributionWish.findAll();
+		if (wishs == null || wishs.isEmpty()) {
+			wishs = new ArrayList<>();
+			List<Item> pItems = Item.find("byType", "P").fetch();
+			for (Item item : pItems) {
+				DistributionWish wish = new DistributionWish();
+				wish.item = item.itemId;
+				wish.save();
+				wishs.add(wish);
+			}
+		}
+		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(wishs));
+	}
+	
+	/**
+	 * save and merge posted deistributionWishs
+	 */
+	public static void postDistributionWishs() {
+		setHeader();
+		String body = getBodyAsString();
+		ArrayList<DistributionWish> wishs = new JSONDeserializer<ArrayList<DistributionWish>>().use("values", DistributionWish.class).deserialize(body);
+		DistributionWish.merge(wishs);	
+		ApplicationLogic.wishToPlan();
+		ok();
 	}
 
 	/**
@@ -110,15 +177,12 @@ public class Application extends Controller {
 	 * everytime the xml from the scsim website
 	 */
 	public static void parseXML() {
-		OpenOrder.deleteAll();
 		Template template = TemplateLoader.load("229_9_7result.xml");
 		String xmlFile = template.render();
-
 		InputStream in = IOUtils.toInputStream(xmlFile);
 		Parser p = new Parser(in);
 		p.parseDoc();
-		List<Item> items = Item.findAll();
-		renderText(items.size() + " : " + items);
+		ok();
 	}
 
 	/**
@@ -178,6 +242,7 @@ public class Application extends Controller {
 
 	/**
 	 * get request body as JSONObject
+	 * 
 	 * @return
 	 */
 	private static JSONObject getBodyAsJSON() {
@@ -190,7 +255,12 @@ public class Application extends Controller {
 		}
 		return json;
 	}
-	
+
+	/**
+	 * get request body as string
+	 * 
+	 * @return
+	 */
 	private static String getBodyAsString() {
 		return params.get("body");
 	}
