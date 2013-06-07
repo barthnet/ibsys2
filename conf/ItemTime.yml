@@ -1,425 +1,425 @@
 ItemTime(W1-E49):
-    workplace: W1
+    workplace: 1
     item: E49
     setupTime: 20
     processTime: 6
 
 ItemTime(W1-E54):
-    workplace: W1
+    workplace: 1
     item: E54
     setupTime: 20
     processTime: 6
 
 ItemTime(W1-E29):
-    workplace: W1
+    workplace: 1
     item: E29
     setupTime: 20 
     processTime: 6
 
 ItemTime(W2-E50):
-    workplace: W2
+    workplace: 2
     item: E50
     setupTime: 30 
     processTime: 5
 
 ItemTime(W2-E55):
-    workplace: W2
+    workplace: 2
     item: E55
     setupTime: 30  
     processTime: 5
 
 ItemTime(W2-E30):
-    workplace: W2
+    workplace: 2
     item: E30
     setupTime: 20  
     processTime: 5
 
 ItemTime(W3-E51):
-    workplace: W3
+    workplace: 3
     item: E51
     setupTime: 20  
     processTime: 5
 
 ItemTime(W3-E56):
-    workplace: W3
+    workplace: 3
     item: E56
     setupTime: 20 
     processTime: 6
 
 ItemTime(W3-E31):
-    workplace: W3
+    workplace: 3
     item: E31
     setupTime: 20 
     processTime: 6
 
 ItemTime(W4-P1):
-    workplace: W4
+    workplace: 4
     item: P1
     setupTime: 30 
     processTime: 6
 
 ItemTime(W4-P2):
-    workplace: W4
+    workplace: 4
     item: P2
     setupTime: 20 
     processTime: 7
 
 ItemTime(W4-P3):
-    workplace: W4
+    workplace: 4
     item: P3
     setupTime: 30 
     processTime: 7
 
 ItemTime(W6-E16):
-    workplace: W6
+    workplace: 6
     item: E16
     setupTime: 15 
     processTime: 2
 
 ItemTime(W6-E18):
-    workplace: W6
+    workplace: 6
     item: E18
     setupTime: 15 
     processTime: 3
 
 ItemTime(W6-E19):
-    workplace: W6
+    workplace: 6
     item: E19
     setupTime: 15 
     processTime: 3
 
 ItemTime(W6-E20):
-    workplace: W6
+    workplace: 6
     item: E20
     setupTime: 15 
     processTime: 3
 
 ItemTime(W7-E10):
-    workplace: W7
+    workplace: 7
     item: E10
     setupTime: 20 
     processTime: 2
 
 ItemTime(W7-E11):
-    workplace: W7
+    workplace: 7
     item: E11
     setupTime: 20 
     processTime: 2
 
 ItemTime(W7-E12):
-    workplace: W7
+    workplace: 7
     item: E12
     setupTime: 20 
     processTime: 2
 
 ItemTime(W7-E13):
-    workplace: W7
+    workplace: 7
     item: E13
     setupTime: 20 
     processTime: 2
 
 ItemTime(W7-E14):
-    workplace: W7
+    workplace: 7
     item: E14
     setupTime: 20 
     processTime: 2
 
 ItemTime(W7-E15):
-    workplace: W7
+    workplace: 7
     item: E15
     setupTime: 20 
     processTime: 2
 
 ItemTime(W7-E18):
-    workplace: W7
+    workplace: 7
     item: E18
     setupTime: 20 
     processTime: 2
 
 ItemTime(W7-E19):
-    workplace: W7
+    workplace: 7
     item: E19
     setupTime: 20 
     processTime: 2
 
 ItemTime(W7-E20):
-    workplace: W7
+    workplace: 7
     item: E20
     setupTime: 20 
     processTime: 2
 
 ItemTime(W7-E26):
-    workplace: W7
+    workplace: 7
     item: E26
     setupTime: 30 
     processTime: 2
 
 ItemTime(W8-E10):
-    workplace: W8
+    workplace: 8
     item: E10
     setupTime: 15 
     processTime: 1
 
 ItemTime(W8-E11):
-    workplace: W8
+    workplace: 8
     item: E11
     setupTime: 15 
     processTime: 2
 
 ItemTime(W8-E12):
-    workplace: W8
+    workplace: 8
     item: E12
     setupTime: 15 
     processTime: 2
 
 ItemTime(W8-E13):
-    workplace: W8
+    workplace: 8
     item: E13
     setupTime: 15 
     processTime: 1
 
 ItemTime(W8-E14):
-    workplace: W8
+    workplace: 8
     item: E14
     setupTime: 15 
     processTime: 2
 
 ItemTime(W8-E15):
-    workplace: W8
+    workplace: 8
     item: E15
     setupTime: 15 
     processTime: 2
 
 ItemTime(W8-E18):
-    workplace: W8
+    workplace: 8
     item: E18
     setupTime: 20 
     processTime: 3
 
 ItemTime(W8-E19):
-    workplace: W8
+    workplace: 8
     item: E19
     setupTime: 25 
     processTime: 3
 
 ItemTime(W8-E20):
-    workplace: W8
+    workplace: 8
     item: E20
     setupTime: 20 
     processTime: 3
 
 ItemTime(W9-E10):
-    workplace: W9
+    workplace: 9
     item: E10
     setupTime: 15 
     processTime: 3
 
 ItemTime(W9-E11):
-    workplace: W9
+    workplace: 9
     item: E11
     setupTime: 15 
     processTime: 3
 
 ItemTime(W9-E12):
-    workplace: W9
+    workplace: 9
     item: E12
     setupTime: 15 
     processTime: 3
 
 ItemTime(W9-E13):
-    workplace: W9
+    workplace: 9
     item: E13
     setupTime: 15 
     processTime: 3
 
 ItemTime(W9-E14):
-    workplace: W9
+    workplace: 9
     item: E14
     setupTime: 15 
     processTime: 3
 
 ItemTime(W9-E15):
-    workplace: W9
+    workplace: 9
     item: E15
     setupTime: 15 
     processTime: 3
 
 ItemTime(W9-E18):
-    workplace: W9
+    workplace: 9
     item: E18
     setupTime: 15 
     processTime: 2
 
 ItemTime(W9-E19):
-    workplace: W9
+    workplace: 9
     item: E19
     setupTime: 20 
     processTime: 2
 
 ItemTime(W9-E20):
-    workplace: W9
+    workplace: 9
     item: E20
     setupTime: 15 
     processTime: 2
 
 ItemTime(W10-E4):
-    workplace: W10
+    workplace: 10
     item: E4
     setupTime: 20 
     processTime: 4
 
 ItemTime(W10-E5):
-    workplace: W10
+    workplace: 10
     item: E5
     setupTime: 20 
     processTime: 4
 
 ItemTime(W10-E6):
-    workplace: W10
+    workplace: 10
     item: E6
     setupTime: 20 
     processTime: 4
 
 ItemTime(W10-E7):
-    workplace: W10
+    workplace: 10
     item: E7
     setupTime: 20 
     processTime: 4
 
 ItemTime(W10-E8):
-    workplace: W10
+    workplace: 10
     item: E8
     setupTime: 20 
     processTime: 4
 
 ItemTime(W10-E9):
-    workplace: W10
+    workplace: 10
     item: E9
     setupTime: 20 
     processTime: 4
 
 ItemTime(W11-E4):
-    workplace: W11
+    workplace: 11
     item: E4
     setupTime: 10
     processTime: 3
 
 ItemTime(W11-E5):
-    workplace: W11
+    workplace: 11
     item: E5
     setupTime: 10 
     processTime: 3
 
 ItemTime(W11-E6):
-    workplace: W11
+    workplace: 11
     item: E6
     setupTime: 20 
     processTime: 3
 
 ItemTime(W11-E7):
-    workplace: W11
+    workplace: 11
     item: E7
     setupTime: 20 
     processTime: 3
 
 ItemTime(W11-E8):
-    workplace: W11
+    workplace: 11
     item: E8
     setupTime: 20 
     processTime: 3
 
 ItemTime(W11-E9):
-    workplace: W11
+    workplace: 11
     item: E9
     setupTime: 20 
     processTime: 3
 
 ItemTime(W12-E10):
-    workplace: W12
+    workplace: 12
     item: E10
     setupTime: 0
     processTime: 3
 
 ItemTime(W12-E11):
-    workplace: W12
+    workplace: 12
     item: E11
     setupTime: 0
     processTime: 3
 
 ItemTime(W12-E12):
-    workplace: W12
+    workplace: 12
     item: E12
     setupTime: 0
     processTime: 3
 
 ItemTime(W12-E13):
-    workplace: W12
+    workplace: 12
     item: E13
     setupTime: 0
     processTime: 3
 
 ItemTime(W12-E14):
-    workplace: W12
+    workplace: 12
     item: E14
     setupTime: 0
     processTime: 3
 
 ItemTime(W12-E15):
-    workplace: W12
+    workplace: 12
     item: E15
     setupTime: 0
     processTime: 3
 
 ItemTime(W13-E10):
-    workplace: W13
+    workplace: 13
     item: E10
     setupTime: 0
     processTime: 2
 
 ItemTime(W13-E11):
-    workplace: W13
+    workplace: 13
     item: E11
     setupTime: 0
     processTime: 2
 
 ItemTime(W13-E12):
-    workplace: W13
+    workplace: 13
     item: E12
     setupTime: 0
     processTime: 2
 
 ItemTime(W13-E13):
-    workplace: W13
+    workplace: 13
     item: E13
     setupTime: 0
     processTime: 2
 
 ItemTime(W13-E14):
-    workplace: W13
+    workplace: 13
     item: E14
     setupTime: 0
     processTime: 2
 
 ItemTime(W13-E15):
-    workplace: W13
+    workplace: 13
     item: E15
     setupTime: 0
     processTime: 2
 
 ItemTime(W14-E16):
-    workplace: W14
+    workplace: 14
     item: E16
     setupTime: 0
     processTime: 3
 
 ItemTime(W15-E17):
-    workplace: W15
+    workplace: 15
     item: E17
     setupTime: 15
     processTime: 3
 
 ItemTime(W115-E26):
-    workplace: W15
+    workplace: 15
     item: E26
     setupTime: 15
     processTime: 3

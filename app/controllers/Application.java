@@ -15,6 +15,7 @@ import models.DispositionManufacture;
 import models.DispositionOrder;
 import models.DistributionWish;
 import models.Item;
+import models.ItemTime;
 import models.OpenOrder;
 import models.ProductionOrder;
 import models.Workplace;
@@ -38,7 +39,7 @@ public class Application extends Controller {
 	}
 	
 	public static void test() {
-		List<Workplace> places = Workplace.findAll();
+		List<ItemTime> places = ItemTime.findAll();
 		renderText(places);
 	}
 	
@@ -78,6 +79,7 @@ public class Application extends Controller {
 	public static void postCapacity() {
 		setHeader();
 		String body = getBodyAsString();
+		ApplicationLogic.calculateCapacity();
 		ArrayList<Capacity> capacities = new JSONDeserializer<ArrayList<Capacity>>().use("values", Capacity.class).deserialize(body);
 		Capacity.merge(capacities);
 		ok();
@@ -88,6 +90,7 @@ public class Application extends Controller {
 	 */
 	public static void getCapacity() {
 		setHeader();
+		ApplicationLogic.calculateCapacity();
 		List<Capacity> capacities = Capacity.findAll();
 		renderJSON(new JSONSerializer().exclude("workplaceAsObject").serialize(capacities));
 	}
@@ -137,7 +140,8 @@ public class Application extends Controller {
 	public static void getProductionPlan() {
 		setHeader();
 		List<DispositionManufacture> disps = DispositionManufacture.findAll();
-		renderJSON(new JSONSerializer().exclude("itemAsObject", "ItemChildsAsObject").serialize(disps));
+		Logger.info("childs: %s", disps.get(0));
+		renderJSON(new JSONSerializer().include("itemChilds").exclude("itemAsObject", "ItemChildsAsObject").serialize(disps));
 	}	
 
 	/**

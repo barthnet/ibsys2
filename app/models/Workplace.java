@@ -49,6 +49,9 @@ public class Workplace extends Model {
 
 	public List<WaitingList> getWaitingListAsObjectList() {
 		List<WaitingList> wList = new ArrayList<>();
+		if (this.waitingList == null) {
+			return null;
+		}
 		for (int count = 0, length = this.waitingList.length; count < length; count++) {
 			WaitingList wL = WaitingList.find("byWaitingListId", this.waitingList[count]).first();
 			wList.add(wL);
@@ -58,6 +61,9 @@ public class Workplace extends Model {
 
 	public List<ProductionOrder> getProductionPlanListAsObjectList() {
 		List<ProductionOrder> pList = new ArrayList<>();
+		if (this.productionPlanList == null) {
+			return null;
+		}
 		for (int count = 0, length = this.productionPlanList.length; count < length; count++) {
 			ProductionOrder pO = ProductionOrder.find("byOrderNumber", this.productionPlanList[count]).first();
 			pList.add(pO);
