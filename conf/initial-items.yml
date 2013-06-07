@@ -2,293 +2,617 @@ Item(P1):
     itemNumber: 1
     type: P
     name: Children’s bicycle
+    components: 
+        - P1K21
+        - P1K24
+        - P1K27
+        - P1E26
+        - P1E51
 
 Item(P2):    
     itemNumber: 2
     type: P 
-    name: Ladies bicycle  
+    name: Ladies bicycle
+    components: 
+        - P1K22
+        - P1K24
+        - P1K27
+        - P1E26
+        - P1E56  
     
 Item(P3):    
     itemNumber: 3 
     type: P 
-    name: Men’s bicycle 
+    name: Men’s bicycle
+    components: 
+        - P3K23
+        - P3K24
+        - P3K27
+        - P3E26
+        - P3E31  
         
 Item(E4):    
     itemNumber: 4 
     type: E 
-    name: Rear wheel group 
+    name: Rear wheel group
+    components:
+        - E4K35
+        - E4K36
+        - E4K52
+        - E4K53
+    usedIn:
+        - E50E4
         
 Item(E5):    
     itemNumber: 5 
     type: E 
-    name: Rear wheel group 
+    name: Rear wheel group
+    components:
+        - E5K35
+        - E5K36
+        - E5K57
+        - E5K58
+    usedIn:
+        - E55E5 
         
 Item(E6):    
     itemNumber: 6 
     type: E 
     name: Rear wheel group 
+    components:
+        - E6K33
+        - E6K34
+        - E6K35
+        - E6K36
+    usedIn:
+        - E30E6
     
 Item(E7):    
     itemNumber: 7 
     type: E 
-    name: Front wheel group 
+    name: Front wheel group
+    components:
+        - E7K35
+        - E7K37
+        - E7K38
+        - E7K52
+        - E7K53
+    usedIn:
+        - E49E7 
 
 Item(E8):    
     itemNumber: 8 
     type: E 
-    name: Front wheel group 
+    name: Front wheel group
+    components:
+        - E8K35
+        - E8K37
+        - E8K38
+        - E8K57
+        - E8K58
+    usedIn:
+        - E54E8 
     
 Item(E9):        
     itemNumber: 9 
     type: E  
-    name: Front wheel group 
+    name: Front wheel group
+    components:
+        - E9K35
+        - E9K37
+        - E9K38
+        - E9K33
+        - E9K34
+    usedIn:
+        - E29E9  
     
 Item(E10):        
     itemNumber: 10 
     type: E  
-    name: Mudguard rear 
+    name: Mudguard rear
+    components:
+        - E10K32
+        - E10K39
+    usedIn:
+        - E50E10 
 
 Item(E11):    
     itemNumber: 11 
     type: E 
-    name: Mudguard rear 
+    name: Mudguard rear
+    components:
+        - E11K32
+        - E11K39
+    usedIn:
+        - E55E11 
  
 Item(E12):    
     itemNumber: 12 
     type: E 
-    name: Mudguard rear 
+    name: Mudguard rear
+    components:
+        - E12K32
+        - E12K39
+    usedIn:
+        - E30E12 
    
 Item(E13):    
     itemNumber: 13 
     type: E 
     name: Mudguard front 
+    components:
+        - E13K32
+        - E13K39
+    usedIn:
+        - E49E13
   
 Item(E14):    
     itemNumber: 14 
     type: E 
-    name: Mudguard front 
+    name: Mudguard front
+    components:
+        - E14K32
+        - E14K39
+    usedIn:
+        - E54E14 
   
 Item(E15):    
     itemNumber: 15 
     type: E 
-    name: Mudguard front 
+    name: Mudguard front
+    components:
+        - E15K32
+        - E15K39
+    usedIn:
+        - E29E15 
  
 Item(E16):    
     itemNumber: 16 
     type: E  
-    name: Handle complete 
+    name: Handle complete
+    components:
+        - E16K24
+        - E16K28
+        - E16K40
+        - E16K41
+        - E16K42
+    usedIn:
+        - E51E16
+        - E56E16 
+        - E31E16 
  
 Item(E17):    
     itemNumber: 17 
     type: E 
-    name: Saddle complete 
+    name: Saddle complete
+    components:
+        - E17K43
+        - E17K44
+        - E17K45
+        - E17K46
+    usedIn:
+        - E51E17
+        - E56E17
+        - E31E17 
     
 Item(E18):    
     itemNumber: 18 
     type: E 
-    name: Frame 
+    name: Frame
+    components:
+        - E18K28
+        - E18K32
+        - E18K59
+    usedIn:
+        - E49E18 
    
 Item(E19):    
     itemNumber: 19 
     type: E  
-    name: Frame 
+    name: Frame
+    components:
+        - E19K28
+        - E19K32
+        - E19K59
+    usedIn:
+        - E54E19 
   
 Item(E20):    
     itemNumber: 20 
     type: E 
-    name: Frame 
+    name: Frame
+    components:
+        - E20K28
+        - E20K32
+        - E20K59
+    usedIn:
+        - E29E20 
   
 Item(K21):    
     itemNumber: 21 
     type: K 
-    name: Chain 
+    name: Chain
+    usedIn:
+        - P1K21 
  
 Item(K22):    
     itemNumber: 22 
     type: K 
-    name: Chain 
+    name: Chain
+    usedIn:
+        - P2K22 
  
 Item(K23):    
     itemNumber: 23 
     type: K 
-    name: Chain 
+    name: Chain
+    usedIn:
+        - P3K23 
  
 Item(K24):    
     itemNumber: 24 
     type: K 
-    name: Nut 3/8“ 
+    name: Nut 3/8“
+    usedIn:
+        - P1K24
+        - E51K24
+        - E16K24
+        - E50K24
+        - E49K24
+        - P2K24
+        - E56K24
+        - E55K24
+        - E54K24
+        - P3K24
+        - E31K24
+        - E30K24
+        - E29K24
   
 Item(K25):    
     itemNumber: 25 
     type: K 
-    name: Washer 3/8“ 
+    name: Washer 3/8“
+    usedIn:
+        - E50K25
+        - E49K25
+        - E55K25
+        - E54K25
+        - E30K25
+        - E29K25 
   
 Item(E26):    
     itemNumber: 26 
     type: E  
-    name: Pedal complete 
+    name: Pedal complete
+    components:
+        - E26K44
+        - E26K47
+        - E26K48
+    usedIn:
+        - P1E26
+        - P2E26
+        - P3E26 
  
 Item(K27):    
     itemNumber: 27 
     type: K  
-    name: Screw 3/8“ 
+    name: Screw 3/8“
+    usedIn:
+        - P1K27
+        - E51K27
+        - P2K27
+        - E56K27
+        - P3K27
+        - E31K27
  
 Item(K28):    
     itemNumber: 28 
     type: K  
-    name: Tube 3/4“ 
+    name: Tube 3/4“
+    usedIn:
+        - E16K28
+        - E18K28
+        - E19K28
+        - E20K28 
    
 Item(E29):    
     itemNumber: 29 
     type: E 
-    name: Front wheel compl. 
+    name: Front wheel compl.
+    components:
+        - E29K24
+        - E29K25
+        - E29E9
+        - E29E15
+        - E29E20
+    usedIn:
+        - E30E29 
 
 Item(E30):    
     itemNumber: 30 
     type: E 
-    name: Frame and wheels 
+    name: Frame and wheels
+    components:
+        - E30K24
+        - E30K25
+        - E30E6
+        - E30E12
+        - E30E29
+    usedIn:
+        - E31E30 
   
 Item(E31):    
     itemNumber: 31 
     type: E  
-    name: Bicycle w/o. pedals 
+    name: Bicycle w/o. pedals
+    components:
+        - E31K24
+        - E31K27
+        - E31E16
+        - E31E17
+        - E31E30
+    usedIn:
+        - P3E31 
    
 Item(K32):    
     itemNumber: K32 
     type: K 
-    name: Paint 
+    name: Paint
+    usedIn:
+        - E10K32
+        - E13K32
+        - E18K32
+        - E11K32
+        - E14K32
+        - E19K32
+        - E12K32
+        - E15K32
+        - E20K32
    
 Item(K33):    
     itemNumber: 33 
     type: K 
-    name: Rim compl. 
+    name: Rim compl.
+    usedIn:
+        - E6K33
+        - E9E33 
  
 Item(K34):    
     itemNumber: 34 
     type: K 
-    name: Spoke 
+    name: Spoke
+    usedIn:
+        - E6K34
+        - E9E34 
    
 Item(K35):    
     itemNumber: 35 
     type: K 
-    name: Taper sleeve 
+    name: Taper sleeve
+    usedIn:
+        - E4K35
+        - E7K35
+        - E5K35
+        - E8K35
+        - E6K35
+        - E9K35 
  
 Item(K36):    
     itemNumber: 36 
     type: K  
-    name: Free wheel 
+    name: Free wheel
+    usedIn:
+        - E4K36
+        - E5K36
+        - E6K36 
 
 Item(K37):    
     itemNumber: 37 
     type: K 
     name: Fork 
+    usedIn:
+        - E7K37
+        - E8K37
+        - E9K37
  
 Item(K38):    
     itemNumber: 38 
     type: K  
     name: Axle 
+    usedIn:
+        - E7K38
+        - E8K38
+        - E9K38
 
 Item(K39):    
     itemNumber: 39 
     type: K 
-    name: Sheet 
+    name: Sheet
+    usedIn:
+        - E10K39
+        - E13K39 
+        - E11K39
+        - E14K39
+        - E12K39
+        - E15K39
 
 Item(K40):    
     itemNumber: 40 
     type: K 
-    name: Handle bar 
+    name: Handle bar
+    usedIn:
+        - E16K40
  
 Item(K41):    
     itemNumber: 41 
     type: K  
-    name: Nut 3/4“ 
+    name: Nut 3/4“
+    usedIn:
+        - E16K41
  
 Item(K42):    
     itemNumber: 42 
     type: K 
     name: Handle grip
+    usedIn:
+        - E16K42
 
 Item(K43):    
     itemNumber: 43
     type: K 
     name: Saddle
+    usedIn:
+        - E17K43
   
 Item(K44):    
     itemNumber: 44
     type: K 
-    name: Bar 1/2“ 
+    name: Bar 1/2“
+    usedIn:
+        - E26K44
+        - E17K44 
 
 Item(K45):
     itemNumber: 45 
     type: K 
-    name: Nut 1/4“ 
+    name: Nut 1/4“
+    usedIn:
+        - E17K45 
 
 Item(K46):
     itemNumber: 46 
     type: K 
     name: Screw 1/4“
+    usedIn:
+        - E17K46
 
 Item(K47):    
     itemNumber: 47
     type: K 
-    name: Sprocket 
+    name: Sprocket
+    usedIn:
+        - E26K47
 
 Item(K48):
     itemNumber: 48
     type: K 
-    name: Pedal 
+    name: Pedal
+    usedIn:
+        - E26K48 
 
 Item(E49):    
     itemNumber: 49 
     type: E 
-    name: Front wheel compl 
+    name: Front wheel compl
+    components:
+        - E49K24
+        - E49K25
+        - E49E7
+        - E49E13 
+        - E49E18
+    usedIn:
+        - E50E49
 
 Item(E50):
     itemNumber: 50
     type: E
-    name: Frame and wheels 
+    name: Frame and wheels
+    components:
+        - E50K24
+        - E50K25
+        - E50E4
+        - E50E10
+        - E50E49
+    usedIn:
+        - E51E50
 
 Item(E51):
     itemNumber: 51
     type: E 
-    name: Bicycle w/o. pedals 
+    name: Bicycle w/o. pedals
+    components:
+        - E51K24
+        - E51K27
+        - E51E16
+        - E51E17
+        - E51E50
+    usedIn:
+        - P1E51
 
 Item(K52):
     itemNumber: 52 
     type: K  
-    name: Rim compl. 
+    name: Rim compl.
+    usedIn:
+        - E4K52
+        - E7K52
 
 Item(K53):    
     itemNumber: 53
     type: K  
-    name: Spoke 
+    name: Spoke
+    usedIn:
+        - E4K53
+        - E7K53 
 
 Item(E54):    
     itemNumber: 54 
     type: E
-    name: Front wheel compl 
+    name: Front wheel compl
+    components:
+        - E54K24
+        - E54K25
+    usedIn:
+        - E55E54
  
 Item(E55):    
     itemNumber: 55 
     type: E 
     name: Frame and wheels
+    components:
+        - E55K24
+        - E55K25
+        - E55E5
+        - E55E11
+        - E55E54
+    usedIn:
+        - E56E55
+        
  
 Item(E56):    
     itemNumber: 56 
     type: E 
     name: Bicycle w/o. pedals
+    components:
+        - E56K24
+        - E56K27
+        - E56E16
+        - E56K17
+        - E56E55
+    usedIn:
+        - P2E56
 
 Item(K57):    
     itemNumber: 57 
     type: K
-    name: Rim compl. 
+    name: Rim compl.
+    usedIn:
+        - E5K57
+        - E8K57 
  
 Item(K58):    
     itemNumber: 58 
     type: K  
-    name: Spoke 
+    name: Spoke
+    usedIn:
+        - E5K58
+        - E8K58 
 
 Item(K59):    
     itemNumber: 59 
     type: K 
-    name: Welding wires 
+    name: Welding wires
+    usedIn:
+        - E18K59
+        - E19K59
+        - E20K59 

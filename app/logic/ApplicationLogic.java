@@ -22,7 +22,7 @@ public class ApplicationLogic {
 	public static void resetData() {
 		Logger.info("reset Data");
 		Fixtures.deleteAllModels();
-		Fixtures.loadModels("initial-items.yml", "initial-workplaces.yml", "ItemTime.yml", "initial-dispositionOrder.yml", "initial-productionPlan.yml");
+		Fixtures.loadModels("initial-items.yml", "initial-workplaces.yml", "ItemTime.yml", "initial-dispositionOrder.yml", "initial-productionPlan.yml", "initial-components.yml");
 	}
 
 	public static void wishToPlan() {
@@ -87,11 +87,11 @@ public class ApplicationLogic {
 
 			cap.totaltime = cap.time + cap.setupTime;
 
-			if (cap.totaltime < 3600) {
+			if (cap.totaltime <= 3600) {
 				cap.shift = 1;
 				cap.overtime = cap.totaltime - 2400;
 			}
-			if (cap.totaltime < 4800) {
+			if (cap.totaltime <= 4800) {
 				cap.shift = 2;
 				cap.overtime = cap.totaltime - 3600;
 			}
