@@ -47,7 +47,6 @@ public class Application extends Controller {
 		renderJSON(disps);
 	}
 
-
 	public static void testLogin() {
 		setHeader();
 		renderJSON(true);
