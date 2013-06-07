@@ -1,0 +1,725 @@
+# Start P1 
+
+Component(P1K21):
+    item: K21
+    parent: P1
+    amount: 1
+    
+Component(P1K24):
+    item: K24
+    parent: P1
+    amount: 1
+    
+Component(P1K27):
+    item: K27
+    parent: P1
+    amount: 1
+    
+Component(P1E26):
+    item: E26
+    parent: P1
+    amount: 1
+    
+Component(E26K44):
+    item: K44
+    parent: E26
+    amount: 2
+    
+Component(E26K47):
+    item: K47
+    parent: E26
+    amount: 1
+    
+Component(E26K48):
+    item: K48
+    parent: E26
+    amount: 2
+    
+Component(P1E51):
+    item: E51
+    parent: P1
+    amount: 1
+    
+Component(E51K24):
+    item: K24
+    parent: E51
+    amount: 1
+    
+Component(E51K27):
+    item: K27
+    parent: E51
+    amount: 1
+    
+Component(E51E16):
+    item: E16
+    parent: E51
+    amount: 1
+    
+Component(E16K24):
+    item: K24
+    parent: E16
+    amount: 1
+    
+Component(E16K28):
+    item: K28
+    parent: E16
+    amount: 1
+    
+Component(E16K40):
+    item: K40
+    parent: E16
+    amount: 1
+    
+Component(E16K41):
+    item: K41
+    parent: E16
+    amount: 1
+    
+Component(E16K42):
+    item: K42
+    parent: E16
+    amount: 2
+    
+Component(E51E17):
+    item: E17
+    parent: E51
+    amount: 1
+    
+Component(E17K43):
+    item: E17
+    parent: K43
+    amount: 1
+    
+Component(E17K44):
+    item: K44
+    parent: E17
+    amount: 1
+    
+Component(E17K45):
+    item: K45
+    parent: E17
+    amount: 1
+    
+Component(E17K46):
+    item: K46
+    parent: E17
+    amount: 1
+    
+Component(E51E50):
+    item: E50
+    parent: E51
+    amount: 1
+    
+Component(E50K24):
+    item: K24
+    parent: E50
+    amount: 2
+    
+Component(E50K25):
+    item: K25
+    parent: E50
+    amount: 2
+    
+Component(E50E4):
+    item: E4
+    parent: E50
+    amount: 1
+    
+Component(E4K35):
+    item: K35
+    parent: E4
+    amount: 2
+    
+Component(E4K36):
+    item: K36
+    parent: E4
+    amount: 1
+    
+Component(E4K52):
+    item: K52
+    parent: E4
+    amount: 1
+    
+Component(E4K53):
+    item: K53
+    parent: E4
+    amount: 36
+    
+Component(E50E10):
+    item: E10
+    parent: E50
+    amount: 1
+    
+Component(E10K32):
+    item: K32
+    parent: E10
+    amount: 1
+    
+Component(E10K39):
+    item: K39
+    parent: E10
+    amount: 1
+    
+Component(E50E49):
+    item: E49
+    parent: E50
+    amount: 1
+    
+Component(E49K24):
+    item: K24
+    parent: E49
+    amount: 2
+    
+Component(E49K25):
+    item: K25
+    parent: E49
+    amount: 2
+    
+Component(E49E7):
+    item: E7
+    parent: E49
+    amount: 1
+    
+Component(E7K35):
+    item: K35
+    parent: E7
+    amount: 2
+    
+Component(E7K37):
+    item: K37
+    parent: E7
+    amount: 1
+  
+Component(E7K38):
+    item: K38
+    parent: E7
+    amount: 1
+    
+Component(E7K52):
+    item: K52
+    parent: E7
+    amount: 1
+    
+Component(E7K53):
+    item: K53
+    parent: E7
+    amount: 36
+    
+Component(E49E13):
+    item: E13
+    parent: E49
+    amount: 1
+    
+Component(E13K32):
+    item: K32
+    parent: E13
+    amount: 1
+    
+Component(E13K39):
+    item: K39
+    parent: E13
+    amount: 1
+    
+Component(E49E18):
+    item: E18
+    parent: E49
+    amount: 1
+    
+Component(E18K28):
+    item: K28
+    parent: E18
+    amount: 3
+    
+Component(E18K32):
+    item: K32
+    parent: E18
+    amount: 1
+    
+Component(E18K59):
+    item: K59
+    parent: E18
+    amount: 2
+    
+# Start P2 
+
+Component(P2K22):
+    item: K22
+    parent: P2
+    amount: 1
+    
+Component(P2K24):
+    item: K24
+    parent: P2
+    amount: 1
+    
+Component(P2K27):
+    item: K27
+    parent: P2
+    amount: 1
+    
+Component(P2E26):
+    item: E26
+    parent: P2
+    amount: 1
+    
+Component(E26K44):
+    item: K44
+    parent: E26
+    amount: 2
+    
+Component(E26K47):
+    item: K47
+    parent: E26
+    amount: 1
+    
+Component(E26K48):
+    item: K48
+    parent: E26
+    amount: 2
+    
+Component(P2E56):
+    item: E56
+    parent: P2
+    amount: 1
+    
+Component(E56K24):
+    item: K24
+    parent: E56
+    amount: 1
+    
+Component(E56K27):
+    item: K27
+    parent: E56
+    amount: 1
+    
+Component(E56E16):
+    item: E16
+    parent: E56
+    amount: 1
+    
+Component(E16K24):
+    item: K24
+    parent: E16
+    amount: 1
+    
+Component(E16K28):
+    item: K28
+    parent: E16
+    amount: 1
+    
+Component(E16K40):
+    item: K40
+    parent: E16
+    amount: 1
+    
+Component(E16K41):
+    item: K41
+    parent: E16
+    amount: 1
+    
+Component(E16K42):
+    item: K42
+    parent: E16
+    amount: 2
+    
+Component(E56E17):
+    item: E17
+    parent: E56
+    amount: 1
+    
+Component(E17K43):
+    item: E17
+    parent: K43
+    amount: 1
+    
+Component(E17K44):
+    item: K44
+    parent: E17
+    amount: 1
+    
+Component(E17K45):
+    item: K45
+    parent: E17
+    amount: 1
+    
+Component(E17K46):
+    item: K46
+    parent: E17
+    amount: 1
+    
+Component(E56E55):
+    item: E55
+    parent: E56
+    amount: 1
+    
+Component(E55K24):
+    item: K24
+    parent: E55
+    amount: 2
+    
+Component(E55K25):
+    item: K25
+    parent: E55
+    amount: 2
+    
+Component(E55E5):
+    item: E5
+    parent: E55
+    amount: 1
+    
+Component(E5K35):
+    item: K35
+    parent: E5
+    amount: 2
+    
+Component(E5K36):
+    item: K36
+    parent: E5
+    amount: 1
+    
+Component(E5K57):
+    item: K57
+    parent: E5
+    amount: 1
+    
+Component(E5K58):
+    item: K58
+    parent: E5
+    amount: 36
+    
+Component(E55E11):
+    item: E11
+    parent: E55
+    amount: 1
+    
+Component(E11K32):
+    item: K32
+    parent: E11
+    amount: 1
+    
+Component(E11K39):
+    item: K39
+    parent: E11
+    amount: 1
+    
+Component(E55E54):
+    item: E54
+    parent: E55
+    amount: 1
+    
+Component(E54K24):
+    item: K24
+    parent: E54
+    amount: 2
+    
+Component(E54K25):
+    item: K25
+    parent: E54
+    amount: 2
+    
+Component(E54E8):
+    item: E8
+    parent: E54
+    amount: 1
+    
+Component(E8K35):
+    item: K35
+    parent: E8
+    amount: 2
+    
+Component(E8K37):
+    item: K37
+    parent: E8
+    amount: 1
+    
+Component(E8K38):
+    item: K38
+    parent: E8
+    amount: 1
+    
+Component(E8K57):
+    item: K57
+    parent: E8
+    amount: 1
+    
+Component(E8K58):
+    item: K58
+    parent: E8
+    amount: 36
+    
+Component(E54E14):
+    item: E14
+    parent: E54
+    amount: 1
+    
+Component(E14K32):
+    item: K32
+    parent: E14
+    amount: 1
+    
+Component(E14K39):
+    item: K39
+    parent: E14
+    amount: 1
+    
+Component(E54E19):
+    item: E19
+    parent: E54
+    amount: 1
+    
+Component(E19K28):
+    item: K28
+    parent: E19
+    amount: 4
+    
+Component(E19K32):
+    item: K32
+    parent: E19
+    amount: 1
+    
+Component(E19K59):
+    item: K59
+    parent: E19
+    amount: 2
+    
+# Start P3 
+
+Component(P3K23):
+    item: K23
+    parent: P3
+    amount: 1
+    
+Component(P3K24):
+    item: K24
+    parent: P3
+    amount: 1
+    
+Component(P3K27):
+    item: K27
+    parent: P3
+    amount: 1
+    
+Component(P3E26):
+    item: E26
+    parent: P3
+    amount: 1
+    
+Component(E26K44):
+    item: K44
+    parent: E26
+    amount: 2
+    
+Component(E26K47):
+    item: K47
+    parent: E26
+    amount: 1
+    
+Component(E26K48):
+    item: K48
+    parent: E26
+    amount: 2
+    
+Component(P3E31):
+    item: E31
+    parent: P3
+    amount: 1
+    
+Component(E31K24):
+    item: K24
+    parent: E31
+    amount: 1
+    
+Component(E31K27):
+    item: K27
+    parent: E31
+    amount: 1
+    
+Component(E31E16):
+    item: E16
+    parent: E31
+    amount: 1
+    
+Component(E16K24):
+    item: K24
+    parent: E16
+    amount: 1
+    
+Component(E16K28):
+    item: K28
+    parent: E16
+    amount: 1
+    
+Component(E16K40):
+    item: K40
+    parent: E16
+    amount: 1
+    
+Component(E16K41):
+    item: K41
+    parent: E16
+    amount: 1
+    
+Component(E16K42):
+    item: K42
+    parent: E16
+    amount: 2
+    
+Component(E31E17):
+    item: E17
+    parent: E31
+    amount: 1
+    
+Component(E17K43):
+    item: E17
+    parent: K43
+    amount: 1
+    
+Component(E17K44):
+    item: K44
+    parent: E17
+    amount: 1
+    
+Component(E17K45):
+    item: K45
+    parent: E17
+    amount: 1
+    
+Component(E17K46):
+    item: K46
+    parent: E17
+    amount: 1
+    
+Component(E31E30):
+    item: E30
+    parent: E31
+    amount: 1
+    
+Component(E30K24):
+    item: K24
+    parent: E30
+    amount: 2
+    
+Component(E30K25):
+    item: K25
+    parent: E30
+    amount: 2
+    
+Component(E30E6):
+    item: E6
+    parent: E30
+    amount: 1
+    
+Component(E6K35):
+    item: K35
+    parent: E6
+    amount: 2
+    
+Component(E6K36):
+    item: K36
+    parent: E6
+    amount: 1
+    
+Component(E6K33):
+    item: K33
+    parent: E6
+    amount: 1
+    
+Component(E6K34):
+    item: K34
+    parent: E6
+    amount: 36
+    
+Component(E30E12):
+    item: E12
+    parent: E30
+    amount: 1
+    
+Component(E12K32):
+    item: K32
+    parent: E12
+    amount: 1
+    
+Component(E12K39):
+    item: K39
+    parent: E12
+    amount: 1
+    
+Component(E30E29):
+    item: E29
+    parent: E30
+    amount: 1
+    
+Component(E29K24):
+    item: K24
+    parent: E29
+    amount: 2
+    
+Component(E29K25):
+    item: K25
+    parent: E29
+    amount: 2
+    
+Component(E49E9):
+    item: E9
+    parent: E49
+    amount: 1
+    
+Component(E9K35):
+    item: K35
+    parent: E9
+    amount: 2
+    
+Component(E9K37):
+    item: K37
+    parent: E9
+    amount: 1
+    
+Component(E9K38):
+    item: K38
+    parent: E9
+    amount: 1
+    
+Component(E9K33):
+    item: K33
+    parent: E9
+    amount: 1
+    
+Component(E9K34):
+    item: K34
+    parent: E9
+    amount: 36
+    
+Component(E29E15):
+    item: E15
+    parent: E29
+    amount: 1
+    
+Component(E15K32):
+    item: K32
+    parent: E15
+    amount: 1
+    
+Component(E15K39):
+    item: K39
+    parent: E15
+    amount: 1
+    
+Component(E29E20):
+    item: E20
+    parent: E29
+    amount: 1
+    
+Component(E20K28):
+    item: K28
+    parent: E20
+    amount: 5
+    
+Component(E20K32):
+    item: K32
+    parent: E20
+    amount: 1
+    
+Component(E20K59):
+    item: K59
+    parent: E20
+    amount: 2
