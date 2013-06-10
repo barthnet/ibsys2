@@ -25,8 +25,8 @@ GET		/order 									Application.getProductionOrders
 POST	/order									Application.postProductionOrders
 GET		/capacity								Application.getCapacity
 POST	/capacity								Application.postCapacity
-GET		/disposition							Application.getDisposition
-POST	/disposition							Application.postDisposition
+GET		/disposition							Application.getDispositionOrders
+POST	/disposition							Application.postDispositionOrders
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
