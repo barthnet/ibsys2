@@ -84,18 +84,33 @@ public class ApplicationLogic {
 			}
 
 			cap.totaltime = cap.time + cap.setupTime;
+			
 
-			if (cap.totaltime <= 3600) {
+			if (cap.totaltime == 0) {
+				cap.shift = 0;
+				cap.overtime = 0;
+			}
+			else if (cap.totaltime <= 3600) {
 				cap.shift = 1;
-				cap.overtime = cap.totaltime - 2400;
-			}
-			if (cap.totaltime <= 4800) {
+				if (cap.totaltime < 2400) {
+					cap.overtime = 0;
+				} else {
+					cap.overtime = cap.totaltime - 2400;
+				}
+			} else if (cap.totaltime <= 6000) {
 				cap.shift = 2;
-				cap.overtime = cap.totaltime - 3600;
-			}
-			if (cap.totaltime > 4800) {
+				if (cap.totaltime < 4800) {
+					cap.overtime = 0;
+				} else {
+					cap.overtime = cap.totaltime - 4800;
+				}
+			} else if (cap.totaltime > 6000) {
 				cap.shift = 3;
-				cap.overtime = cap.totaltime - 4800;
+				if (cap.totaltime < 7200) {
+					cap.overtime = 0;
+				} else {
+					cap.overtime = cap.totaltime - 7200;
+				}
 			}
 			cap.save();
 		}
