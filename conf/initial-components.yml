@@ -1,5 +1,10 @@
 # Start P1 
 
+Component(P1P1):
+    item: P1
+    parent:
+    amount: 1
+
 Component(P1K21):
     item: K21
     parent: P1
@@ -242,6 +247,11 @@ Component(E18K59):
     
 # Start P2 
 
+Component(P2P2):
+    item: P2
+    parent:
+    amount: 1
+
 Component(P2K22):
     item: K22
     parent: P2
@@ -483,6 +493,11 @@ Component(E19K59):
     amount: 2
     
 # Start P3 
+
+Component(P3P3):
+    item: P3
+    parent:
+    amount: 1
 
 Component(P3K23):
     item: K23

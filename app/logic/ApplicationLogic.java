@@ -105,17 +105,13 @@ public class ApplicationLogic {
 		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
 		for (DispositionOrder dispoOrder : dispoOrders) {		
 			//aktueller Verbrauch			
-			List<Component> components = Component.find("byItem", dispoOrder.item).fetch();			
-			for (Component component : components) {				
-				List<Component> parents = Component.find("byParent", component.item).fetch();				
-				for (Component parent : parents) {
-					DispositionManufacture dm = DispositionManufacture.find("byItem", parent.item).first();
-					if (dm != null) {
-						dispoOrder.consumptionPeriod0 += dm.production * component.amount ;
-					}
+			List<Component> components = Component.find("byItem", dispoOrder.item).fetch();
+			for (Component component : components) {
+				DispositionManufacture dm = DispositionManufacture.find("byItem", component.parent).first();
+				if (dm != null) {
+					dispoOrder.consumptionPeriod0 += dm.production * component.amount;
 				}
 			}
-			
 			
 			List<WaitingList> waitingLists = WaitingList.find("byItem", dispoOrder.item).fetch();
 			if (waitingLists != null && waitingLists.size() > 0) {
@@ -147,7 +143,9 @@ public class ApplicationLogic {
 				dispoOrder.consumptionPeriod1 += wish.period1 * dispoOrder.usedP3;
 				dispoOrder.consumptionPeriod2 += wish.period2 * dispoOrder.usedP3;
 				dispoOrder.consumptionPeriod3 += wish.period3 * dispoOrder.usedP3;
-			}		
+			}
+			
+			dispoOrder.save();
 		}
 	}
 
