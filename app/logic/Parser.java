@@ -170,6 +170,7 @@ public class Parser {
 			wList.workplace = wO.workplaceId;
 			Item it = Item.find("byItemNumber", getInteger(attWP, "item")).first();
 			wList.item = it.itemId;
+			wList.inWork = true;
 			wList.save();
 			wO.inWork = wList.waitingListId;
 			wO.save();

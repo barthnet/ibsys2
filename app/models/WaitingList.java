@@ -22,6 +22,7 @@ public class WaitingList extends Model {
 	public int period;
 	public int amount;
 	public int timeneed;
+	public boolean inWork = false;
 
 	@PrePersist
 	protected void onCreate() {
