@@ -48,50 +48,10 @@ public class Parser {
 		parseOpenOrders();
 		parseWaitingLists();
 		parseOrderInWorks();
-		setDependencies();
+//		ApplicationLogic.calcProductionPlan();
 	}
 
-	public static void setDependencies() {
-		Logger.info("setDependencies");
-		List<DispositionManufacture> disps = DispositionManufacture.findAll();
-		DispositionManufacture parent = new DispositionManufacture();
-		for (int i = 0, length = disps.size(); i < length; i++) {
-			DispositionManufacture disp = disps.get(i);
-			Item item = Item.find("byItemId", disp.item).first();
-			if ("P".equals(item.type)) {
-				parent = new DispositionManufacture();
-			} else {
-				disp.distributionWish = parent.production;
-			}
-			boolean mulitpleItem = item.itemNumber == 26 || item.itemNumber == 16 || item.itemNumber == 17 ? true : false;
-			disp.stock = item.amount;
-			// TODO in item model yml aufnehmen
-			disp.safetyStock = disp.safetyStock > 0 ? disp.safetyStock : 100;
-			disp.parentWaitingList = parent.waitingList;
-			List<WaitingList> wL = WaitingList.find("byItem", disp.item).fetch();
-			for (WaitingList waitingList : wL) {
-				Workplace wP = Workplace.find("byWorkplaceId", waitingList.workplace).first();
-				if (wP.inWork != null && wP.inWork.equals(waitingList.waitingListId)) {
-					if (mulitpleItem) {
-						disp.inWork += waitingList.amount / 3;
-					} else {
-						disp.inWork += waitingList.amount;
-					}
-				} else {
-					if (mulitpleItem) {
-						disp.waitingList += waitingList.amount / 3;
-					} else {
-						disp.waitingList += waitingList.amount;
-					}
-				}
-			}
-			disp.production = disp.distributionWish + disp.parentWaitingList + disp.safetyStock - disp.stock - disp.waitingList - disp.inWork;
-			disp.save();
-			if (disp.itemChilds != null && disp.itemChilds.length > 0) {
-				parent = disp;
-			}
-		}
-	}
+	
 
 	private void parseArticles() {
 		NodeList articles = document.getElementsByTagName("article");

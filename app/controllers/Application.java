@@ -37,12 +37,12 @@ public class Application extends Controller {
 	public static void index() {
 		render();
 	}
-	
+
 	public static void test() {
 		List<ItemTime> places = ItemTime.findAll();
 		renderText(places);
 	}
-	
+
 	public static void test2() {
 		List<DispositionManufacture> disps = DispositionManufacture.find("byItem", "E26").fetch();
 		renderJSON(disps);
@@ -52,7 +52,7 @@ public class Application extends Controller {
 		setHeader();
 		renderJSON(true);
 	}
-	
+
 	/**
 	 * save disposition orders
 	 */
@@ -63,38 +63,19 @@ public class Application extends Controller {
 		DispositionOrder.merge(orders);
 		ok();
 	}
-	
-	/**
-	 * get disposition orders
-	 */
-	public static void getDispositionOrders() {
-		setHeader();
-		List<DispositionOrder> orders = DispositionOrder.findAll();
-		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(orders));
-	}
-	
+
 	/**
 	 * save capacities
 	 */
 	public static void postCapacity() {
 		setHeader();
 		String body = getBodyAsString();
-		ApplicationLogic.calculateCapacity();
+		// ApplicationLogic.calculateCapacity();
 		ArrayList<Capacity> capacities = new JSONDeserializer<ArrayList<Capacity>>().use("values", Capacity.class).deserialize(body);
 		Capacity.merge(capacities);
 		ok();
 	}
-	
-	/**
-	 * get calculated capacities of all workplaces
-	 */
-	public static void getCapacity() {
-		setHeader();
-		ApplicationLogic.calculateCapacity();
-		List<Capacity> capacities = Capacity.findAll();
-		renderJSON(new JSONSerializer().exclude("workplaceAsObject").serialize(capacities));
-	}
-	
+
 	/**
 	 * save productionOrders
 	 */
@@ -103,24 +84,13 @@ public class Application extends Controller {
 		String body = getBodyAsString();
 		ArrayList<ProductionOrder> orders = new JSONDeserializer<ArrayList<ProductionOrder>>().use("values", ProductionOrder.class).deserialize(body);
 		if (orders != null && !orders.isEmpty()) {
+			Logger.info("postProductionOrders: %s %s", ProductionOrder.findAll().size(), orders.size());
 			ProductionOrder.deleteAll();
 			ProductionOrder.saveAll(orders);
 		}
 		ApplicationLogic.calculateCapacity();
+		ApplicationLogic.calculateDisposition();
 		ok();
-	}
-	
-	/**
-	 * get all saved productionOrders
-	 */
-	public static void getProductionOrders() {
-		setHeader();
-		List<ProductionOrder> orders = ProductionOrder.find("order by orderNumber asc").fetch();
-		if (orders == null || orders.isEmpty()) {
-			ApplicationLogic.planToOrder();
-			orders = ProductionOrder.find("order by orderNumber asc").fetch();
-		}
-		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(orders));
 	}
 
 	/**
@@ -129,9 +99,62 @@ public class Application extends Controller {
 	public static void postProductionPlan() {
 		setHeader();
 		String body = getBodyAsString();
-		ArrayList<DispositionManufacture> plan = new JSONDeserializer<ArrayList<DispositionManufacture>>().use("values", DispositionManufacture.class).deserialize(body);
-		DispositionManufacture.merge(plan);	
+		ArrayList<DispositionManufacture> plan = new JSONDeserializer<ArrayList<DispositionManufacture>>().use("values", DispositionManufacture.class)
+				.deserialize(body);
+		DispositionManufacture.merge(plan);
+		ApplicationLogic.planToOrder();
+		ApplicationLogic.calculateCapacity();
+		ApplicationLogic.calculateDisposition();
 		ok();
+	}
+
+	/**
+	 * save and merge posted deistributionWishs
+	 */
+	public static void postDistributionWishs() {
+		setHeader();
+		String body = getBodyAsString();
+		// Logger.info("postDistributionWish: %S", body);
+		ArrayList<DistributionWish> wishs = new JSONDeserializer<ArrayList<DistributionWish>>().use("values", DistributionWish.class).deserialize(body);
+		DistributionWish.merge(wishs);
+		ApplicationLogic.wishToPlan();
+		ApplicationLogic.calcProductionPlan();
+		ApplicationLogic.planToOrder();
+		ApplicationLogic.calculateCapacity();
+		ApplicationLogic.calculateDisposition();
+		ok();
+	}
+
+	/**
+	 * get disposition orders
+	 */
+	public static void getDispositionOrders() {
+		setHeader();
+		List<DispositionOrder> orders = DispositionOrder.findAll();
+		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(orders));
+	}
+
+	/**
+	 * get calculated capacities of all workplaces
+	 */
+	public static void getCapacity() {
+		setHeader();
+		// ApplicationLogic.calculateCapacity();
+		List<Capacity> capacities = Capacity.findAll();
+		renderJSON(new JSONSerializer().exclude("workplaceAsObject").serialize(capacities));
+	}
+
+	/**
+	 * get all saved productionOrders
+	 */
+	public static void getProductionOrders() {
+		setHeader();
+		List<ProductionOrder> orders = ProductionOrder.find("order by orderNumber asc").fetch();
+		// if (orders == null || orders.isEmpty()) {
+		// ApplicationLogic.planToOrder();
+		// orders = ProductionOrder.find("order by orderNumber asc").fetch();
+		// }
+		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(orders));
 	}
 
 	/**
@@ -140,9 +163,9 @@ public class Application extends Controller {
 	public static void getProductionPlan() {
 		setHeader();
 		List<DispositionManufacture> disps = DispositionManufacture.findAll();
-		Logger.info("childs: %s", disps.get(0));
+		// Logger.info("childs: %s", disps.get(0));
 		renderJSON(new JSONSerializer().include("itemChilds").exclude("itemAsObject", "ItemChildsAsObject").serialize(disps));
-	}	
+	}
 
 	/**
 	 * deliver saved distributionWishs, if necessary create them first
@@ -162,29 +185,23 @@ public class Application extends Controller {
 		}
 		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(wishs));
 	}
-	
-	/**
-	 * save and merge posted deistributionWishs
-	 */
-	public static void postDistributionWishs() {
-		setHeader();
-		String body = getBodyAsString();
-		ArrayList<DistributionWish> wishs = new JSONDeserializer<ArrayList<DistributionWish>>().use("values", DistributionWish.class).deserialize(body);
-		DistributionWish.merge(wishs);	
-		ApplicationLogic.wishToPlan();
-		ok();
-	}
 
 	/**
 	 * Testmethod to develop xml parser with local xml file doesnt load
 	 * everytime the xml from the scsim website
 	 */
 	public static void parseXML() {
+		setHeader();
 		Template template = TemplateLoader.load("229_9_7result.xml");
 		String xmlFile = template.render();
 		InputStream in = IOUtils.toInputStream(xmlFile);
 		Parser p = new Parser(in);
 		p.parseDoc();
+		ApplicationLogic.wishToPlan();
+		ApplicationLogic.calcProductionPlan();
+		ApplicationLogic.planToOrder();
+		ApplicationLogic.calculateCapacity();
+		ApplicationLogic.calculateDisposition();
 		ok();
 	}
 
@@ -194,6 +211,7 @@ public class Application extends Controller {
 	 * @param file
 	 */
 	public static void uploadXML(File file) {
+		setHeader();
 		InputStream in = null;
 		try {
 			in = new FileInputStream(file);

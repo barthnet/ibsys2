@@ -25,6 +25,7 @@ public class ProductionOrder extends Model {
 			newOrder.item = productionOrder.item;
 			newOrder.orderNumber = productionOrder.orderNumber;
 			newOrder.amount = productionOrder.amount;
+			newOrder.assignToWorkplaces();
 			newOrder.save();
 		}
 	}
