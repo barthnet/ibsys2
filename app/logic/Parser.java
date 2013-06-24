@@ -173,7 +173,7 @@ public class Parser {
 		return node.getNamedItem(attribute).getNodeValue();
 	}
 	
-	private String parseInputXML(){
+	public static Document parseInputXML(){
 
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = null;
@@ -267,7 +267,7 @@ public class Parser {
 		rootElement.appendChild(workingtimelist);
 		
 		//workingtime
-		List<Capacity> capa_list = Workplace.findAll();
+		List<Capacity> capa_list = Capacity.findAll();
 		for (Capacity work : capa_list) {
 			
 			Element workingtime = doc.createElement("workingtime");
@@ -280,11 +280,11 @@ public class Parser {
 		}
 
 		
-		return getStringFromDocument(doc);
+		return doc;
 	}
 	
 	//method to convert Document to String
-	public String getStringFromDocument(Document doc)
+	private static String getStringFromDocument(Document doc)
 	{
 	    try
 	    {

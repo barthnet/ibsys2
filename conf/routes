@@ -15,6 +15,7 @@ GET		/testLogin								Application.testLogin
 GET		/login									Application.login
 GET		/load									Application.loadXmlFromSite
 POST	/upload									Application.uploadXML
+GET     /download								Application.downloadInputXML
 
 # simulate methods
 GET		/wish									Application.getDistributenWishs
