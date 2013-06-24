@@ -2,6 +2,7 @@ package logic;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.List;
@@ -10,6 +11,11 @@ import java.util.Locale;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import models.Capacity;
 import models.DispositionOrder;
@@ -20,7 +26,6 @@ import models.ProductionOrder;
 import models.WaitingList;
 import models.Workplace;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -168,10 +173,15 @@ public class Parser {
 		return node.getNamedItem(attribute).getNodeValue();
 	}
 	
-	private Document parseInputXML(){
+	private String parseInputXML(){
 
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+		DocumentBuilder docBuilder = null;
+		try {
+			docBuilder = docFactory.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {			
+			e.printStackTrace();
+		}
  
 		// root element
 		Document doc = docBuilder.newDocument();
@@ -232,7 +242,7 @@ public class Parser {
 			
 			order.setAttribute("article", dispositionOrder.item);
 			order.setAttribute("modus", dispositionOrder.modus);
-			order.setAttribute("quantity", dispositionOrder.quantity);
+			order.setAttribute("quantity", String.valueOf(dispositionOrder.quantity));
 						
 			orderlist.appendChild(order);
 		}
@@ -269,8 +279,28 @@ public class Parser {
 			workingtimelist.appendChild(workingtime);
 		}
 
-					
-		return doc;
-	} 
+		
+		return getStringFromDocument(doc);
+	}
+	
+	//method to convert Document to String
+	public String getStringFromDocument(Document doc)
+	{
+	    try
+	    {
+	       DOMSource domSource = new DOMSource(doc);
+	       StringWriter writer = new StringWriter();
+	       StreamResult result = new StreamResult(writer);
+	       TransformerFactory tf = TransformerFactory.newInstance();
+	       Transformer transformer = tf.newTransformer();
+	       transformer.transform(domSource, result);
+	       return writer.toString();
+	    }
+	    catch(TransformerException ex)
+	    {
+	       ex.printStackTrace();
+	       return null;
+	    }
+	}
 
 }
