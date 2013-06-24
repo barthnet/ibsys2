@@ -36,4 +36,11 @@ public class Capacity extends Model {
 		this.overtime = cap.overtime;
 		this.totaltime = cap.totaltime;
 	}
+
+	@Override
+	public String toString() {
+		return "Capacity [workplace=" + workplace + ", time=" + time + ", setupTime=" + setupTime + ", shift=" + shift + ", overtime=" + overtime
+				+ ", totaltime=" + totaltime + "]";
+	}
+
 }
