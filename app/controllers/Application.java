@@ -7,6 +7,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import logic.ApplicationLogic;
 import logic.Crawler;
 import logic.Parser;
@@ -207,6 +216,36 @@ public class Application extends Controller {
 		ApplicationLogic.calculateCapacity();
 		ApplicationLogic.calculateDisposition();
 		ok();
+	}
+	
+	/**
+	 * downloads the input.xml
+	 */
+	public static void downloadInputXML (){
+		setHeader();
+		
+		response.setContentTypeIfNotSet("application/x-download");  
+		response.setHeader("Content-disposition","attachment; filename=input.xml");
+		
+		// Prepare the output file
+		File file = new File("input.xml");
+		Result result = new StreamResult(file);;
+		
+		try {
+            //Prepare the DOM document for writing
+            Source source = new DOMSource(Parser.parseInputXML());
+    
+            // Write the DOM document to the file
+            Transformer xformer = TransformerFactory.newInstance().newTransformer();
+            xformer.transform(source, result);
+            
+        } catch (TransformerConfigurationException e) {
+        	e.printStackTrace();
+        } catch (TransformerException e) {
+        	e.printStackTrace();
+        }
+					
+		renderBinary(file); 
 	}
 
 	/**

@@ -26,6 +26,10 @@ public class DispositionOrder extends Model {
 	public double deliveryTime;
 	public double deliveryVariance;
 	public int discount;
+	
+	public String modus;
+	public int quantity;
+	public double expectedArrival;
 
 	public Item getItemAsObject() {
 		return Item.find("byItem", this.item).first();

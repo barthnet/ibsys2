@@ -2,6 +2,7 @@ package logic;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.List;
@@ -10,15 +11,24 @@ import java.util.Locale;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
-import models.DispositionManufacture;
+import models.Capacity;
+import models.DispositionOrder;
+import models.DistributionWish;
 import models.Item;
 import models.OpenOrder;
+import models.ProductionOrder;
 import models.WaitingList;
 import models.Workplace;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -161,6 +171,136 @@ public class Parser {
 	@SuppressWarnings("all")
 	private String getString(NamedNodeMap node, String attribute) {
 		return node.getNamedItem(attribute).getNodeValue();
+	}
+	
+	public static Document parseInputXML(){
+
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = null;
+		try {
+			docBuilder = docFactory.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {			
+			e.printStackTrace();
+		}
+ 
+		// root element
+		Document doc = docBuilder.newDocument();
+		Node rootElement = doc.createElement("input");
+		doc.appendChild(rootElement);
+		
+		Element qualitiycontrol = doc.createElement("qualitycontrol");
+		qualitiycontrol.setAttribute("delay", "0");
+		qualitiycontrol.setAttribute("losequantity", "0");
+		qualitiycontrol.setAttribute("type", "no");
+		rootElement.appendChild(qualitiycontrol);
+				
+		//Sellwishes
+		Node sellwishes = doc.createElement("sellwish");
+		rootElement.appendChild(sellwishes);
+		
+		//sellwish
+		List<DistributionWish> dist_wish = DistributionWish.findAll();
+		for (DistributionWish distributionWish : dist_wish) {
+			Element sellwish = doc.createElement("item");
+			
+			sellwish.setAttribute("article", distributionWish.item);
+			sellwish.setAttribute("quantity", String.valueOf(distributionWish.period0));
+						
+			sellwishes.appendChild(sellwish);
+		}
+		
+		//selldirect
+		Node selldirect = doc.createElement("selldirect");
+		rootElement.appendChild(selldirect);
+		
+		Element selldirects1 = doc.createElement("item");
+		selldirects1.setAttribute("article", "1");
+		selldirects1.setAttribute("penalty", "0.0");
+		selldirects1.setAttribute("price", "0.0");
+		selldirects1.setAttribute("quantity", "0");
+		
+		Element selldirects2 = doc.createElement("item");
+		selldirects2.setAttribute("article", "2");
+		selldirects2.setAttribute("penalty", "0.0");
+		selldirects2.setAttribute("price", "0.0");
+		selldirects2.setAttribute("quantity", "0");
+		
+		Element selldirects3 = doc.createElement("item");
+		selldirects3.setAttribute("article", "3");
+		selldirects3.setAttribute("penalty", "0.0");
+		selldirects3.setAttribute("price", "0.0");
+		selldirects3.setAttribute("quantity", "0");
+ 
+		//orderlist
+		Node orderlist = doc.createElement("orderlist");
+		rootElement.appendChild(orderlist);
+ 
+		//order
+		List<DispositionOrder> list = DispositionOrder.findAll();
+		for (DispositionOrder dispositionOrder : list) {
+			Element order = doc.createElement("order");
+			
+			order.setAttribute("article", dispositionOrder.item);
+			order.setAttribute("modus", dispositionOrder.modus);
+			order.setAttribute("quantity", String.valueOf(dispositionOrder.quantity));
+						
+			orderlist.appendChild(order);
+		}
+		
+		//productionlist
+		Node productionlist = doc.createElement("productionlist");
+		rootElement.appendChild(productionlist);
+		
+		//production
+		List<ProductionOrder> prod_list = ProductionOrder.findAll();
+		for (ProductionOrder productionOrder : prod_list) {
+			Element production = doc.createElement("production");
+			
+			production.setAttribute("article", productionOrder.item);
+			production.setAttribute("quantity", String.valueOf(productionOrder.amount));
+						
+			productionlist.appendChild(production);
+		}
+		
+		//workingtimelist
+		Node workingtimelist = doc.createElement("workingtimelist");
+		rootElement.appendChild(workingtimelist);
+		
+		//workingtime
+		List<Capacity> capa_list = Capacity.findAll();
+		for (Capacity work : capa_list) {
+			
+			Element workingtime = doc.createElement("workingtime");
+			
+			workingtime.setAttribute("overtime", String.valueOf(work.overtime));
+			workingtime.setAttribute("shift", String.valueOf(work.shift));
+			workingtime.setAttribute("station", String.valueOf(work.workplace));
+						
+			workingtimelist.appendChild(workingtime);
+		}
+
+		
+		return doc;
+	}
+	
+	//method to convert Document to String
+	private static String getStringFromDocument(Document doc)
+	{
+	    try
+	    {
+	       DOMSource domSource = new DOMSource(doc);
+	       StringWriter writer = new StringWriter();
+	       StreamResult result = new StreamResult(writer);
+	       TransformerFactory tf = TransformerFactory.newInstance();
+	       Transformer transformer = tf.newTransformer();
+	       transformer.transform(domSource, result);
+	       return writer.toString();
+	    }
+	    catch(TransformerException ex)
+	    {
+	       ex.printStackTrace();
+	       return null;
+	    }
 	}
 
 }
