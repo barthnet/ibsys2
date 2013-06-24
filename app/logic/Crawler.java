@@ -34,7 +34,7 @@ public class Crawler {
 	private String username;
 	private String password;
 	private String sessionId;
-	private String period;
+	public String period;
 	private HttpClient client;
 
 	public Crawler(String username, String password) {

@@ -18,6 +18,7 @@ import models.Item;
 import models.ItemTime;
 import models.OpenOrder;
 import models.ProductionOrder;
+import models.User;
 import models.Workplace;
 
 import org.apache.commons.io.IOUtils;
@@ -197,6 +198,9 @@ public class Application extends Controller {
 		InputStream in = IOUtils.toInputStream(xmlFile);
 		Parser p = new Parser(in);
 		p.parseDoc();
+		User user = new User();
+		user.period = "7";
+		user.save();
 		ApplicationLogic.wishToPlan();
 		ApplicationLogic.calcProductionPlan();
 		ApplicationLogic.planToOrder();
@@ -250,6 +254,9 @@ public class Application extends Controller {
 	public static void loadXmlFromSite(String username, String password) {
 		Crawler cr = new Crawler(username, password);
 		String file = cr.importFileFromWeb();
+		User user = new User();
+		user.period = cr.period;
+		user.save();
 		Logger.info("file:\n%s", file);
 		renderText(file);
 	}
