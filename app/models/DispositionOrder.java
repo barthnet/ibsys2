@@ -27,7 +27,8 @@ public class DispositionOrder extends Model {
 	public double deliveryVariance;
 	public int discount;
 	
-	public String mode;
+	public String modus;
+	public int quantity;
 	public double expectedArrival;
 
 	public Item getItemAsObject() {
