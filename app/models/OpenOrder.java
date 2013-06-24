@@ -18,6 +18,7 @@ public class OpenOrder extends Model {
 	public int mode;
 	public int orderPeriod;
 	public int amount;
+	public double expectedArrival;
 
 	public Item getItemAsObject() {
 		return Item.find("byItemId", this.item).first();
@@ -25,7 +26,9 @@ public class OpenOrder extends Model {
 
 	@Override
 	public String toString() {
-		return "OpenOrder [item=" + item + ", mode=" + mode + ", orderPeriod=" + orderPeriod + ", amount=" + amount + "]";
+		return "OpenOrder [item=" + item + ", mode=" + mode + ", orderPeriod="
+				+ orderPeriod + ", amount=" + amount + ", expectedArrival="
+				+ expectedArrival + "]";
 	}
 
 }
