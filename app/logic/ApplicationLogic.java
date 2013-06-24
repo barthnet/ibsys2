@@ -163,5 +163,19 @@ public class ApplicationLogic {
 			dispoOrder.save();
 		}
 	}
+	
+	public static void calculateExpectedArrival(String method) {
+		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
+		for(DispositionOrder dispoOrder : dispoOrders) {
+			//TODO Addiere aktuelle Periode zu expectedArrival hinzu
+			dispoOrder.expectedArrival = 0.2 + dispoOrder.deliveryTime;
+			switch (method) {
+				case "optimistic": break;
+				case "riskaverse": dispoOrder.expectedArrival += dispoOrder.deliveryVariance; break;
+				case "recommended": dispoOrder.expectedArrival += (dispoOrder.deliveryVariance * 0.75); break;
+			}
+			dispoOrder.save();
+		}		
+	}
 
 }
