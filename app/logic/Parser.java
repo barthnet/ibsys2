@@ -23,6 +23,7 @@ import models.DistributionWish;
 import models.Item;
 import models.OpenOrder;
 import models.ProductionOrder;
+import models.User;
 import models.WaitingList;
 import models.Workplace;
 
@@ -54,6 +55,7 @@ public class Parser {
 
 	public void parseDoc() {
 		ApplicationLogic.resetData();
+		parsePeriod();
 		parseArticles();
 		parseOpenOrders();
 		parseWaitingLists();
@@ -61,7 +63,13 @@ public class Parser {
 //		ApplicationLogic.calcProductionPlan();
 	}
 
-	
+	private void parsePeriod() {
+		Node period = document.getElementsByTagName("results").item(0);
+		NamedNodeMap att = period.getAttributes(); 
+		User user = new User();
+		user.period = getString(att, "period");
+		user.save();
+	}
 
 	private void parseArticles() {
 		NodeList articles = document.getElementsByTagName("article");
