@@ -95,6 +95,7 @@ public class Application extends Controller {
 		ArrayList<ProductionOrder> orders = new JSONDeserializer<ArrayList<ProductionOrder>>().use("values", ProductionOrder.class).deserialize(body);
 		if (orders != null && !orders.isEmpty()) {
 			Logger.info("postProductionOrders: %s %s", ProductionOrder.findAll().size(), orders.size());
+			Workplace.deleteAllProductionPlanLists();
 			ProductionOrder.deleteAll();
 			ProductionOrder.saveAll(orders);
 		}
