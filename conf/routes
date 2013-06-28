@@ -8,6 +8,7 @@ GET     /                                       Application.index
 # Test methods
 GET		/test									Application.test
 GET		/test2									Application.test2
+GET		/test3									Application.test3
 GET		/parse									Application.parseXML
 GET		/testLogin								Application.testLogin
 

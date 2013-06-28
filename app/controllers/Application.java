@@ -56,6 +56,37 @@ public class Application extends Controller {
 		List<DispositionManufacture> disps = DispositionManufacture.find("byItem", "E26").fetch();
 		renderJSON(disps);
 	}
+	
+	public static void test3() {
+		DistributionWish wish1 = DistributionWish.find("byItem", "P1").first();
+		wish1.period0 = 100;
+		wish1.period1 = 50;
+		wish1.period2 = 90;
+		wish1.period3 = 120;
+		DistributionWish wish2 = DistributionWish.find("byItem", "P2").first();
+		wish2.period0 = 70;
+		wish2.period1 = 20;
+		wish2.period2 = 90;
+		wish2.period3 = 100;
+		DistributionWish wish3 = DistributionWish.find("byItem", "P3").first();
+		wish3.period0 = 10;
+		wish3.period1 = 50;
+		wish3.period2 = 100;
+		wish3.period3 = 150;
+		
+		ApplicationLogic.calculateDisposition();
+		
+		List<DispositionOrder> orders = DispositionOrder.findAll();
+		for (DispositionOrder order : orders) {
+			Logger.info("Order: %s", order.item);
+		}
+		
+		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
+		for (DispositionOrder dispoOrder : dispoOrders) {
+			Item item = Item.find("byItemId", dispoOrder.item).first();
+			Logger.info("Disposition Order: %s Consumption0: %s Consumption1: %s Consumption2: %s Consumption3: %s Quantity: %s Mode: %s Stock: %s", dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1, dispoOrder.consumptionPeriod2, dispoOrder.consumptionPeriod3, dispoOrder.quantity, dispoOrder.modus, item.amount);
+		}
+	}
 
 	public static void testLogin() {
 		setHeader();
@@ -212,15 +243,16 @@ public class Application extends Controller {
 		InputStream in = IOUtils.toInputStream(xmlFile);
 		Parser p = new Parser(in);
 		p.parseDoc();
-		User user = new User();
-		user.period = "7";
-		user.save();
 		ApplicationLogic.wishToPlan();
 		ApplicationLogic.calcProductionPlan();
 		ApplicationLogic.planToOrder();
 		ApplicationLogic.calculateCapacity();
 		ApplicationLogic.calculateDisposition();
-		ok();
+		
+		List<User> users = User.findAll();
+		int actPeriod = Integer.valueOf(users.get(0).period);
+		
+		renderJSON(actPeriod);
 	}
 	
 	/**
@@ -253,7 +285,11 @@ public class Application extends Controller {
 			e.printStackTrace();
 			error("No file received.");
 		}
-		ok();
+		
+		List<User> users = User.findAll();
+		int actPeriod = Integer.valueOf(users.get(0).period);
+		
+		renderJSON(actPeriod);
 	}
 
 	/**
@@ -282,9 +318,6 @@ public class Application extends Controller {
 	public static void loadXmlFromSite(String username, String password) {
 		Crawler cr = new Crawler(username, password);
 		String file = cr.importFileFromWeb();
-		User user = new User();
-		user.period = cr.period;
-		user.save();
 		Logger.info("file:\n%s", file);
 		renderText(file);
 	}
