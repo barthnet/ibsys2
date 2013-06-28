@@ -271,7 +271,7 @@ public class ApplicationLogic {
 			}
 			
 			//Wenn Lieferzeit zu lang, dann Express Bestellung
-			if (dispoOrder.expectedArrival < (period + actPeriod)) {
+			if (dispoOrder.expectedArrival > (period + actPeriod)) {
 				dispoOrder.modus = "4";
 			} else {
 				dispoOrder.modus = "5";
