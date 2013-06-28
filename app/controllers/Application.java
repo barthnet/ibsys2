@@ -246,7 +246,11 @@ public class Application extends Controller {
 		ApplicationLogic.planToOrder();
 		ApplicationLogic.calculateCapacity();
 		ApplicationLogic.calculateDisposition();
-		ok();
+		
+		List<User> users = User.findAll();
+		int actPeriod = Integer.valueOf(users.get(0).period);
+		
+		renderJSON(actPeriod);
 	}
 	
 	/**
@@ -279,7 +283,11 @@ public class Application extends Controller {
 			e.printStackTrace();
 			error("No file received.");
 		}
-		ok();
+		
+		List<User> users = User.findAll();
+		int actPeriod = Integer.valueOf(users.get(0).period);
+		
+		renderJSON(actPeriod);
 	}
 
 	/**
