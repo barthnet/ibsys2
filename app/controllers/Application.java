@@ -268,7 +268,8 @@ public class Application extends Controller {
 	 */
 	public static void uploadXML(File file) {
 		setHeader();
-		Logger.info("uploadXML: %s", file.getName());
+		String body = getBodyAsString();
+		Logger.info("uploadXML: %s", body);
 		InputStream in = null;
 		try {
 			in = new FileInputStream(file);

@@ -213,7 +213,7 @@ public class ApplicationLogic {
 			//TODO calculateExpectedArrival Methode dynamisch statt hardcoded
 			dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item);
 			Item item = Item.find("byItemId", dispoOrder.item).first();
-			
+			dispoOrder.amount = item.amount;
 			int stock = item.amount;
 			int amt0 = dispoOrder.consumptionPeriod0;
 			int amt1 = amt0 + dispoOrder.consumptionPeriod1;
