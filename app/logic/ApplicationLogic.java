@@ -243,19 +243,23 @@ public class ApplicationLogic {
 				quantity = amt0;
 			} else if (stock - amt0 <= 0) {
 				period = 0;
-				quantity = amt0;
-			} else if (stock - amt1 <= 0 && dispoOrder.expectedArrival >= 1) {
+				//quantity = amt0;
+				quantity = dispoOrder.consumptionPeriod0;
+			} else if (stock - amt1 <= 0 && dispoOrder.expectedArrival >= (1 + actPeriod)) {
 				period = 1;
-				quantity = amt1;
-			} else if (stock - amt2 <= 0 && dispoOrder.expectedArrival >= 2) {
+				//quantity = amt1;
+				quantity = dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
+			} else if (stock - amt2 <= 0 && dispoOrder.expectedArrival >= (2 + actPeriod)) {
 				period = 2;
-				quantity = amt2;
-			} else if (stock - amt3 <= 0 && dispoOrder.expectedArrival >= 3) {
+				//quantity = amt2;
+				quantity = dispoOrder.consumptionPeriod2 + dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
+			} else if (stock - amt3 <= 0 && dispoOrder.expectedArrival >= (3 + actPeriod)) {
 				period = 3;
-				quantity = amt3;
+				//quantity = amt3;
+				quantity = dispoOrder.consumptionPeriod3 + dispoOrder.consumptionPeriod2 + dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
 			}
 			
-			if (period == -1) break;
+			if (period == -1) continue;
 			
 			//Bestellmenge = Diskontmenge
 			if (quantity < dispoOrder.discount) {
@@ -265,7 +269,7 @@ public class ApplicationLogic {
 			}
 			
 			//Wenn Lieferzeit zu lang, dann Express Bestellung
-			if (dispoOrder.expectedArrival < period) {
+			if (dispoOrder.expectedArrival < (period + actPeriod)) {
 				dispoOrder.modus = "4";
 			} else {
 				dispoOrder.modus = "5";
@@ -335,6 +339,7 @@ public class ApplicationLogic {
 			case "riskaverse": {expectedArrival += dispoOrder.deliveryVariance; break;}
 			case "recommended": {expectedArrival += (dispoOrder.deliveryVariance * 0.75); break;}
 		}
+		Logger.info("Expected arrival for %s: %s", dispoOrder.item, expectedArrival);
 		return expectedArrival;
 	}
 
