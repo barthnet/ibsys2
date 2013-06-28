@@ -25,20 +25,18 @@ import models.DispositionOrder;
 import models.DistributionWish;
 import models.Item;
 import models.ItemTime;
-import models.OpenOrder;
 import models.ProductionOrder;
 import models.User;
-import models.Workplace;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
 
 import play.Logger;
 import play.mvc.Controller;
 import play.templates.Template;
 import play.templates.TemplateLoader;
-import play.test.Fixtures;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
@@ -195,6 +193,11 @@ public class Application extends Controller {
 		}
 		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(wishs));
 	}
+	
+	public static void reset() {
+		setHeader();
+		ApplicationLogic.resetData();
+	}
 
 	/**
 	 * Testmethod to develop xml parser with local xml file doesnt load
@@ -221,31 +224,13 @@ public class Application extends Controller {
 	/**
 	 * downloads the input.xml
 	 */
-	public static void downloadInputXML (){
+	public static void downloadXML() {
 		setHeader();
-		
 		response.setContentTypeIfNotSet("application/x-download");  
 		response.setHeader("Content-disposition","attachment; filename=input.xml");
 		
-		// Prepare the output file
-		File file = new File("input.xml");
-		Result result = new StreamResult(file);;
-		
-		try {
-            //Prepare the DOM document for writing
-            Source source = new DOMSource(Parser.parseInputXML());
-    
-            // Write the DOM document to the file
-            Transformer xformer = TransformerFactory.newInstance().newTransformer();
-            xformer.transform(source, result);
-            
-        } catch (TransformerConfigurationException e) {
-        	e.printStackTrace();
-        } catch (TransformerException e) {
-        	e.printStackTrace();
-        }
-					
-		renderBinary(file); 
+		Document doc = Parser.parseInputXML();
+		renderXml(doc);
 	}
 
 	/**
@@ -255,6 +240,7 @@ public class Application extends Controller {
 	 */
 	public static void uploadXML(File file) {
 		setHeader();
+		Logger.info("uploadXML: %s", file.getName());
 		InputStream in = null;
 		try {
 			in = new FileInputStream(file);
