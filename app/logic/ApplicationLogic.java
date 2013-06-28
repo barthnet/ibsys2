@@ -9,7 +9,9 @@ import models.DispositionManufacture;
 import models.DispositionOrder;
 import models.DistributionWish;
 import models.Item;
+import models.OpenOrder;
 import models.ProductionOrder;
+import models.User;
 import models.WaitingList;
 import models.Workplace;
 import play.Logger;
@@ -199,8 +201,82 @@ public class ApplicationLogic {
 //			Logger.info("capacity %s", cap);
 		}
 	}
-
+	
 	public static void calculateDisposition() {
+		calculateConsumption();
+		List<User> users = User.findAll();
+		int actPeriod = Integer.valueOf(users.get(0).period);
+		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
+		for (DispositionOrder dispoOrder : dispoOrders) {
+			//TODO calculateExpectedArrival Methode dynamisch statt hardcoded
+			dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item);
+			Item item = Item.find("byItemId", dispoOrder.item).first();
+			
+			int stock = item.amount;
+			int amt0 = dispoOrder.consumptionPeriod0;
+			int amt1 = amt0 + dispoOrder.consumptionPeriod1;
+			int amt2 = amt1 + dispoOrder.consumptionPeriod2;
+			int amt3 = amt2 + dispoOrder.consumptionPeriod3;
+			
+			//remove inward amount from consumption amount
+			List<OpenOrder> openOrders = OpenOrder.find("byItem", dispoOrder.item).fetch();
+			for (OpenOrder order : openOrders) {
+				//TODO calculateExpectedArrival Methode dynamisch statt hardcoded
+				order.expectedArrival = order.orderPeriod + calculateExpectedArrival("recommended", dispoOrder.item);
+				double delta = order.expectedArrival - actPeriod;			
+				if (delta <= 1) {
+					amt0 = (order.amount > amt0) ? 0 : (amt0 - order.amount);
+				} else if (delta <= 2) {
+					amt1 = (order.amount > amt1) ? 0 : (amt1 - order.amount);
+				} else if (delta <= 3) {
+					amt2 = (order.amount > amt2) ? 0 : (amt2 - order.amount);
+				} else {
+					amt3 = (order.amount > amt3) ? 0 : (amt3 - order.amount);
+				}
+			}
+			
+			int period = -1;
+			int quantity = 0;
+			//quantity anpassen?!
+			if (stock == 0) {
+				period = 0;
+				quantity = amt0;
+			} else if (stock - amt0 <= 0) {
+				period = 0;
+				quantity = amt0;
+			} else if (stock - amt1 <= 0 && dispoOrder.expectedArrival >= 1) {
+				period = 1;
+				quantity = amt1;
+			} else if (stock - amt2 <= 0 && dispoOrder.expectedArrival >= 2) {
+				period = 2;
+				quantity = amt2;
+			} else if (stock - amt3 <= 0 && dispoOrder.expectedArrival >= 3) {
+				period = 3;
+				quantity = amt3;
+			}
+			
+			if (period == -1) break;
+			
+			//Bestellmenge = Diskontmenge
+			if (quantity < dispoOrder.discount) {
+				dispoOrder.quantity = dispoOrder.discount;
+			} else {
+				dispoOrder.quantity = quantity;
+			}
+			
+			//Wenn Lieferzeit zu lang, dann Express Bestellung
+			if (dispoOrder.expectedArrival < period) {
+				dispoOrder.modus = "4";
+			} else {
+				dispoOrder.modus = "5";
+			}
+			
+			dispoOrder.save();
+			
+		}
+	}
+
+	public static void calculateConsumption() {
 		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
 		for (DispositionOrder dispoOrder : dispoOrders) {
 			// aktueller Verbrauch
@@ -248,18 +324,18 @@ public class ApplicationLogic {
 		}
 	}
 	
-	public static void calculateExpectedArrival(String method) {
-		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
-		for(DispositionOrder dispoOrder : dispoOrders) {
-			//TODO Addiere aktuelle Periode zu expectedArrival hinzu
-			dispoOrder.expectedArrival = 0.2 + dispoOrder.deliveryTime;
-			switch (method) {
-				case "optimistic": break;
-				case "riskaverse": dispoOrder.expectedArrival += dispoOrder.deliveryVariance; break;
-				case "recommended": dispoOrder.expectedArrival += (dispoOrder.deliveryVariance * 0.75); break;
-			}
-			dispoOrder.save();
-		}		
+	public static double calculateExpectedArrival(String method, String itemId) {
+		List<User> users = User.findAll();
+		int period = Integer.valueOf(users.get(0).period);
+		double expectedArrival = 0.0;
+		DispositionOrder dispoOrder = DispositionOrder.find("byItem", itemId).first();
+		expectedArrival = 0.2 + dispoOrder.deliveryTime + period;
+		switch (method) {
+			case "optimistic": {break;}
+			case "riskaverse": {expectedArrival += dispoOrder.deliveryVariance; break;}
+			case "recommended": {expectedArrival += (dispoOrder.deliveryVariance * 0.75); break;}
+		}
+		return expectedArrival;
 	}
 
 }
