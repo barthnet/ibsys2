@@ -197,6 +197,8 @@ public class ApplicationLogic {
 					cap.overtime = cap.totaltime - 7200;
 				}
 			}
+			//overtime per day
+			cap.overtime = (int)Math.ceil(cap.overtime / 5);
 			cap.save();
 //			Logger.info("capacity %s", cap);
 		}
@@ -240,7 +242,7 @@ public class ApplicationLogic {
 			//quantity anpassen?!
 			if (stock == 0) {
 				period = 0;
-				quantity = amt0;
+				quantity = dispoOrder.consumptionPeriod0;
 			} else if (stock - amt0 <= 0) {
 				period = 0;
 				//quantity = amt0;
