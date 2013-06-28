@@ -27,6 +27,8 @@ public class DispositionOrder extends Model {
 	public double deliveryVariance;
 	public int discount;
 	
+	public int amount;
+	
 	/*
 	 * mode 5: normal
        mode 4: fast

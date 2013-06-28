@@ -355,7 +355,7 @@ Item(E31):
         - P3E31 
    
 Item(K32):    
-    itemNumber: K32 
+    itemNumber: 32 
     type: K 
     name: Paint
     usedIn:

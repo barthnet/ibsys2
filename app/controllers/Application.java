@@ -25,20 +25,18 @@ import models.DispositionOrder;
 import models.DistributionWish;
 import models.Item;
 import models.ItemTime;
-import models.OpenOrder;
 import models.ProductionOrder;
 import models.User;
-import models.Workplace;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
 
 import play.Logger;
 import play.mvc.Controller;
 import play.templates.Template;
 import play.templates.TemplateLoader;
-import play.test.Fixtures;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
@@ -56,6 +54,37 @@ public class Application extends Controller {
 	public static void test2() {
 		List<DispositionManufacture> disps = DispositionManufacture.find("byItem", "E26").fetch();
 		renderJSON(disps);
+	}
+	
+	public static void test3() {
+		DistributionWish wish1 = DistributionWish.find("byItem", "P1").first();
+		wish1.period0 = 100;
+		wish1.period1 = 50;
+		wish1.period2 = 90;
+		wish1.period3 = 120;
+		DistributionWish wish2 = DistributionWish.find("byItem", "P2").first();
+		wish2.period0 = 70;
+		wish2.period1 = 20;
+		wish2.period2 = 90;
+		wish2.period3 = 100;
+		DistributionWish wish3 = DistributionWish.find("byItem", "P3").first();
+		wish3.period0 = 10;
+		wish3.period1 = 50;
+		wish3.period2 = 100;
+		wish3.period3 = 150;
+		
+		ApplicationLogic.calculateDisposition();
+		
+		List<DispositionOrder> orders = DispositionOrder.findAll();
+		for (DispositionOrder order : orders) {
+			Logger.info("Order: %s", order.item);
+		}
+		
+		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
+		for (DispositionOrder dispoOrder : dispoOrders) {
+			Item item = Item.find("byItemId", dispoOrder.item).first();
+			Logger.info("Disposition Order: %s Consumption0: %s Consumption1: %s Consumption2: %s Consumption3: %s Quantity: %s Mode: %s Stock: %s", dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1, dispoOrder.consumptionPeriod2, dispoOrder.consumptionPeriod3, dispoOrder.quantity, dispoOrder.modus, item.amount);
+		}
 	}
 
 	public static void testLogin() {
@@ -196,6 +225,11 @@ public class Application extends Controller {
 		}
 		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(wishs));
 	}
+	
+	public static void reset() {
+		setHeader();
+		ApplicationLogic.resetData();
+	}
 
 	/**
 	 * Testmethod to develop xml parser with local xml file doesnt load
@@ -208,45 +242,28 @@ public class Application extends Controller {
 		InputStream in = IOUtils.toInputStream(xmlFile);
 		Parser p = new Parser(in);
 		p.parseDoc();
-		User user = new User();
-		user.period = "7";
-		user.save();
 		ApplicationLogic.wishToPlan();
 		ApplicationLogic.calcProductionPlan();
 		ApplicationLogic.planToOrder();
 		ApplicationLogic.calculateCapacity();
 		ApplicationLogic.calculateDisposition();
-		ok();
+		
+		List<User> users = User.findAll();
+		int actPeriod = Integer.valueOf(users.get(0).period);
+		
+		renderJSON(actPeriod);
 	}
 	
 	/**
 	 * downloads the input.xml
 	 */
-	public static void downloadInputXML (){
+	public static void downloadXML() {
 		setHeader();
-		
 		response.setContentTypeIfNotSet("application/x-download");  
 		response.setHeader("Content-disposition","attachment; filename=input.xml");
 		
-		// Prepare the output file
-		File file = new File("input.xml");
-		Result result = new StreamResult(file);;
-		
-		try {
-            //Prepare the DOM document for writing
-            Source source = new DOMSource(Parser.parseInputXML());
-    
-            // Write the DOM document to the file
-            Transformer xformer = TransformerFactory.newInstance().newTransformer();
-            xformer.transform(source, result);
-            
-        } catch (TransformerConfigurationException e) {
-        	e.printStackTrace();
-        } catch (TransformerException e) {
-        	e.printStackTrace();
-        }
-					
-		renderBinary(file); 
+		Document doc = Parser.parseInputXML();
+		renderXml(doc);
 	}
 
 	/**
@@ -256,6 +273,8 @@ public class Application extends Controller {
 	 */
 	public static void uploadXML(File file) {
 		setHeader();
+		String body = getBodyAsString();
+		Logger.info("uploadXML: %s", body);
 		InputStream in = null;
 		try {
 			in = new FileInputStream(file);
@@ -265,7 +284,11 @@ public class Application extends Controller {
 			e.printStackTrace();
 			error("No file received.");
 		}
-		ok();
+		
+		List<User> users = User.findAll();
+		int actPeriod = Integer.valueOf(users.get(0).period);
+		
+		renderJSON(actPeriod);
 	}
 
 	/**
@@ -294,9 +317,6 @@ public class Application extends Controller {
 	public static void loadXmlFromSite(String username, String password) {
 		Crawler cr = new Crawler(username, password);
 		String file = cr.importFileFromWeb();
-		User user = new User();
-		user.period = cr.period;
-		user.save();
 		Logger.info("file:\n%s", file);
 		renderText(file);
 	}
