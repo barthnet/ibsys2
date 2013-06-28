@@ -21,7 +21,7 @@ import utils.ItemHelper;
 public class ApplicationLogic {
 
 	public static void resetData() {
-		Logger.info("reset Data");
+		Logger.info("reset Data");		
 		Fixtures.deleteAllModels();
 		Fixtures.loadModels("initial-items.yml", "initial-workplaces.yml", "ItemTime.yml", "initial-dispositionOrder.yml", "initial-productionPlan.yml",
 				"initial-components.yml");
@@ -97,10 +97,13 @@ public class ApplicationLogic {
 	}
 
 	public static void planToOrder() {
-		List<DispositionManufacture> plans = DispositionManufacture.findAll();
+		
+		List<DispositionManufacture> plans = DispositionManufacture.find("order by itemNumber asc").fetch();
+//		List<DispositionManufacture> plans = DispositionManufacture.findAll();
 		Workplace.deleteAllProductionPlanLists();
 		Logger.info("planToOrder %s", ProductionOrder.findAll().size());
 		ProductionOrder.deleteAll();
+		int no = 0;
 		for (DispositionManufacture dispo : plans) {
 			ProductionOrder prodOrder = ProductionOrder.find("byItem", dispo.item).first();
 			Item item = dispo.getItemAsObject();
@@ -110,12 +113,15 @@ public class ApplicationLogic {
 			} else {
 				prodOrder = new ProductionOrder();
 				prodOrder.item = item.itemId;
-				prodOrder.orderNumber = item.itemNumber;
+//				prodOrder.itemNumber = item.itemNumber;
+				prodOrder.orderNumber = no;
+				no++;
 				prodOrder.amount = dispo.production;
 				Logger.info("pOrder null: %s", prodOrder);
 			}
-			prodOrder.save();
 			prodOrder.assignToWorkplaces();
+			prodOrder.save();
+			
 		}
 	}
 

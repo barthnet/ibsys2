@@ -27,6 +27,7 @@ import models.Item;
 import models.ItemTime;
 import models.ProductionOrder;
 import models.User;
+import models.Workplace;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -93,7 +94,8 @@ public class Application extends Controller {
 		ArrayList<ProductionOrder> orders = new JSONDeserializer<ArrayList<ProductionOrder>>().use("values", ProductionOrder.class).deserialize(body);
 		if (orders != null && !orders.isEmpty()) {
 			Logger.info("postProductionOrders: %s %s", ProductionOrder.findAll().size(), orders.size());
-			ProductionOrder.deleteAll();
+			Workplace.deleteAllProductionPlanLists();
+			ProductionOrder.deleteAll();			
 			ProductionOrder.saveAll(orders);
 		}
 		ApplicationLogic.calculateCapacity();

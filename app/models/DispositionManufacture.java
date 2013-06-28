@@ -16,6 +16,7 @@ import play.db.jpa.Model;
 public class DispositionManufacture extends Model {
 
 	public String item;
+	public int itemNumber;
 	public String productItem;
 	public String[] itemChilds;
 
