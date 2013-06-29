@@ -84,7 +84,7 @@ public class Application extends Controller {
 		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
 		for (DispositionOrder dispoOrder : dispoOrders) {
 			Item item = Item.find("byItemId", dispoOrder.item).first();
-			Logger.info("Disposition Order: %s Consumption0: %s Consumption1: %s Consumption2: %s Consumption3: %s Quantity: %s Mode: %s Stock: %s", dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1, dispoOrder.consumptionPeriod2, dispoOrder.consumptionPeriod3, dispoOrder.quantity, dispoOrder.modus, item.amount);
+			Logger.info("Disposition Order: %s Consumption0: %s Consumption1: %s Consumption2: %s Consumption3: %s Quantity: %s Mode: %s Stock: %s", dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1, dispoOrder.consumptionPeriod2, dispoOrder.consumptionPeriod3, dispoOrder.quantity, dispoOrder.mode, item.amount);
 		}
 	}
 

@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.sql.Delete;
 
+import com.ning.http.client.oauth.ConsumerKey;
+
 import models.Capacity;
 import models.Component;
 import models.DispositionManufacture;
@@ -218,16 +220,14 @@ public class ApplicationLogic {
 		}
 	}
 	
-	public static void calculateDisposition() {
-		//Fixtures.delete(DispositionOrder.class);
-		//Fixtures.loadModels("initial-dispositionOrder.yml");		
+	public static void calculateDisposition() {	
 		calculateConsumption();
 		List<User> users = User.findAll();
 		int actPeriod = Integer.valueOf(users.get(0).period);
 		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
 		for (DispositionOrder dispoOrder : dispoOrders) {
 			//TODO calculateExpectedArrival Methode dynamisch statt hardcoded
-			dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item);
+			dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 5);
 			Item item = Item.find("byItemId", dispoOrder.item).first();
 			dispoOrder.amount = item.amount;
 			int stock = item.amount;
@@ -240,18 +240,27 @@ public class ApplicationLogic {
 			List<OpenOrder> openOrders = OpenOrder.find("byItem", dispoOrder.item).fetch();
 			for (OpenOrder order : openOrders) {
 				//TODO calculateExpectedArrival Methode dynamisch statt hardcoded
-				order.expectedArrival = order.orderPeriod + calculateExpectedArrival("recommended", dispoOrder.item);
+				order.expectedArrival = order.orderPeriod + calculateExpectedArrival("recommended", dispoOrder.item, order.mode);
 				double delta = order.expectedArrival - actPeriod;			
 				if (delta <= 1) {
-					amt0 = (order.amount > amt0) ? 0 : (amt0 - order.amount);
+					//amt0 = (order.amount > amt0) ? 0 : (amt0 - order.amount);
+					amt0 -= order.amount;
 				} else if (delta <= 2) {
-					amt1 = (order.amount > amt1) ? 0 : (amt1 - order.amount);
+					//amt1 = (order.amount > amt1) ? 0 : (amt1 - order.amount);
+					amt1 -= order.amount;
 				} else if (delta <= 3) {
-					amt2 = (order.amount > amt2) ? 0 : (amt2 - order.amount);
+					//amt2 = (order.amount > amt2) ? 0 : (amt2 - order.amount);
 				} else {
-					amt3 = (order.amount > amt3) ? 0 : (amt3 - order.amount);
+					//amt3 = (order.amount > amt3) ? 0 : (amt3 - order.amount);
+					amt2 -= order.amount;
 				}
 			}
+			
+			//Set futureStock after consumption and expected orders
+			item.futureStock0 = stock - amt0;
+			item.futureStock1 = stock - amt1;
+			item.futureStock2 = stock - amt2;
+			item.futureStock3 = stock - amt3;
 			
 			int period = -1;
 			int quantity = 0;
@@ -288,10 +297,14 @@ public class ApplicationLogic {
 			
 			//Wenn Lieferzeit zu lang, dann Express Bestellung
 			if (Math.round(dispoOrder.expectedArrival) > (period + actPeriod)) {
-				dispoOrder.modus = "4";
+				dispoOrder.mode = 4;
+				dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 4);
 			} else {
-				dispoOrder.modus = "5";
+				dispoOrder.mode = 5;
 			}
+			
+			//add new orders to future stock
+			
 			
 			dispoOrder.save();
 			
@@ -348,16 +361,22 @@ public class ApplicationLogic {
 		}
 	}
 	
-	public static double calculateExpectedArrival(String method, String itemId) {
+	public static double calculateExpectedArrival(String method, String itemId, int mode) {
 		List<User> users = User.findAll();
 		int period = Integer.valueOf(users.get(0).period);
 		double expectedArrival = 0.0;
 		DispositionOrder dispoOrder = DispositionOrder.find("byItem", itemId).first();
-		expectedArrival = 0.2 + dispoOrder.deliveryTime + period;
-		switch (method) {
-			case "optimistic": {break;}
-			case "riskaverse": {expectedArrival += dispoOrder.deliveryVariance; break;}
-			case "recommended": {expectedArrival += (dispoOrder.deliveryVariance * 0.75); break;}
+		expectedArrival = 0.2 + period;
+		//If express order half delivery time and no variance
+		if (mode == 4) {
+			expectedArrival += (dispoOrder.deliveryTime / 2); 
+		} else {
+			expectedArrival += dispoOrder.deliveryTime;
+			switch (method) {
+				case "optimistic": {break;}
+				case "riskaverse": {expectedArrival += dispoOrder.deliveryVariance; break;}
+				case "recommended": {expectedArrival += (dispoOrder.deliveryVariance * 0.75); break;}
+			}
 		}
 		Logger.info("Expected arrival for %s: %s", dispoOrder.item, expectedArrival);
 		return expectedArrival;

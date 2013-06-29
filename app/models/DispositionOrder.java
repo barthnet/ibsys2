@@ -36,7 +36,7 @@ public class DispositionOrder extends Model {
        mode 2: cheap vendor
        mode 1: special order
 	 */
-	public String modus;
+	public int mode;
 	public int quantity;
 	public double expectedArrival;
 
