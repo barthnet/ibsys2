@@ -20,6 +20,11 @@ public class DispositionOrder extends Model {
 	public int consumptionPeriod1;
 	public int consumptionPeriod2;
 	public int consumptionPeriod3;
+	
+	public int futureStock0;
+	public int futureStock1;
+	public int futureStock2;
+	public int futureStock3;
 
 	public double price;
 	public double deliveryCost;

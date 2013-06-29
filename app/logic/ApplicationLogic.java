@@ -250,16 +250,16 @@ public class ApplicationLogic {
 			if (item.amount == 0) {
 				period = 0;
 				quantity = dispoOrder.consumptionPeriod0;
-			} else if (item.futureStock0 <= 0) {
+			} else if (dispoOrder.futureStock0 <= 0) {
 				period = 0;
 				quantity = dispoOrder.consumptionPeriod0;
-			} else if (item.futureStock1 <= 0) {
+			} else if (dispoOrder.futureStock1 <= 0) {
 				period = 1;
 				quantity = dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
-			} else if (item.futureStock2 <= 0) {
+			} else if (dispoOrder.futureStock2 <= 0) {
 				period = 2;
 				quantity = dispoOrder.consumptionPeriod2 + dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
-			} else if (item.futureStock3 <= 0) {
+			} else if (dispoOrder.futureStock3 <= 0) {
 				period = 3;
 				quantity = dispoOrder.consumptionPeriod3 + dispoOrder.consumptionPeriod2 + dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
 			}
@@ -276,7 +276,6 @@ public class ApplicationLogic {
 			
 			//Wenn Lieferzeit zu lang, dann Express Bestellung
 			
-			Logger.info("Dispo arrival: %s vs Period %s", Math.ceil(dispoOrder.expectedArrival), (period + actPeriod));
 			if (Math.ceil(dispoOrder.expectedArrival) > (period + actPeriod)) {
 				dispoOrder.mode = 4;
 				dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 4);
@@ -284,10 +283,7 @@ public class ApplicationLogic {
 				dispoOrder.mode = 5;
 			}
 			
-			dispoOrder.save();
-			
-			//Logger.info("DispoOrder: %s, %s, %s", dispoOrder, dispoOrder.amount, dispoOrder.mode);
-			
+			dispoOrder.save();			
 		}
 	}
 
@@ -368,25 +364,23 @@ public class ApplicationLogic {
 	public static void calculateFutureStock(String itemId, String method) {
 		List<User> users = User.findAll();
 		int actPeriod = Integer.valueOf(users.get(0).period);
-
-		Item item = Item.find("byItemId", itemId).first();
 		
 		//remove consumption from stock, add dispoOrders amount to expected period
 		DispositionOrder dispoOrder = DispositionOrder.find("byItem", itemId).first();
-		item.futureStock0 = item.amount - dispoOrder.consumptionPeriod0;
-		item.futureStock1 = item.futureStock0 - dispoOrder.consumptionPeriod1;
-		item.futureStock2 = item.futureStock1 -dispoOrder.consumptionPeriod2;
-		item.futureStock3 = item.futureStock2 - dispoOrder.consumptionPeriod3;
+		dispoOrder.futureStock0 = dispoOrder.amount - dispoOrder.consumptionPeriod0;
+		dispoOrder.futureStock1 = dispoOrder.futureStock0 - dispoOrder.consumptionPeriod1;
+		dispoOrder.futureStock2 = dispoOrder.futureStock1 -dispoOrder.consumptionPeriod2;
+		dispoOrder.futureStock3 = dispoOrder.futureStock2 - dispoOrder.consumptionPeriod3;
 		
 		double deltaDispo = dispoOrder.expectedArrival - actPeriod;
 		if (deltaDispo <= 1) {
-			item.futureStock0 += dispoOrder.amount;
+			dispoOrder.futureStock0 += dispoOrder.amount;
 		} else if (deltaDispo <= 2) {
-			item.futureStock1 += dispoOrder.amount;
+			dispoOrder.futureStock1 += dispoOrder.amount;
 		} else if (deltaDispo <= 3) {
-			item.futureStock2 += dispoOrder.amount;
+			dispoOrder.futureStock2 += dispoOrder.amount;
 		} else {
-			item.futureStock3 -= dispoOrder.amount;
+			dispoOrder.futureStock3 -= dispoOrder.amount;
 		}
 				
 		//add openOrder amount to expected period
@@ -395,16 +389,16 @@ public class ApplicationLogic {
 			oOrder.expectedArrival = calculateExpectedArrival(method, itemId, oOrder.mode);
 			double deltaOpenOrder = oOrder.expectedArrival - actPeriod;
 			if (deltaOpenOrder <= 1) {
-				item.futureStock0 += oOrder.amount;
+				dispoOrder.futureStock0 += oOrder.amount;
 			} else if (deltaOpenOrder <= 2) {
-				item.futureStock1 += oOrder.amount;
+				dispoOrder.futureStock1 += oOrder.amount;
 			} else if (deltaOpenOrder <= 3) {
-				item.futureStock2 += oOrder.amount;
+				dispoOrder.futureStock2 += oOrder.amount;
 			} else {
-				item.futureStock3 -= oOrder.amount;
+				dispoOrder.futureStock3 -= oOrder.amount;
 			}
 		}
-		item.save();
+		dispoOrder.save();
 	}
 
 }

@@ -24,10 +24,6 @@ public class Item extends Model {
 	public String name;
 
 	public int amount;
-	public int futureStock0;
-	public int futureStock1;
-	public int futureStock2;
-	public int futureStock3;
 	public double price;
 
 	public String[] components;
