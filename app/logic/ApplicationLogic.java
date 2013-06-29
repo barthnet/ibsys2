@@ -94,7 +94,7 @@ public class ApplicationLogic {
 			if (disp.itemChilds != null && disp.itemChilds.length > 0) {
 				parent = disp;
 			}
-			Logger.info("disp: %s", disp);
+//			Logger.info("disp: %s", disp);
 		}
 	}
 
@@ -110,7 +110,7 @@ public class ApplicationLogic {
 			ProductionOrder prodOrder = ProductionOrder.find("byItem", dispo.item).first();
 			Item item = dispo.getItemAsObject();
 			if (prodOrder != null) {
-				Logger.info("pOrder not null: %s", prodOrder);
+//				Logger.info("pOrder not null: %s", prodOrder);
 				prodOrder.amount += dispo.production;
 			} else {
 				prodOrder = new ProductionOrder();
@@ -119,7 +119,7 @@ public class ApplicationLogic {
 				prodOrder.orderNumber = no;
 				no++;
 				prodOrder.amount = dispo.production;
-				Logger.info("pOrder null: %s", prodOrder);
+//				Logger.info("pOrder null: %s", prodOrder);
 			}
 			prodOrder.assignToWorkplaces();
 			prodOrder.save();
@@ -353,7 +353,7 @@ public class ApplicationLogic {
 			case "riskaverse": {expectedArrival += dispoOrder.deliveryVariance; break;}
 			case "recommended": {expectedArrival += (dispoOrder.deliveryVariance * 0.75); break;}
 		}
-		Logger.info("Expected arrival for %s: %s", dispoOrder.item, expectedArrival);
+//		Logger.info("Expected arrival for %s: %s", dispoOrder.item, expectedArrival);
 		return expectedArrival;
 	}
 

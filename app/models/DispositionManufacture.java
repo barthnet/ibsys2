@@ -57,6 +57,7 @@ public class DispositionManufacture extends Model {
 		this.stock = disp.stock;
 		this.waitingList = disp.waitingList;
 		this.inWork = disp.inWork;
+		this.production = disp.production;
 	}
 
 	@Override
