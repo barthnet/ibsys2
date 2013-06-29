@@ -16,6 +16,7 @@ import play.db.jpa.Model;
 public class DispositionManufacture extends Model {
 
 	public String item;
+	public int itemNumber;
 	public String productItem;
 	public String[] itemChilds;
 
@@ -56,6 +57,7 @@ public class DispositionManufacture extends Model {
 		this.stock = disp.stock;
 		this.waitingList = disp.waitingList;
 		this.inWork = disp.inWork;
+		this.production = disp.production;
 	}
 
 	@Override

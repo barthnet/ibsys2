@@ -96,32 +96,38 @@ public class ApplicationLogic {
 			if (disp.itemChilds != null && disp.itemChilds.length > 0) {
 				parent = disp;
 			}
-			Logger.info("disp: %s", disp);
+//			Logger.info("disp: %s", disp);
 		}
 	}
 
 	public static void planToOrder() {
-		List<DispositionManufacture> plans = DispositionManufacture.findAll();
+		
+		List<DispositionManufacture> plans = DispositionManufacture.find("order by itemNumber asc").fetch();
+//		List<DispositionManufacture> plans = DispositionManufacture.findAll();
 		Workplace.deleteAllProductionPlanLists();
 		Logger.info("planToOrder %s", ProductionOrder.findAll().size());
 		ProductionOrder.deleteAll();
+		int no = 0;
 		for (DispositionManufacture dispo : plans) {
 			ProductionOrder prodOrder = ProductionOrder.find("byItem", dispo.item).first();
 			Item item = dispo.getItemAsObject();
 			if (prodOrder != null) {
-				Logger.info("pOrder not null: %s", prodOrder);
+//				Logger.info("pOrder not null: %s", prodOrder);
 				prodOrder.amount += dispo.production;
 			} else {
 				prodOrder = new ProductionOrder();
 				prodOrder.item = item.itemId;
-				prodOrder.orderNumber = item.itemNumber;
+//				prodOrder.itemNumber = item.itemNumber;
+				prodOrder.orderNumber = no;
+				no++;
 				prodOrder.amount = dispo.production;
-				Logger.info("pOrder null: %s", prodOrder);
-				//THIS IS IT!!
 				prodOrder.assignToWorkplaces();
+//				Logger.info("pOrder null: %s", prodOrder);
 			}
-			prodOrder.save();			
-		}	
+			
+			prodOrder.save();
+			
+		}
 	}
 
 	public static void calculateCapacity() {
@@ -378,7 +384,7 @@ public class ApplicationLogic {
 				case "recommended": {expectedArrival += (dispoOrder.deliveryVariance * 0.75); break;}
 			}
 		}
-		Logger.info("Expected arrival for %s: %s", dispoOrder.item, expectedArrival);
+//		Logger.info("Expected arrival for %s: %s", dispoOrder.item, expectedArrival);
 		return expectedArrival;
 	}
 
