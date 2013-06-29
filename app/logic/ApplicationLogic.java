@@ -236,61 +236,28 @@ public class ApplicationLogic {
 			dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 5);
 			Item item = Item.find("byItemId", dispoOrder.item).first();
 			dispoOrder.amount = item.amount;
-			int stock = item.amount;
-			int amt0 = dispoOrder.consumptionPeriod0;
-			int amt1 = amt0 + dispoOrder.consumptionPeriod1;
-			int amt2 = amt1 + dispoOrder.consumptionPeriod2;
-			int amt3 = amt2 + dispoOrder.consumptionPeriod3;
-			
-			//remove inward amount from consumption amount
-			List<OpenOrder> openOrders = OpenOrder.find("byItem", dispoOrder.item).fetch();
-			for (OpenOrder order : openOrders) {
-				//TODO calculateExpectedArrival Methode dynamisch statt hardcoded
-				order.expectedArrival = order.orderPeriod + calculateExpectedArrival("recommended", dispoOrder.item, order.mode);
-				double delta = order.expectedArrival - actPeriod;			
-				if (delta <= 1) {
-					//amt0 = (order.amount > amt0) ? 0 : (amt0 - order.amount);
-					amt0 -= order.amount;
-				} else if (delta <= 2) {
-					//amt1 = (order.amount > amt1) ? 0 : (amt1 - order.amount);
-					amt1 -= order.amount;
-				} else if (delta <= 3) {
-					//amt2 = (order.amount > amt2) ? 0 : (amt2 - order.amount);
-				} else {
-					//amt3 = (order.amount > amt3) ? 0 : (amt3 - order.amount);
-					amt2 -= order.amount;
-				}
-			}
-			
-			//Set futureStock after consumption and expected orders
-			item.futureStock0 = stock - amt0;
-			item.futureStock1 = stock - amt1;
-			item.futureStock2 = stock - amt2;
-			item.futureStock3 = stock - amt3;
+			calculateFutureStock(dispoOrder.item, "recommended");
 			
 			int period = -1;
 			int quantity = 0;
 			//quantity anpassen?!
-			if (stock == 0) {
+			if (item.amount == 0) {
 				period = 0;
 				quantity = dispoOrder.consumptionPeriod0;
-			} else if (stock - amt0 <= 0) {
+			} else if (item.futureStock0 <= 0) {
 				period = 0;
-				//quantity = amt0;
 				quantity = dispoOrder.consumptionPeriod0;
-			} else if (stock - amt1 <= 0 && dispoOrder.expectedArrival >= (1 + actPeriod)) {
+			} else if (item.futureStock1 <= 0) {
 				period = 1;
-				//quantity = amt1;
 				quantity = dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
-			} else if (stock - amt2 <= 0 && dispoOrder.expectedArrival >= (2 + actPeriod)) {
+			} else if (item.futureStock2 <= 0) {
 				period = 2;
-				//quantity = amt2;
 				quantity = dispoOrder.consumptionPeriod2 + dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
-			} else if (stock - amt3 <= 0 && dispoOrder.expectedArrival >= (3 + actPeriod)) {
+			} else if (item.futureStock3 <= 0) {
 				period = 3;
-				//quantity = amt3;
 				quantity = dispoOrder.consumptionPeriod3 + dispoOrder.consumptionPeriod2 + dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
 			}
+			
 			
 			if (period == -1) continue;
 			
@@ -302,17 +269,18 @@ public class ApplicationLogic {
 			}
 			
 			//Wenn Lieferzeit zu lang, dann Express Bestellung
-			if (Math.round(dispoOrder.expectedArrival) > (period + actPeriod)) {
+			
+			Logger.info("Dispo arrival: %s vs Period %s", Math.ceil(dispoOrder.expectedArrival), (period + actPeriod));
+			if (Math.ceil(dispoOrder.expectedArrival) > (period + actPeriod)) {
 				dispoOrder.mode = 4;
 				dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 4);
 			} else {
 				dispoOrder.mode = 5;
 			}
 			
-			//add new orders to future stock
-			
-			
 			dispoOrder.save();
+			
+			//Logger.info("DispoOrder: %s, %s, %s", dispoOrder, dispoOrder.amount, dispoOrder.mode);
 			
 		}
 	}
@@ -374,18 +342,63 @@ public class ApplicationLogic {
 		DispositionOrder dispoOrder = DispositionOrder.find("byItem", itemId).first();
 		expectedArrival = 0.2 + period;
 		//If express order half delivery time and no variance
-		if (mode == 4) {
-			expectedArrival += (dispoOrder.deliveryTime / 2); 
-		} else {
+		if (mode == 0) {
+			return 0; 
+		} else if (mode == 5) {
 			expectedArrival += dispoOrder.deliveryTime;
 			switch (method) {
 				case "optimistic": {break;}
 				case "riskaverse": {expectedArrival += dispoOrder.deliveryVariance; break;}
 				case "recommended": {expectedArrival += (dispoOrder.deliveryVariance * 0.75); break;}
 			}
+		} else if (mode == 4) {
+			expectedArrival += (dispoOrder.deliveryTime / 2);
 		}
 //		Logger.info("Expected arrival for %s: %s", dispoOrder.item, expectedArrival);
 		return expectedArrival;
+	}
+	
+	
+	public static void calculateFutureStock(String itemId, String method) {
+		List<User> users = User.findAll();
+		int actPeriod = Integer.valueOf(users.get(0).period);
+
+		Item item = Item.find("byItemId", itemId).first();
+		
+		//remove consumption from stock, add dispoOrders amount to expected period
+		DispositionOrder dispoOrder = DispositionOrder.find("byItem", itemId).first();
+		item.futureStock0 = item.amount - dispoOrder.consumptionPeriod0;
+		item.futureStock1 = item.futureStock0 - dispoOrder.consumptionPeriod1;
+		item.futureStock2 = item.futureStock1 -dispoOrder.consumptionPeriod2;
+		item.futureStock3 = item.futureStock2 - dispoOrder.consumptionPeriod3;
+		
+		double deltaDispo = dispoOrder.expectedArrival - actPeriod;
+		if (deltaDispo <= 1) {
+			item.futureStock0 += dispoOrder.amount;
+		} else if (deltaDispo <= 2) {
+			item.futureStock1 += dispoOrder.amount;
+		} else if (deltaDispo <= 3) {
+			item.futureStock2 += dispoOrder.amount;
+		} else {
+			item.futureStock3 -= dispoOrder.amount;
+		}
+				
+		//add openOrder amount to expected period
+		List<OpenOrder> openOrders = OpenOrder.find("byItem", itemId).fetch();
+		for(OpenOrder oOrder : openOrders) {
+			oOrder.expectedArrival = calculateExpectedArrival(method, itemId, oOrder.mode);
+			double deltaOpenOrder = oOrder.expectedArrival - actPeriod;
+			if (deltaOpenOrder <= 1) {
+				item.futureStock0 += oOrder.amount;
+			} else if (deltaOpenOrder <= 2) {
+				item.futureStock1 += oOrder.amount;
+			} else if (deltaOpenOrder <= 3) {
+				item.futureStock2 += oOrder.amount;
+			} else {
+				item.futureStock3 -= oOrder.amount;
+			}
+		}
+		item.save();
 	}
 
 }
