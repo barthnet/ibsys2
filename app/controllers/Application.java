@@ -236,6 +236,29 @@ public class Application extends Controller {
 		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(wishs));
 	}
 	
+	/**
+	 * sets the method for expected delivery calculation
+	 */
+	public static void postUserMethod() {
+		setHeader();
+		String body = getBodyAsString();
+		User user = new JSONDeserializer<User>().deserialize(body);
+		Logger.info("postUserMethod: %s", user.method);
+		ok();
+	}
+	
+	/**
+	 * returns the method for expected delivery calculation
+	 */
+	public static void getUserMethod() {
+		setHeader();
+		Logger.info("getUserMethod");
+		List<User> users = User.findAll();
+		User user = users.get(0);		
+		
+		renderJSON(user.method);
+	}
+	
 	public static void reset() {
 		setHeader();
 		Logger.info("reset");

@@ -9,4 +9,5 @@ public class User extends Model {
 
 	public String period;
 	public String session;
+	public String method = "recommended";
 }
