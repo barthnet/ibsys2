@@ -45,7 +45,7 @@ public class ApplicationLogic {
 		}
 		for (DistributionWish wish : wishList) {
 			DispositionManufacture disp = DispositionManufacture.find("byItem", wish.item).first();
-			disp.distributionWish = wish.period0;
+			disp.distributionWish = wish.period0 + wish.directSale;
 			disp.save();
 			// Logger.info("wishToPlan %s", disp);
 		}
