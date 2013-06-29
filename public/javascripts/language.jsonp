@@ -1,0 +1,8 @@
+translation = {
+    "en": {
+		"lng_title"    : "Title English"
+    },
+    "de": {
+		"lng_title"	   : "Titel Deutsch"
+    }
+}

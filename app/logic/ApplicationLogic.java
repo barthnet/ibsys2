@@ -23,7 +23,7 @@ import utils.ItemHelper;
 public class ApplicationLogic {
 
 	public static void resetData() {
-		Logger.info("reset Data");		
+		Logger.info("reset Data");
 		Fixtures.deleteAllModels();
 		Fixtures.loadModels("initial-items.yml", "initial-workplaces.yml", "ItemTime.yml", "initial-dispositionOrder.yml", "initial-productionPlan.yml",
 				"initial-components.yml");
@@ -119,9 +119,10 @@ public class ApplicationLogic {
 				prodOrder.orderNumber = no;
 				no++;
 				prodOrder.amount = dispo.production;
+				prodOrder.assignToWorkplaces();
 //				Logger.info("pOrder null: %s", prodOrder);
 			}
-			prodOrder.assignToWorkplaces();
+			
 			prodOrder.save();
 			
 		}
@@ -129,35 +130,46 @@ public class ApplicationLogic {
 
 	public static void calculateCapacity() {
 
+		//Gib mir alle Arbeitsplätze
 		List<Workplace> places = Workplace.findAll();
+		Capacity.deleteAll();
 		Logger.info("calculateCapacity: %s", places.size());
+		
+		//Rechne für jeden Arbeitsplatz die Kapazität aus
 		for (Workplace workplace : places) {
+			
+			//Gibt es bereits ein Kapazitätsobjekt zu dem Arbeitsplatz
 			Capacity cap = Capacity.find("byWorkplace", workplace.workplaceId).first();
+			//Falls nicht, ein neues Anlegen
 			if (cap == null) {
 				cap = new Capacity();
 				cap.workplace = workplace.workplaceId;
 //				Logger.info("create new capacity %s", cap);
 			}
-
+			//Alles auf 0 setzen
 			cap.time = 0;
 			cap.setupTime = 0;
 			cap.totaltime = 0;
 			cap.overtime = 0;
 			cap.shift = 0;
 
+			//Die Zeiten für die Warteschlangen errechnen und hinzufügen, falls vorhanden
 			List<WaitingList> wList = workplace.getWaitingListAsObjectList();
-
 			if (wList != null && !wList.isEmpty()) {
 				// Logger.info("wList: %s", wList.size());
 				int time = 0;
-				for (WaitingList wait : wList) {
+				int setup = 0;
+				//Für jedes Item in der Warteschlange Zeit und Rüstzeit hinzuaddieren
+				for (WaitingList wait : wList) {			
 					time += wait.timeneed;
-					cap.setupTime += ItemHelper.getSetupTime(cap.workplace, wait.item);
+					setup += ItemHelper.getSetupTime(cap.workplace, wait.item);
 				}
 				// Logger.info("WaitL: %s", time);
 				cap.time += time;
+				cap.setupTime += setup;
 			}
 
+			//Zeit für das in Arbeit befindliche Item hinzuaddieren
 			WaitingList inWork = workplace.getInWorkAsObject();
 
 			if (inWork != null) {
@@ -165,8 +177,8 @@ public class ApplicationLogic {
 				cap.time += inWork.timeneed;
 			}
 
+			//Die Zeiten für die Produktionsaufträge errechnen und hinzufügen.
 			List<ProductionOrder> pOrders = workplace.getProductionPlanListAsObjectList();
-
 			if (pOrders != null && !pOrders.isEmpty()) {
 				// Logger.info("pOrders: %s", pOrders.size());
 				int time = 0;
