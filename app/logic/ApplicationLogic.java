@@ -65,7 +65,13 @@ public class ApplicationLogic {
 				disp.distributionWish = parent.production;
 			}
 			boolean mulitpleItem = item.itemNumber == 26 || item.itemNumber == 16 || item.itemNumber == 17 ? true : false;
-			disp.stock = item.amount;
+			if (mulitpleItem) {
+				disp.stock = item.amount / 3;
+			} else {
+				disp.stock = item.amount;
+			}
+				
+			
 			// TODO in item model yml aufnehmen
 			disp.safetyStock = disp.safetyStock > 0 ? disp.safetyStock : 100;
 			disp.parentWaitingList = parent.waitingList;
