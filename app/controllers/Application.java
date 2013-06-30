@@ -272,24 +272,23 @@ public class Application extends Controller {
 	 * 
 	 * @param file
 	 */
-	public static void uploadXML(File file) {
+	public static void uploadXML() {
 		setHeader();
-		String body = getBodyAsString();
-		Logger.info("uploadXML: %s", body);
-		InputStream in = null;
-		try {
-			in = new FileInputStream(file);
-			Parser p = new Parser(in);
-			p.parseDoc();
-		} catch (FileNotFoundException | NullPointerException e) {
-			e.printStackTrace();
-			error("No file received.");
-		}
 		
-		List<User> users = User.findAll();
-		int actPeriod = Integer.valueOf(users.get(0).period);
+		String xml = getBodyAsString();
+		Logger.info("uploadXML: %s", xml);
 		
-		renderJSON(actPeriod);
+		InputStream in = IOUtils.toInputStream(xml);
+		Parser p = new Parser(in);
+		p.parseDoc();
+		
+		ApplicationLogic.wishToPlan();
+		ApplicationLogic.calcProductionPlan();
+		ApplicationLogic.planToOrder();
+		ApplicationLogic.calculateCapacity();
+		ApplicationLogic.calculateDisposition();
+		
+		ok();
 	}
 
 	/**
