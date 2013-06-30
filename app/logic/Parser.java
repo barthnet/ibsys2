@@ -93,10 +93,10 @@ public class Parser {
 		NodeList orders = openOrders.item(0).getChildNodes();
 		Logger.info("parseOpenOrders: %s", orders.getLength());
 		for (int i = 0, length = orders.getLength(); i < length; i++) {
-			Node node = orders.item(i);
+			Node node = orders.item(i);			
 			NamedNodeMap att = node.getAttributes();
 			OpenOrder order = new OpenOrder();
-			order.orderPeriod = getInteger(att, "orderperiod");
+			order.orderPeriod = getInteger(att, "orderperiod");				
 			order.mode = getInteger(att, "mode");
 			order.amount = getInteger(att, "amount");
 			Item item = Item.find("byItemNumber", getInteger(att, "article")).first();

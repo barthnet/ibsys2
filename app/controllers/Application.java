@@ -312,6 +312,8 @@ public class Application extends Controller {
 		String xml = getBodyAsString();
 		Logger.info("uploadXML: %s", xml);
 		
+		
+		
 		InputStream in = IOUtils.toInputStream(xml);
 		Parser p = new Parser(in);
 		p.parseDoc();
@@ -321,8 +323,14 @@ public class Application extends Controller {
 		ApplicationLogic.planToOrder();
 		ApplicationLogic.calculateCapacity();
 		ApplicationLogic.calculateDisposition();
+//		Template template = TemplateLoader.load("beauty.xml");
+//		String xmlFile = template.render();
+//		
+//		renderText(xmlFile);
+		List<User> users = User.findAll(); 
+		int actPeriod = Integer.valueOf(users.get(0).period);
 		
-		ok();
+		renderJSON(actPeriod);
 	}
 
 	/**
