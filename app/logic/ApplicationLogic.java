@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.sql.Delete;
 
+import com.ning.http.client.oauth.ConsumerKey;
+
 import models.Capacity;
 import models.Component;
 import models.DispositionManufacture;
@@ -43,7 +45,7 @@ public class ApplicationLogic {
 		}
 		for (DistributionWish wish : wishList) {
 			DispositionManufacture disp = DispositionManufacture.find("byItem", wish.item).first();
-			disp.distributionWish = wish.period0;
+			disp.distributionWish = wish.period0 + wish.directSale;
 			disp.save();
 			// Logger.info("wishToPlan %s", disp);
 		}
@@ -63,7 +65,13 @@ public class ApplicationLogic {
 				disp.distributionWish = parent.production;
 			}
 			boolean mulitpleItem = item.itemNumber == 26 || item.itemNumber == 16 || item.itemNumber == 17 ? true : false;
-			disp.stock = item.amount;
+			if (mulitpleItem) {
+				disp.stock = item.amount / 3;
+			} else {
+				disp.stock = item.amount;
+			}
+				
+			
 			// TODO in item model yml aufnehmen
 			disp.safetyStock = disp.safetyStock > 0 ? disp.safetyStock : 100;
 			disp.parentWaitingList = parent.waitingList;
@@ -94,32 +102,38 @@ public class ApplicationLogic {
 			if (disp.itemChilds != null && disp.itemChilds.length > 0) {
 				parent = disp;
 			}
-			Logger.info("disp: %s", disp);
+//			Logger.info("disp: %s", disp);
 		}
 	}
 
 	public static void planToOrder() {
-		List<DispositionManufacture> plans = DispositionManufacture.findAll();
+		
+		List<DispositionManufacture> plans = DispositionManufacture.find("order by itemNumber asc").fetch();
+//		List<DispositionManufacture> plans = DispositionManufacture.findAll();
 		Workplace.deleteAllProductionPlanLists();
 		Logger.info("planToOrder %s", ProductionOrder.findAll().size());
 		ProductionOrder.deleteAll();
+		int no = 0;
 		for (DispositionManufacture dispo : plans) {
 			ProductionOrder prodOrder = ProductionOrder.find("byItem", dispo.item).first();
 			Item item = dispo.getItemAsObject();
 			if (prodOrder != null) {
-				Logger.info("pOrder not null: %s", prodOrder);
+//				Logger.info("pOrder not null: %s", prodOrder);
 				prodOrder.amount += dispo.production;
 			} else {
 				prodOrder = new ProductionOrder();
 				prodOrder.item = item.itemId;
-				prodOrder.orderNumber = item.itemNumber;
+//				prodOrder.itemNumber = item.itemNumber;
+				prodOrder.orderNumber = no;
+				no++;
 				prodOrder.amount = dispo.production;
-				Logger.info("pOrder null: %s", prodOrder);
-				//THIS IS IT!!
 				prodOrder.assignToWorkplaces();
+//				Logger.info("pOrder null: %s", prodOrder);
 			}
-			prodOrder.save();			
-		}	
+			
+			prodOrder.save();
+			
+		}
 	}
 
 	public static void calculateCapacity() {
@@ -218,64 +232,38 @@ public class ApplicationLogic {
 		}
 	}
 	
-	public static void calculateDisposition() {
-		//Fixtures.delete(DispositionOrder.class);
-		//Fixtures.loadModels("initial-dispositionOrder.yml");		
+	public static void calculateDisposition() {	
 		calculateConsumption();
 		List<User> users = User.findAll();
 		int actPeriod = Integer.valueOf(users.get(0).period);
 		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
 		for (DispositionOrder dispoOrder : dispoOrders) {
 			//TODO calculateExpectedArrival Methode dynamisch statt hardcoded
-			dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item);
+			dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 5);
 			Item item = Item.find("byItemId", dispoOrder.item).first();
 			dispoOrder.amount = item.amount;
-			int stock = item.amount;
-			int amt0 = dispoOrder.consumptionPeriod0;
-			int amt1 = amt0 + dispoOrder.consumptionPeriod1;
-			int amt2 = amt1 + dispoOrder.consumptionPeriod2;
-			int amt3 = amt2 + dispoOrder.consumptionPeriod3;
-			
-			//remove inward amount from consumption amount
-			List<OpenOrder> openOrders = OpenOrder.find("byItem", dispoOrder.item).fetch();
-			for (OpenOrder order : openOrders) {
-				//TODO calculateExpectedArrival Methode dynamisch statt hardcoded
-				order.expectedArrival = order.orderPeriod + calculateExpectedArrival("recommended", dispoOrder.item);
-				double delta = order.expectedArrival - actPeriod;			
-				if (delta <= 1) {
-					amt0 = (order.amount > amt0) ? 0 : (amt0 - order.amount);
-				} else if (delta <= 2) {
-					amt1 = (order.amount > amt1) ? 0 : (amt1 - order.amount);
-				} else if (delta <= 3) {
-					amt2 = (order.amount > amt2) ? 0 : (amt2 - order.amount);
-				} else {
-					amt3 = (order.amount > amt3) ? 0 : (amt3 - order.amount);
-				}
-			}
+			calculateFutureStock(dispoOrder.item, "recommended");
 			
 			int period = -1;
 			int quantity = 0;
 			//quantity anpassen?!
-			if (stock == 0) {
+			if (item.amount == 0) {
 				period = 0;
 				quantity = dispoOrder.consumptionPeriod0;
-			} else if (stock - amt0 <= 0) {
+			} else if (dispoOrder.futureStock0 <= 0) {
 				period = 0;
-				//quantity = amt0;
 				quantity = dispoOrder.consumptionPeriod0;
-			} else if (stock - amt1 <= 0 && dispoOrder.expectedArrival >= (1 + actPeriod)) {
+			} else if (dispoOrder.futureStock1 <= 0) {
 				period = 1;
-				//quantity = amt1;
 				quantity = dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
-			} else if (stock - amt2 <= 0 && dispoOrder.expectedArrival >= (2 + actPeriod)) {
+			} else if (dispoOrder.futureStock2 <= 0) {
 				period = 2;
-				//quantity = amt2;
 				quantity = dispoOrder.consumptionPeriod2 + dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
-			} else if (stock - amt3 <= 0 && dispoOrder.expectedArrival >= (3 + actPeriod)) {
+			} else if (dispoOrder.futureStock3 <= 0) {
 				period = 3;
-				//quantity = amt3;
 				quantity = dispoOrder.consumptionPeriod3 + dispoOrder.consumptionPeriod2 + dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
 			}
+			
 			
 			if (period == -1) continue;
 			
@@ -287,14 +275,15 @@ public class ApplicationLogic {
 			}
 			
 			//Wenn Lieferzeit zu lang, dann Express Bestellung
-			if (Math.round(dispoOrder.expectedArrival) > (period + actPeriod)) {
-				dispoOrder.modus = "4";
+			
+			if (Math.ceil(dispoOrder.expectedArrival) > (period + actPeriod)) {
+				dispoOrder.mode = 4;
+				dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 4);
 			} else {
-				dispoOrder.modus = "5";
+				dispoOrder.mode = 5;
 			}
 			
-			dispoOrder.save();
-			
+			dispoOrder.save();			
 		}
 	}
 
@@ -348,19 +337,68 @@ public class ApplicationLogic {
 		}
 	}
 	
-	public static double calculateExpectedArrival(String method, String itemId) {
+	public static double calculateExpectedArrival(String method, String itemId, int mode) {
 		List<User> users = User.findAll();
 		int period = Integer.valueOf(users.get(0).period);
 		double expectedArrival = 0.0;
 		DispositionOrder dispoOrder = DispositionOrder.find("byItem", itemId).first();
-		expectedArrival = 0.2 + dispoOrder.deliveryTime + period;
-		switch (method) {
-			case "optimistic": {break;}
-			case "riskaverse": {expectedArrival += dispoOrder.deliveryVariance; break;}
-			case "recommended": {expectedArrival += (dispoOrder.deliveryVariance * 0.75); break;}
+		expectedArrival = 0.2 + period;
+		//If express order half delivery time and no variance
+		if (mode == 0) {
+			return 0; 
+		} else if (mode == 5) {
+			expectedArrival += dispoOrder.deliveryTime;
+			switch (method) {
+				case "optimistic": {break;}
+				case "riskaverse": {expectedArrival += dispoOrder.deliveryVariance; break;}
+				case "recommended": {expectedArrival += (dispoOrder.deliveryVariance * 0.75); break;}
+			}
+		} else if (mode == 4) {
+			expectedArrival += (dispoOrder.deliveryTime / 2);
 		}
-		Logger.info("Expected arrival for %s: %s", dispoOrder.item, expectedArrival);
+//		Logger.info("Expected arrival for %s: %s", dispoOrder.item, expectedArrival);
 		return expectedArrival;
+	}
+	
+	
+	public static void calculateFutureStock(String itemId, String method) {
+		List<User> users = User.findAll();
+		int actPeriod = Integer.valueOf(users.get(0).period);
+		
+		//remove consumption from stock, add dispoOrders amount to expected period
+		DispositionOrder dispoOrder = DispositionOrder.find("byItem", itemId).first();
+		dispoOrder.futureStock0 = dispoOrder.amount - dispoOrder.consumptionPeriod0;
+		dispoOrder.futureStock1 = dispoOrder.futureStock0 - dispoOrder.consumptionPeriod1;
+		dispoOrder.futureStock2 = dispoOrder.futureStock1 -dispoOrder.consumptionPeriod2;
+		dispoOrder.futureStock3 = dispoOrder.futureStock2 - dispoOrder.consumptionPeriod3;
+		
+		double deltaDispo = dispoOrder.expectedArrival - actPeriod;
+		if (deltaDispo <= 1) {
+			dispoOrder.futureStock0 += dispoOrder.amount;
+		} else if (deltaDispo <= 2) {
+			dispoOrder.futureStock1 += dispoOrder.amount;
+		} else if (deltaDispo <= 3) {
+			dispoOrder.futureStock2 += dispoOrder.amount;
+		} else {
+			dispoOrder.futureStock3 -= dispoOrder.amount;
+		}
+				
+		//add openOrder amount to expected period
+		List<OpenOrder> openOrders = OpenOrder.find("byItem", itemId).fetch();
+		for(OpenOrder oOrder : openOrders) {
+			oOrder.expectedArrival = calculateExpectedArrival(method, itemId, oOrder.mode);
+			double deltaOpenOrder = oOrder.expectedArrival - actPeriod;
+			if (deltaOpenOrder <= 1) {
+				dispoOrder.futureStock0 += oOrder.amount;
+			} else if (deltaOpenOrder <= 2) {
+				dispoOrder.futureStock1 += oOrder.amount;
+			} else if (deltaOpenOrder <= 3) {
+				dispoOrder.futureStock2 += oOrder.amount;
+			} else {
+				dispoOrder.futureStock3 -= oOrder.amount;
+			}
+		}
+		dispoOrder.save();
 	}
 
 }

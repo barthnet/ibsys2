@@ -20,6 +20,11 @@ public class DispositionOrder extends Model {
 	public int consumptionPeriod1;
 	public int consumptionPeriod2;
 	public int consumptionPeriod3;
+	
+	public int futureStock0;
+	public int futureStock1;
+	public int futureStock2;
+	public int futureStock3;
 
 	public double price;
 	public double deliveryCost;
@@ -36,7 +41,7 @@ public class DispositionOrder extends Model {
        mode 2: cheap vendor
        mode 1: special order
 	 */
-	public String modus;
+	public int mode;
 	public int quantity;
 	public double expectedArrival;
 

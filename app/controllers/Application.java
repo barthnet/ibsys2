@@ -84,7 +84,7 @@ public class Application extends Controller {
 		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
 		for (DispositionOrder dispoOrder : dispoOrders) {
 			Item item = Item.find("byItemId", dispoOrder.item).first();
-			Logger.info("Disposition Order: %s Consumption0: %s Consumption1: %s Consumption2: %s Consumption3: %s Quantity: %s Mode: %s Stock: %s", dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1, dispoOrder.consumptionPeriod2, dispoOrder.consumptionPeriod3, dispoOrder.quantity, dispoOrder.modus, item.amount);
+			Logger.info("Disposition Order: %s Consumption0: %s Consumption1: %s Consumption2: %s Consumption3: %s Quantity: %s Mode: %s Stock: %s", dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1, dispoOrder.consumptionPeriod2, dispoOrder.consumptionPeriod3, dispoOrder.quantity, dispoOrder.mode, item.amount);
 		}
 	}
 
@@ -100,6 +100,7 @@ public class Application extends Controller {
 		setHeader();
 		String body = getBodyAsString();
 		ArrayList<DispositionOrder> orders = new JSONDeserializer<ArrayList<DispositionOrder>>().use("values", DispositionOrder.class).deserialize(body);
+		Logger.info("postDispositionOrders: %s", orders.size());
 		DispositionOrder.merge(orders);
 		ok();
 	}
@@ -112,6 +113,7 @@ public class Application extends Controller {
 		String body = getBodyAsString();
 		// ApplicationLogic.calculateCapacity();
 		ArrayList<Capacity> capacities = new JSONDeserializer<ArrayList<Capacity>>().use("values", Capacity.class).deserialize(body);
+		Logger.info("postCapacity: %s", capacities.size());
 		Capacity.merge(capacities);
 		ok();
 	}
@@ -126,7 +128,7 @@ public class Application extends Controller {
 		if (orders != null && !orders.isEmpty()) {
 			Logger.info("postProductionOrders: %s %s", ProductionOrder.findAll().size(), orders.size());
 			Workplace.deleteAllProductionPlanLists();
-			ProductionOrder.deleteAll();
+			ProductionOrder.deleteAll();			
 			ProductionOrder.saveAll(orders);
 		}
 		ApplicationLogic.calculateCapacity();
@@ -142,6 +144,7 @@ public class Application extends Controller {
 		String body = getBodyAsString();
 		ArrayList<DispositionManufacture> plan = new JSONDeserializer<ArrayList<DispositionManufacture>>().use("values", DispositionManufacture.class)
 				.deserialize(body);
+		Logger.info("postProductionPlan: %s", plan.size());
 		DispositionManufacture.merge(plan);
 		ApplicationLogic.planToOrder();
 		ApplicationLogic.calculateCapacity();
@@ -157,6 +160,7 @@ public class Application extends Controller {
 		String body = getBodyAsString();
 		// Logger.info("postDistributionWish: %S", body);
 		ArrayList<DistributionWish> wishs = new JSONDeserializer<ArrayList<DistributionWish>>().use("values", DistributionWish.class).deserialize(body);
+		Logger.info("postDistributionWishs: %s", wishs.size());
 		DistributionWish.merge(wishs);
 		ApplicationLogic.wishToPlan();
 		ApplicationLogic.calcProductionPlan();
@@ -171,6 +175,7 @@ public class Application extends Controller {
 	 */
 	public static void getDispositionOrders() {
 		setHeader();
+		Logger.info("getDispositionOrders");
 		List<DispositionOrder> orders = DispositionOrder.findAll();
 		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(orders));
 	}
@@ -181,6 +186,7 @@ public class Application extends Controller {
 	public static void getCapacity() {
 		setHeader();
 		// ApplicationLogic.calculateCapacity();
+		Logger.info("getCapacity");
 		List<Capacity> capacities = Capacity.findAll();
 		renderJSON(new JSONSerializer().exclude("workplaceAsObject").serialize(capacities));
 	}
@@ -190,6 +196,7 @@ public class Application extends Controller {
 	 */
 	public static void getProductionOrders() {
 		setHeader();
+		Logger.info("getProductionOrders");
 		List<ProductionOrder> orders = ProductionOrder.find("order by orderNumber asc").fetch();
 		// if (orders == null || orders.isEmpty()) {
 		// ApplicationLogic.planToOrder();
@@ -203,6 +210,7 @@ public class Application extends Controller {
 	 */
 	public static void getProductionPlan() {
 		setHeader();
+		Logger.info("getProductionPlan");
 		List<DispositionManufacture> disps = DispositionManufacture.findAll();
 		// Logger.info("childs: %s", disps.get(0));
 		renderJSON(new JSONSerializer().include("itemChilds").exclude("itemAsObject", "ItemChildsAsObject").serialize(disps));
@@ -213,6 +221,7 @@ public class Application extends Controller {
 	 */
 	public static void getDistributenWishs() {
 		setHeader();
+		Logger.info("getDistributenWishs");
 		List<DistributionWish> wishs = DistributionWish.findAll();
 		if (wishs == null || wishs.isEmpty()) {
 			wishs = new ArrayList<>();
@@ -227,8 +236,32 @@ public class Application extends Controller {
 		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(wishs));
 	}
 	
+	/**
+	 * sets the method for expected delivery calculation
+	 */
+	public static void postUserMethod() {
+		setHeader();
+		String body = getBodyAsString();
+		User user = new JSONDeserializer<User>().deserialize(body);
+		Logger.info("postUserMethod: %s", user.method);
+		ok();
+	}
+	
+	/**
+	 * returns the method for expected delivery calculation
+	 */
+	public static void getUserMethod() {
+		setHeader();
+		Logger.info("getUserMethod");
+		List<User> users = User.findAll();
+		User user = users.get(0);		
+		
+		renderJSON(user.method);
+	}
+	
 	public static void reset() {
 		setHeader();
+		Logger.info("reset");
 		ApplicationLogic.resetData();
 	}
 
@@ -238,6 +271,7 @@ public class Application extends Controller {
 	 */
 	public static void parseXML() {
 		setHeader();
+		Logger.info("parseXML");
 		Template template = TemplateLoader.load("229_9_7result.xml");
 		String xmlFile = template.render();
 		InputStream in = IOUtils.toInputStream(xmlFile);

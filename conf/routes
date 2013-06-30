@@ -22,6 +22,8 @@ GET		/reset									Application.reset
 # simulate methods
 GET		/wish									Application.getDistributenWishs
 POST	/wish									Application.postDistributionWishs
+GET		/userMethod								Application.postUserMethod
+POST	/userMethod								Application.getUserMethod
 GET		/production								Application.getProductionPlan
 POST	/production								Application.postProductionPlan
 GET		/order 									Application.getProductionOrders

@@ -11,6 +11,9 @@ import play.db.jpa.Model;
 public class DistributionWish extends Model {
 
 	public String item;
+	
+	public int directSale;
+	public double price;
 
 	public int period0;
 	public int period1;

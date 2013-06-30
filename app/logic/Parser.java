@@ -249,7 +249,7 @@ public class Parser {
 			Element order = doc.createElement("order");
 			
 			order.setAttribute("article", dispositionOrder.item);
-			order.setAttribute("modus", dispositionOrder.modus);
+			order.setAttribute("modus", String.valueOf(dispositionOrder.mode));
 			order.setAttribute("quantity", String.valueOf(dispositionOrder.quantity));
 						
 			orderlist.appendChild(order);
