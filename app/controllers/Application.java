@@ -57,7 +57,7 @@ public class Application extends Controller {
 		List<DispositionManufacture> disps = DispositionManufacture.find("byItem", "E26").fetch();
 		renderJSON(disps);
 	}
-	
+
 	public static void test3(String userName) {
 		DistributionWish wish1 = DistributionWish.find("byItem", "P1").first();
 		wish1.period0 = 100;
@@ -74,18 +74,20 @@ public class Application extends Controller {
 		wish3.period1 = 50;
 		wish3.period2 = 100;
 		wish3.period3 = 150;
-		
+
 		ApplicationLogic.calculateDisposition(userName);
-		
+
 		List<DispositionOrder> orders = DispositionOrder.findAll();
 		for (DispositionOrder order : orders) {
 			Logger.info("Order: %s", order.item);
 		}
-		
+
 		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
 		for (DispositionOrder dispoOrder : dispoOrders) {
 			Item item = Item.find("byItemId", dispoOrder.item).first();
-			Logger.info("Disposition Order: %s Consumption0: %s Consumption1: %s Consumption2: %s Consumption3: %s Quantity: %s Mode: %s Stock: %s", dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1, dispoOrder.consumptionPeriod2, dispoOrder.consumptionPeriod3, dispoOrder.quantity, dispoOrder.mode, item.amount);
+			Logger.info("Disposition Order: %s Consumption0: %s Consumption1: %s Consumption2: %s Consumption3: %s Quantity: %s Mode: %s Stock: %s",
+					dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1, dispoOrder.consumptionPeriod2,
+					dispoOrder.consumptionPeriod3, dispoOrder.quantity, dispoOrder.mode, item.amount);
 		}
 	}
 
@@ -141,9 +143,10 @@ public class Application extends Controller {
 		String body = getBodyAsString();
 		ArrayList<ProductionOrder> orders = new JSONDeserializer<ArrayList<ProductionOrder>>().use("values", ProductionOrder.class).deserialize(body);
 		if (orders != null && !orders.isEmpty()) {
-//			Logger.info("postProductionOrders: %s %s", ProductionOrder.find("byUser", params) .size(), orders.size());
+			// Logger.info("postProductionOrders: %s %s",
+			// ProductionOrder.find("byUser", params) .size(), orders.size());
 			Workplace.deleteAllProductionPlanLists(orders.get(0).user);
-			ProductionOrder.deleteAll(userName);			
+			ProductionOrder.deleteAll(userName);
 			ProductionOrder.saveAll(orders);
 		}
 		ApplicationLogic.calculateCapacity(userName);
@@ -251,7 +254,7 @@ public class Application extends Controller {
 		}
 		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(wishs));
 	}
-	
+
 	/**
 	 * sets the method for expected delivery calculation
 	 */
@@ -262,17 +265,17 @@ public class Application extends Controller {
 		Logger.info("postUserMethod: %s", user.method);
 		ok();
 	}
-	
+
 	/**
 	 * returns the method for expected delivery calculation
 	 */
 	public static void getUserMethod(String userName) {
 		setHeader();
 		Logger.info("getUserMethod");
-		User user = User.find("byName", userName).first();		
+		User user = User.find("byName", userName).first();
 		renderJSON(user.method);
 	}
-	
+
 	public static void reset(String userName) {
 		setHeader();
 		Logger.info("reset");
@@ -296,39 +299,40 @@ public class Application extends Controller {
 		ApplicationLogic.planToOrder(userName);
 		ApplicationLogic.calculateCapacity(userName);
 		ApplicationLogic.calculateDisposition(userName);
-		
+
 		User user = User.find("byName", userName).first();
+		user.isSimulatable = true;
+		user.save();
 		int actPeriod = Integer.valueOf(user.period);
 		user.isSimulatable = true;
 		user.save();
 		renderJSON(actPeriod);
 	}
-	
+
 	/**
 	 * downloads the input.xml
 	 */
 	public static void downloadXML(String userName) {
 		setHeader();
-		response.setContentTypeIfNotSet("application/x-download");  
-		response.setHeader("Content-disposition","attachment; filename=input.xml");
-		
+		response.setContentTypeIfNotSet("application/x-download");
+		response.setHeader("Content-disposition", "attachment; filename=input.xml");
+
 		Document doc = Parser.parseInputXML(userName);
-		
+
 		renderXml(doc);
 	}
-	
-	
+
 	public static void uploadToSite(String userName, String password) {
 		setHeader();
 		Logger.info("uploadToSite");
-		Document doc = Parser.parseInputXML(userName);		    
-	    
-	    Source source = new DOMSource(doc);
-        StringWriter stringWriter = new StringWriter();
-        Result result = new StreamResult(stringWriter);
-        TransformerFactory factory = TransformerFactory.newInstance();
-        Transformer transformer;
-        String test= "";
+		Document doc = Parser.parseInputXML(userName);
+
+		Source source = new DOMSource(doc);
+		StringWriter stringWriter = new StringWriter();
+		Result result = new StreamResult(stringWriter);
+		TransformerFactory factory = TransformerFactory.newInstance();
+		Transformer transformer;
+		String test = "";
 		try {
 			transformer = factory.newTransformer();
 			transformer.transform(source, result);
@@ -336,11 +340,16 @@ public class Application extends Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
-		test = stringWriter.getBuffer().toString();        
-        
-	    Crawler cr = new Crawler(userName, password);
-	    renderJSON(cr.exportFileToWeb(test));
+
+		test = stringWriter.getBuffer().toString();
+
+		Crawler cr = new Crawler(userName, password);
+		User user = User.find("byName", userName).first();
+		boolean erg = false;
+		if (user != null && user.isSimulatable) {
+			erg = cr.exportFileToWeb(test);
+		}
+		renderJSON(erg);
 	}
 
 	/**
@@ -349,24 +358,24 @@ public class Application extends Controller {
 	 * @param file
 	 */
 	public static void uploadXML(String userName) {
-		setHeader();		
+		setHeader();
 		String xml = getBodyAsString();
 		InputStream in = IOUtils.toInputStream(xml);
 		Parser p = new Parser(in);
 		p.parseDoc(userName);
-		
+
 		ApplicationLogic.wishToPlan(userName);
 		ApplicationLogic.calcProductionPlan(userName);
 		ApplicationLogic.planToOrder(userName);
 		ApplicationLogic.calculateCapacity(userName);
 		ApplicationLogic.calculateDisposition(userName);
-		User user = User.find("byName",userName).first();
+		User user = User.find("byName", userName).first();
 		int actPeriod = Integer.valueOf(user.period);
 		user.isSimulatable = true;
 		user.save();
 		renderJSON(actPeriod);
 	}
-	
+
 	public static void checkUser(String userName) {
 		Logger.info("check User %s", userName);
 		User user = User.find("byName", userName).first();
@@ -391,7 +400,7 @@ public class Application extends Controller {
 			error("Error on login check");
 		}
 		Crawler cr = new Crawler(username, password);
-		
+
 		boolean check = cr.checkLogin();
 		if (check) {
 			User user = User.find("byName", username).first();
@@ -414,18 +423,18 @@ public class Application extends Controller {
 		Crawler cr = new Crawler(userName, password);
 		String file = cr.importFileFromWeb();
 		Logger.info("file:\n%s", file);
-//		renderText(file);
-		
+		// renderText(file);
+
 		InputStream in = IOUtils.toInputStream(file);
 		Parser p = new Parser(in);
 		p.parseDoc(userName);
-		
+
 		ApplicationLogic.wishToPlan(userName);
 		ApplicationLogic.calcProductionPlan(userName);
 		ApplicationLogic.planToOrder(userName);
 		ApplicationLogic.calculateCapacity(userName);
 		ApplicationLogic.calculateDisposition(userName);
-		User user = User.find("byName",userName).first();
+		User user = User.find("byName", userName).first();
 		int actPeriod = Integer.valueOf(user.period);
 		user.isSimulatable = true;
 		user.save();
