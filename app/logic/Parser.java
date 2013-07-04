@@ -53,34 +53,39 @@ public class Parser {
 		}
 	}
 
-	public void parseDoc() {
-		ApplicationLogic.resetData();
-		parsePeriod();
-		parseArticles();
-		parseOpenOrders();
-		parseWaitingLists();
-		parseOrderInWorks();
+	public void parseDoc(String userName) {
+		ApplicationLogic.resetUserData(userName);
+		parsePeriod(userName);
+		parseArticles(userName);
+		parseOpenOrders(userName);
+		parseWaitingLists(userName);
+		parseOrderInWorks(userName);
 //		ApplicationLogic.calcProductionPlan();
 	}
 
-	private void parsePeriod() {
+	private void parsePeriod(String userName) {
 		Node period = document.getElementsByTagName("results").item(0);
 		NamedNodeMap att = period.getAttributes(); 
-		User user = new User();
+		User user = User.find("byName", userName).first();
+		if (user == null) {
+			user = new User();
+		}
 		user.period = getString(att, "period");
+		user.name = userName;
 		user.save();
 	}
 
-	private void parseArticles() {
+	private void parseArticles(String userName) {
 		NodeList articles = document.getElementsByTagName("article");
 		Logger.info("parseArticles %s", articles.getLength());
 		for (int i = 0, length = articles.getLength(); i < length; i++) {
 			Node node = articles.item(i);
 			NamedNodeMap att = node.getAttributes();
-			Item item = Item.find("byItemNumber", getInteger(att, "id")).first();
+			Item item = Item.find("byItemNumberAndUser", getInteger(att, "id"), userName).first();
 			if (item == null) {
 				item = new Item();
 				item.itemNumber = getInteger(att, "id");
+				item.user = userName;
 			}
 			item.amount = getInteger(att, "amount");
 			item.price = getDouble(att, "price");
@@ -88,7 +93,7 @@ public class Parser {
 		}
 	}
 
-	private void parseOpenOrders() {
+	private void parseOpenOrders(String userName) {
 		NodeList openOrders = document.getElementsByTagName("futureinwardstockmovement");
 		NodeList orders = openOrders.item(0).getChildNodes();
 		Logger.info("parseOpenOrders: %s", orders.getLength());
@@ -99,13 +104,14 @@ public class Parser {
 			order.orderPeriod = getInteger(att, "orderperiod");				
 			order.mode = getInteger(att, "mode");
 			order.amount = getInteger(att, "amount");
+			order.user = userName;
 			Item item = Item.find("byItemNumber", getInteger(att, "article")).first();
 			order.item = item.itemId;
 			order.save();
 		}
 	}
 
-	private void parseWaitingLists() {
+	private void parseWaitingLists(String userName) {
 		NodeList waitinglistworkstations = document.getElementsByTagName("waitinglistworkstations");
 		NodeList workplaces = waitinglistworkstations.item(0).getChildNodes();
 		Logger.info("parseWaitingLists %s", workplaces.getLength());
@@ -113,13 +119,14 @@ public class Parser {
 			NodeList waitingLists = workplaces.item(i).getChildNodes();
 			Node workplace = workplaces.item(i);
 			NamedNodeMap attWP = workplace.getAttributes();
-			Workplace wO = Workplace.find("byWorkplaceId", getInteger(attWP, "id")).first();
+			Workplace wO = Workplace.find("byWorkplaceIdAndUser", getInteger(attWP, "id"), userName).first();
 			for (int j = 0, lengthWL = waitingLists.getLength(); j < lengthWL; j++) {
 				Node waiting = waitingLists.item(j);
 				NamedNodeMap attWL = waiting.getAttributes();
 				WaitingList wList = new WaitingList();
 				wList.period = getInteger(attWL, "period");
 				wList.amount = getInteger(attWL, "amount");
+				wList.user = userName;
 				wList.orderNumber = getInteger(attWL, "order");
 				wList.timeneed = getInteger(attWL, "timeneed");
 				wList.workplace = wO.workplaceId;
@@ -132,17 +139,18 @@ public class Parser {
 		}
 	}
 
-	private void parseOrderInWorks() {
+	private void parseOrderInWorks(String userName) {
 		NodeList ordersinwork = document.getElementsByTagName("ordersinwork");
 		NodeList workplaces = ordersinwork.item(0).getChildNodes();
 		Logger.info("parseOrderInWorks: %s", workplaces.getLength());
 		for (int i = 0, lengthWP = workplaces.getLength(); i < lengthWP; i++) {
 			Node workplace = workplaces.item(i);
 			NamedNodeMap attWP = workplace.getAttributes();
-			Workplace wO = Workplace.find("byWorkplaceId", getInteger(attWP, "id")).first();
+			Workplace wO = Workplace.find("byWorkplaceIdAndUser", getInteger(attWP, "id"), userName).first();
 			WaitingList wList = new WaitingList();
 			wList.period = getInteger(attWP, "period");
 			wList.amount = getInteger(attWP, "amount");
+			wList.user = userName;
 			wList.orderNumber = getInteger(attWP, "order");
 			wList.timeneed = getInteger(attWP, "timeneed");
 			wList.workplace = wO.workplaceId;
@@ -181,7 +189,7 @@ public class Parser {
 		return node.getNamedItem(attribute).getNodeValue();
 	}
 	
-	public static Document parseInputXML(){
+	public static Document parseInputXML(String userName){
 
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = null;
@@ -207,7 +215,7 @@ public class Parser {
 		rootElement.appendChild(sellwishes);
 		
 		//sellwish
-		List<DistributionWish> dist_wish = DistributionWish.findAll();
+		List<DistributionWish> dist_wish = DistributionWish.find("byUser", userName).fetch();
 		for (DistributionWish distributionWish : dist_wish) {
 			Element sellwish = doc.createElement("item");
 			
@@ -244,7 +252,7 @@ public class Parser {
 		rootElement.appendChild(orderlist);
  
 		//order
-		List<DispositionOrder> list = DispositionOrder.findAll();
+		List<DispositionOrder> list = DispositionOrder.find("byUser", userName).fetch();
 		for (DispositionOrder dispositionOrder : list) {
 			Element order = doc.createElement("order");
 			
@@ -260,7 +268,7 @@ public class Parser {
 		rootElement.appendChild(productionlist);
 		
 		//production
-		List<ProductionOrder> prod_list = ProductionOrder.findAll();
+		List<ProductionOrder> prod_list = ProductionOrder.find("byUser", userName).fetch();
 		for (ProductionOrder productionOrder : prod_list) {
 			Element production = doc.createElement("production");
 			
@@ -275,7 +283,7 @@ public class Parser {
 		rootElement.appendChild(workingtimelist);
 		
 		//workingtime
-		List<Capacity> capa_list = Capacity.findAll();
+		List<Capacity> capa_list = Capacity.find("byUser", userName).fetch();
 		for (Capacity work : capa_list) {
 			
 			Element workingtime = doc.createElement("workingtime");

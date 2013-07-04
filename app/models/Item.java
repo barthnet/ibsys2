@@ -22,6 +22,7 @@ public class Item extends Model {
 	public int itemNumber;
 	public String type;
 	public String name;
+	public String user;
 
 	public int amount;
 	public double price;
@@ -29,8 +30,28 @@ public class Item extends Model {
 	public String[] components;
 	public String[] usedIn;
 
+	//TODO sinn?
 	public Item getItemAsObject() {
-		return Item.find("byItemId", this.itemId).first();
+		return Item.find("byItemIdAndUser", this.itemId, this.user).first();
+	}
+	
+	public Item clone() {
+		Item item = new Item();
+		item.itemId = this.itemId;
+		item.itemNumber = this.itemNumber;
+		item.type = this.type;
+		item.name = this.name;
+		item.price = this.price;
+		item.components = this.components;
+		item.usedIn = this.usedIn;
+		return item;
+	}
+	
+	public static void deleteAll(String userName) {
+		List<Item> caps = Item.find("byUser", userName).fetch();
+		for (Item capacity : caps) {
+			capacity.delete();
+		}
 	}
 
 	public List<Component> getItemComponentsAsObjectList() {
@@ -53,6 +74,7 @@ public class Item extends Model {
 		return itemsUsedInAsObjectList;
 	}
 
+	// fehlt da noch etwas??
 	public void addComp(Component comp) {
 		String[] newComponentList = Arrays.copyOf(this.components, this.components.length + 1);
 		newComponentList[this.components.length] = comp.item;

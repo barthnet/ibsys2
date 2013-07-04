@@ -1,11 +1,14 @@
 package logic;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -13,10 +16,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.impl.conn.SchemeRegistryFactory;
+import org.yaml.snakeyaml.reader.StreamReader;
 
 import play.Logger;
 
@@ -36,11 +43,48 @@ public class Crawler {
 	private String sessionId;
 	public String period;
 	private HttpClient client;
-
+	
 	public Crawler(String username, String password) {
-		this.username = username;
-		this.password = password;
+		//TODO vorsichtshalber .....
+//		this.username = username;
+//		this.password = password;
+		this.username = "test005";
+		this.password = "snake";
 		this.sessionId = getSessionId();
+	}
+	
+	public boolean exportFileToWeb(String dataStr) {
+		Logger.info("exportFileToWeb");
+		if (checkLogin()) {
+			Logger.info("loginCheck");
+			HttpPost httppost = new HttpPost(Constants.simulate);
+			httppost.addHeader("Cookie", this.sessionId);			
+			
+			File fl = new File("input.xml");
+			try {
+				FileUtils.writeStringToFile(fl, dataStr);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			FileBody f = new FileBody(fl);
+			
+			MultipartEntity mp = new MultipartEntity();
+			mp.addPart("xml", f);
+			
+			httppost.setEntity(mp);
+			HttpResponse response = doRequest(httppost, true);
+			String responseStr = StringUtils.toString(response);
+			Logger.info("file Upload Response: %s", responseStr);
+			
+			HttpGet g = new HttpGet("http://www.iwi.hs-karlsruhe.de/scs/result/info.jsp");
+			g.addHeader("Cookie", this.sessionId);
+			HttpResponse response2 = doRequest(g, true);
+			String responseStr2 = StringUtils.toString(response2);
+			Logger.info("resp2: %s", responseStr2);
+			return responseStr2.contains("Here you can see your results from");
+		}
+		return false;
 	}
 
 	/**

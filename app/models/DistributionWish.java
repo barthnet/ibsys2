@@ -14,19 +14,35 @@ public class DistributionWish extends Model {
 	
 	public int directSale;
 	public double price;
+	public double penalty;
 
 	public int period0;
 	public int period1;
 	public int period2;
 	public int period3;
+	
+	public String user;
+	
+	public DistributionWish clone() {
+		DistributionWish w = new DistributionWish();
+		w.item = this.item;
+		return w;
+	}
+	
+	public static void deleteAll(String userName) {
+		List<DistributionWish> caps = DistributionWish.find("byUser", userName).fetch();
+		for (DistributionWish capacity : caps) {
+			capacity.delete();
+		}
+	}
 
 	public Item getItemAsObject() {
-		return Item.find("byItemId", this.item).first();
+		return Item.find("byItemIdAndUser", this.item, this.user).first();
 	}
 
 	public static void merge(List<DistributionWish> listToMerge) {
 		for (DistributionWish dist : listToMerge) {
-			DistributionWish d = DistributionWish.find("byItem", dist.item).first();
+			DistributionWish d = DistributionWish.find("byItemAndUser", dist.item, dist.user).first();
 			if (d == null) d = new DistributionWish();
 			d.merge(dist);
 			d.save();
@@ -39,6 +55,9 @@ public class DistributionWish extends Model {
 		this.period1 = dist.period1;
 		this.period2 = dist.period2;
 		this.period3 = dist.period3;
+		this.directSale = dist.directSale;
+		this.penalty = dist.penalty;
+		this.price = dist.price;
 	}
 
 	@Override

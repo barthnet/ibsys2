@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 import play.db.jpa.Model;
@@ -15,6 +17,7 @@ public class WaitingList extends Model {
 	public String waitingListId;
 
 	public String item;
+	public String user;
 
 	public int workplace;
 
@@ -30,11 +33,18 @@ public class WaitingList extends Model {
 	}
 
 	public Item getItemAsObject() {
-		return Item.find("byItemId", this.item).first();
+		return Item.find("byItemIdAndUser", this.item, this.user).first();
+	}
+	
+	public static void deleteAll(String userName) {
+		List<WaitingList> caps = WaitingList.find("byUser", userName).fetch();
+		for (WaitingList capacity : caps) {
+			capacity.delete();
+		}
 	}
 
 	public Workplace getWorkplaceAsObject() {
-		return Workplace.find("byWorkplaceId", this.workplace).first();
+		return Workplace.find("byWorkplaceIdAndUser", this.workplace, this.user).first();
 	}
 
 	@Override

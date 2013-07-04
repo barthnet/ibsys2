@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 import play.db.jpa.*;
@@ -14,6 +16,7 @@ import play.db.jpa.*;
 public class OpenOrder extends Model {
 
 	public String item;
+	public String user;
 
 	public int mode;
 	public int orderPeriod;
@@ -21,7 +24,14 @@ public class OpenOrder extends Model {
 	public double expectedArrival;
 
 	public Item getItemAsObject() {
-		return Item.find("byItemId", this.item).first();
+		return Item.find("byItemIdAndUser", this.item, this.user).first();
+	}
+	
+	public static void deleteAll(String userName) {
+		List<OpenOrder> caps = OpenOrder.find("byUser", userName).fetch();
+		for (OpenOrder capacity : caps) {
+			capacity.delete();
+		}
 	}
 
 	@Override

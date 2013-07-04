@@ -1,9 +1,7 @@
 package controllers;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +36,9 @@ import play.Logger;
 import play.mvc.Controller;
 import play.templates.Template;
 import play.templates.TemplateLoader;
+
+import com.sun.org.apache.xml.internal.security.utils.XMLUtils;
+
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
@@ -57,7 +58,7 @@ public class Application extends Controller {
 		renderJSON(disps);
 	}
 	
-	public static void test3() {
+	public static void test3(String userName) {
 		DistributionWish wish1 = DistributionWish.find("byItem", "P1").first();
 		wish1.period0 = 100;
 		wish1.period1 = 50;
@@ -74,7 +75,7 @@ public class Application extends Controller {
 		wish3.period2 = 100;
 		wish3.period3 = 150;
 		
-		ApplicationLogic.calculateDisposition();
+		ApplicationLogic.calculateDisposition(userName);
 		
 		List<DispositionOrder> orders = DispositionOrder.findAll();
 		for (DispositionOrder order : orders) {
@@ -90,13 +91,27 @@ public class Application extends Controller {
 
 	public static void testLogin() {
 		setHeader();
+		JSONObject json = getBodyAsJSON();
+		String username = null, password = null;
+		try {
+			username = json.getString("username");
+			password = json.getString("password");
+		} catch (JSONException e) {
+			error("Error on login check");
+		}
+		User user = User.find("byName", username).first();
+		if (user == null) {
+			user = new User();
+			user.name = username;
+			user.save();
+		}
 		renderJSON(true);
 	}
 
 	/**
 	 * save disposition orders
 	 */
-	public static void postDispositionOrders() {
+	public static void postDispositionOrders(String userName) {
 		setHeader();
 		String body = getBodyAsString();
 		ArrayList<DispositionOrder> orders = new JSONDeserializer<ArrayList<DispositionOrder>>().use("values", DispositionOrder.class).deserialize(body);
@@ -108,7 +123,7 @@ public class Application extends Controller {
 	/**
 	 * save capacities
 	 */
-	public static void postCapacity() {
+	public static void postCapacity(String userName) {
 		setHeader();
 		String body = getBodyAsString();
 		// ApplicationLogic.calculateCapacity();
@@ -121,83 +136,83 @@ public class Application extends Controller {
 	/**
 	 * save productionOrders
 	 */
-	public static void postProductionOrders() {
+	public static void postProductionOrders(String userName) {
 		setHeader();
 		String body = getBodyAsString();
 		ArrayList<ProductionOrder> orders = new JSONDeserializer<ArrayList<ProductionOrder>>().use("values", ProductionOrder.class).deserialize(body);
 		if (orders != null && !orders.isEmpty()) {
-			Logger.info("postProductionOrders: %s %s", ProductionOrder.findAll().size(), orders.size());
-			Workplace.deleteAllProductionPlanLists();
-			ProductionOrder.deleteAll();			
+//			Logger.info("postProductionOrders: %s %s", ProductionOrder.find("byUser", params) .size(), orders.size());
+			Workplace.deleteAllProductionPlanLists(orders.get(0).user);
+			ProductionOrder.deleteAll(userName);			
 			ProductionOrder.saveAll(orders);
 		}
-		ApplicationLogic.calculateCapacity();
-		ApplicationLogic.calculateDisposition();
+		ApplicationLogic.calculateCapacity(userName);
+		ApplicationLogic.calculateDisposition(userName);
 		ok();
 	}
 
 	/**
 	 * save productionplan
 	 */
-	public static void postProductionPlan() {
+	public static void postProductionPlan(String userName) {
 		setHeader();
 		String body = getBodyAsString();
 		ArrayList<DispositionManufacture> plan = new JSONDeserializer<ArrayList<DispositionManufacture>>().use("values", DispositionManufacture.class)
 				.deserialize(body);
 		Logger.info("postProductionPlan: %s", plan.size());
 		DispositionManufacture.merge(plan);
-		ApplicationLogic.planToOrder();
-		ApplicationLogic.calculateCapacity();
-		ApplicationLogic.calculateDisposition();
+		ApplicationLogic.planToOrder(userName);
+		ApplicationLogic.calculateCapacity(userName);
+		ApplicationLogic.calculateDisposition(userName);
 		ok();
 	}
 
 	/**
 	 * save and merge posted deistributionWishs
 	 */
-	public static void postDistributionWishs() {
+	public static void postDistributionWishs(String userName) {
 		setHeader();
 		String body = getBodyAsString();
 		// Logger.info("postDistributionWish: %S", body);
 		ArrayList<DistributionWish> wishs = new JSONDeserializer<ArrayList<DistributionWish>>().use("values", DistributionWish.class).deserialize(body);
 		Logger.info("postDistributionWishs: %s", wishs.size());
 		DistributionWish.merge(wishs);
-		ApplicationLogic.wishToPlan();
-		ApplicationLogic.calcProductionPlan();
-		ApplicationLogic.planToOrder();
-		ApplicationLogic.calculateCapacity();
-		ApplicationLogic.calculateDisposition();
+		ApplicationLogic.wishToPlan(userName);
+		ApplicationLogic.calcProductionPlan(userName);
+		ApplicationLogic.planToOrder(userName);
+		ApplicationLogic.calculateCapacity(userName);
+		ApplicationLogic.calculateDisposition(userName);
 		ok();
 	}
 
 	/**
 	 * get disposition orders
 	 */
-	public static void getDispositionOrders() {
+	public static void getDispositionOrders(String userName) {
 		setHeader();
 		Logger.info("getDispositionOrders");
-		List<DispositionOrder> orders = DispositionOrder.findAll();
+		List<DispositionOrder> orders = DispositionOrder.find("byUser", userName).fetch();
 		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(orders));
 	}
 
 	/**
 	 * get calculated capacities of all workplaces
 	 */
-	public static void getCapacity() {
+	public static void getCapacity(String userName) {
 		setHeader();
 		// ApplicationLogic.calculateCapacity();
 		Logger.info("getCapacity");
-		List<Capacity> capacities = Capacity.findAll();
+		List<Capacity> capacities = Capacity.find("byUser", userName).fetch();
 		renderJSON(new JSONSerializer().exclude("workplaceAsObject").serialize(capacities));
 	}
 
 	/**
 	 * get all saved productionOrders
 	 */
-	public static void getProductionOrders() {
+	public static void getProductionOrders(String userName) {
 		setHeader();
 		Logger.info("getProductionOrders");
-		List<ProductionOrder> orders = ProductionOrder.find("order by orderNumber asc").fetch();
+		List<ProductionOrder> orders = ProductionOrder.find("user = ? order by orderNumber asc", userName).fetch();
 		// if (orders == null || orders.isEmpty()) {
 		// ApplicationLogic.planToOrder();
 		// orders = ProductionOrder.find("order by orderNumber asc").fetch();
@@ -208,10 +223,10 @@ public class Application extends Controller {
 	/**
 	 * get productionplan
 	 */
-	public static void getProductionPlan() {
+	public static void getProductionPlan(String userName) {
 		setHeader();
 		Logger.info("getProductionPlan");
-		List<DispositionManufacture> disps = DispositionManufacture.findAll();
+		List<DispositionManufacture> disps = DispositionManufacture.find("byUser", userName).fetch();
 		// Logger.info("childs: %s", disps.get(0));
 		renderJSON(new JSONSerializer().include("itemChilds").exclude("itemAsObject", "ItemChildsAsObject").serialize(disps));
 	}
@@ -219,16 +234,17 @@ public class Application extends Controller {
 	/**
 	 * deliver saved distributionWishs, if necessary create them first
 	 */
-	public static void getDistributenWishs() {
+	public static void getDistributenWishs(String userName) {
 		setHeader();
 		Logger.info("getDistributenWishs");
-		List<DistributionWish> wishs = DistributionWish.findAll();
+		List<DistributionWish> wishs = DistributionWish.find("byUser", userName).fetch();
 		if (wishs == null || wishs.isEmpty()) {
 			wishs = new ArrayList<>();
-			List<Item> pItems = Item.find("byType", "P").fetch();
+			List<Item> pItems = Item.find("byTypeAndUser", "P", userName).fetch();
 			for (Item item : pItems) {
 				DistributionWish wish = new DistributionWish();
 				wish.item = item.itemId;
+				wish.user = userName;
 				wish.save();
 				wishs.add(wish);
 			}
@@ -250,55 +266,81 @@ public class Application extends Controller {
 	/**
 	 * returns the method for expected delivery calculation
 	 */
-	public static void getUserMethod() {
+	public static void getUserMethod(String userName) {
 		setHeader();
 		Logger.info("getUserMethod");
-		List<User> users = User.findAll();
-		User user = users.get(0);		
-		
+		User user = User.find("byName", userName).first();		
 		renderJSON(user.method);
 	}
 	
-	public static void reset() {
+	public static void reset(String userName) {
 		setHeader();
 		Logger.info("reset");
-		ApplicationLogic.resetData();
+		ApplicationLogic.resetUserData(userName);
 	}
 
 	/**
 	 * Testmethod to develop xml parser with local xml file doesnt load
 	 * everytime the xml from the scsim website
 	 */
-	public static void parseXML() {
+	public static void parseXML(String userName) {
 		setHeader();
-		Logger.info("parseXML");
+		Logger.info("parseXML %s", userName);
 		Template template = TemplateLoader.load("229_9_7result.xml");
 		String xmlFile = template.render();
 		InputStream in = IOUtils.toInputStream(xmlFile);
 		Parser p = new Parser(in);
-		p.parseDoc();
-		ApplicationLogic.wishToPlan();
-		ApplicationLogic.calcProductionPlan();
-		ApplicationLogic.planToOrder();
-		ApplicationLogic.calculateCapacity();
-		ApplicationLogic.calculateDisposition();
+		p.parseDoc(userName);
+		ApplicationLogic.wishToPlan(userName);
+		ApplicationLogic.calcProductionPlan(userName);
+		ApplicationLogic.planToOrder(userName);
+		ApplicationLogic.calculateCapacity(userName);
+		ApplicationLogic.calculateDisposition(userName);
 		
-		List<User> users = User.findAll();
-		int actPeriod = Integer.valueOf(users.get(0).period);
-		
+		User user = User.find("byName", userName).first();
+		int actPeriod = Integer.valueOf(user.period);
+		user.isSimulatable = true;
+		user.save();
 		renderJSON(actPeriod);
 	}
 	
 	/**
 	 * downloads the input.xml
 	 */
-	public static void downloadXML() {
+	public static void downloadXML(String userName) {
 		setHeader();
 		response.setContentTypeIfNotSet("application/x-download");  
 		response.setHeader("Content-disposition","attachment; filename=input.xml");
 		
-		Document doc = Parser.parseInputXML();
+		Document doc = Parser.parseInputXML(userName);
+		
 		renderXml(doc);
+	}
+	
+	
+	public static void uploadToSite(String userName, String password) {
+		setHeader();
+		Logger.info("uploadToSite");
+		Document doc = Parser.parseInputXML(userName);		    
+	    
+	    Source source = new DOMSource(doc);
+        StringWriter stringWriter = new StringWriter();
+        Result result = new StreamResult(stringWriter);
+        TransformerFactory factory = TransformerFactory.newInstance();
+        Transformer transformer;
+        String test= "";
+		try {
+			transformer = factory.newTransformer();
+			transformer.transform(source, result);
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+		test = stringWriter.getBuffer().toString();        
+        
+	    Crawler cr = new Crawler(userName, password);
+	    renderJSON(cr.exportFileToWeb(test));
 	}
 
 	/**
@@ -306,31 +348,33 @@ public class Application extends Controller {
 	 * 
 	 * @param file
 	 */
-	public static void uploadXML() {
-		setHeader();
-		
+	public static void uploadXML(String userName) {
+		setHeader();		
 		String xml = getBodyAsString();
-		Logger.info("uploadXML: %s", xml);
-		
-		
-		
 		InputStream in = IOUtils.toInputStream(xml);
 		Parser p = new Parser(in);
-		p.parseDoc();
+		p.parseDoc(userName);
 		
-		ApplicationLogic.wishToPlan();
-		ApplicationLogic.calcProductionPlan();
-		ApplicationLogic.planToOrder();
-		ApplicationLogic.calculateCapacity();
-		ApplicationLogic.calculateDisposition();
-//		Template template = TemplateLoader.load("beauty.xml");
-//		String xmlFile = template.render();
-//		
-//		renderText(xmlFile);
-		List<User> users = User.findAll(); 
-		int actPeriod = Integer.valueOf(users.get(0).period);
-		
+		ApplicationLogic.wishToPlan(userName);
+		ApplicationLogic.calcProductionPlan(userName);
+		ApplicationLogic.planToOrder(userName);
+		ApplicationLogic.calculateCapacity(userName);
+		ApplicationLogic.calculateDisposition(userName);
+		User user = User.find("byName",userName).first();
+		int actPeriod = Integer.valueOf(user.period);
+		user.isSimulatable = true;
+		user.save();
 		renderJSON(actPeriod);
+	}
+	
+	public static void checkUser(String userName) {
+		Logger.info("check User %s", userName);
+		User user = User.find("byName", userName).first();
+		if (user != null && user.isSimulatable) {
+			renderJSON(true);
+		} else {
+			renderJSON(false);
+		}
 	}
 
 	/**
@@ -347,7 +391,17 @@ public class Application extends Controller {
 			error("Error on login check");
 		}
 		Crawler cr = new Crawler(username, password);
-		renderJSON(cr.checkLogin());
+		
+		boolean check = cr.checkLogin();
+		if (check) {
+			User user = User.find("byName", username).first();
+			if (user == null) {
+				user = new User();
+				user.name = username;
+				user.save();
+			}
+		}
+		renderJSON(check);
 	}
 
 	/**
@@ -356,11 +410,26 @@ public class Application extends Controller {
 	 * @param username
 	 * @param password
 	 */
-	public static void loadXmlFromSite(String username, String password) {
-		Crawler cr = new Crawler(username, password);
+	public static void loadXmlFromSite(String userName, String password) {
+		Crawler cr = new Crawler(userName, password);
 		String file = cr.importFileFromWeb();
 		Logger.info("file:\n%s", file);
-		renderText(file);
+//		renderText(file);
+		
+		InputStream in = IOUtils.toInputStream(file);
+		Parser p = new Parser(in);
+		p.parseDoc(userName);
+		
+		ApplicationLogic.wishToPlan(userName);
+		ApplicationLogic.calcProductionPlan(userName);
+		ApplicationLogic.planToOrder(userName);
+		ApplicationLogic.calculateCapacity(userName);
+		ApplicationLogic.calculateDisposition(userName);
+		User user = User.find("byName",userName).first();
+		int actPeriod = Integer.valueOf(user.period);
+		user.isSimulatable = true;
+		user.save();
+		renderJSON(actPeriod);
 	}
 
 	/**

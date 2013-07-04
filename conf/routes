@@ -6,32 +6,34 @@
 GET     /                                       Application.index
 
 # Test methods
+GET		/up										Application.uploadToSite
 GET		/test									Application.test
 GET		/test2									Application.test2
 GET		/test3									Application.test3
-GET		/parse									Application.parseXML
-GET		/testLogin								Application.testLogin
+GET		/parse/{userName}						Application.parseXML
+POST	/testLogin								Application.testLogin
 
 # methods
-GET		/login									Application.login
-GET		/load									Application.loadXmlFromSite
-POST	/upload									Application.uploadXML
-GET		/download								Application.downloadXML
-GET		/reset									Application.reset
+POST	/login									Application.login
+GET		/load/{userName}/{password}				Application.loadXmlFromSite
+POST	/upload/{userName}						Application.uploadXML
+GET		/download/{userName}					Application.downloadXML
+GET		/reset/{userName}						Application.reset
+GET 	/simulatable/{userName}					Application.checkUser
 
 # simulate methods
-GET		/wish									Application.getDistributenWishs
-POST	/wish									Application.postDistributionWishs
-GET		/userMethod								Application.postUserMethod
-POST	/userMethod								Application.getUserMethod
-GET		/production								Application.getProductionPlan
-POST	/production								Application.postProductionPlan
-GET		/order 									Application.getProductionOrders
-POST	/order									Application.postProductionOrders
-GET		/capacity								Application.getCapacity
-POST	/capacity								Application.postCapacity
-GET		/disposition							Application.getDispositionOrders
-POST	/disposition							Application.postDispositionOrders
+GET		/wish/{userName}						Application.getDistributenWishs
+POST	/wish/{userName}						Application.postDistributionWishs
+GET		/userMethod/{userName}					Application.postUserMethod
+POST	/userMethod/{userName}					Application.getUserMethod
+GET		/production/{userName}					Application.getProductionPlan
+POST	/production/{userName}					Application.postProductionPlan
+GET		/order/{userName} 						Application.getProductionOrders
+POST	/order/{userName}						Application.postProductionOrders
+GET		/capacity/{userName}					Application.getCapacity
+POST	/capacity/{userName}					Application.postCapacity
+GET		/disposition/{userName}					Application.getDispositionOrders
+POST	/disposition/{userName}					Application.postDispositionOrders
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

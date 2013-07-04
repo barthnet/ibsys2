@@ -16,12 +16,12 @@ public class Component extends Model {
 
 	public int amount;
 
-	public Item getItemAsObject() {
-		return Item.find("byItem", this.item).first();
+	public Item getItemAsObject(String userName) {
+		return Item.find("byItemAndUser", this.item, userName).first();
 	}
 
-	public Item getParentAsObject() {
-		return Item.find("byItem", this.item).first();
+	public Item getParentAsObject(String userName) {
+		return Item.find("byItemAndUser", this.item, userName).first();
 	}
 	
 	@PrePersist

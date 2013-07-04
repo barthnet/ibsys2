@@ -8,6 +8,7 @@ import play.db.jpa.Model;
 public class User extends Model {
 
 	public String period;
-	public String session;
+	public String name;
+	public boolean isSimulatable = false;
 	public String method = "recommended";
 }

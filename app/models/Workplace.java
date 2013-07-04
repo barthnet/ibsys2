@@ -22,10 +22,25 @@ public class Workplace extends Model {
 	public int workplaceId;
 
 	public String name;
+	public String user;
 
 	public String[] waitingList;
 	public String inWork;
 	public int[] productionPlanList;
+	
+	public Workplace clone() {
+		Workplace w = new Workplace();
+		w.workplaceId = this.workplaceId;
+		w.name = this.name;
+		return w;
+	}
+	
+	public static void deleteAll(String userName) {
+		List<Workplace> caps = Workplace.find("byUser", userName).fetch();
+		for (Workplace capacity : caps) {
+			capacity.delete();
+		}
+	}
 
 	public void addWaitingList(WaitingList wList) {
 		if (waitingList == null) {
@@ -53,9 +68,11 @@ public class Workplace extends Model {
 			return null;
 		}
 		for (int count = 0, length = this.waitingList.length; count < length; count++) {
-			WaitingList wL = WaitingList.find("byWaitingListId", this.waitingList[count]).first();
+//			Logger.info("workplace getWaitingListAsObjectList %s %s", this.user, this.waitingList[count]);
+			WaitingList wL = WaitingList.find("byWaitingListIdAndUser", this.waitingList[count], this.user).first();
 			wList.add(wL);
 		}
+//		Logger.info("%s", wList);
 		return wList;
 	}
 
@@ -65,18 +82,18 @@ public class Workplace extends Model {
 			return null;
 		}
 		for (int count = 0, length = this.productionPlanList.length; count < length; count++) {
-			ProductionOrder pO = ProductionOrder.find("byOrderNumber", this.productionPlanList[count]).first();
+			ProductionOrder pO = ProductionOrder.find("byOrderNumberAndUser", this.productionPlanList[count], this.user).first();
 			pList.add(pO);
 		}
 		return pList;
 	}
 
 	public WaitingList getInWorkAsObject() {
-		return WaitingList.find("byWaitingListId", inWork).first();
+		return WaitingList.find("byWaitingListIdAndUser", this.inWork, this.user).first();
 	}
 
-	public static void deleteAllProductionPlanLists() {
-		List<Workplace> places = Workplace.findAll();
+	public static void deleteAllProductionPlanLists(String userName) {
+		List<Workplace> places = Workplace.find("byUser", userName).fetch();
 		for (Workplace workplace : places) {
 			workplace.productionPlanList = null;
 			workplace.save();
@@ -85,8 +102,10 @@ public class Workplace extends Model {
 
 	@Override
 	public String toString() {
-		return "Workplace [workplaceId=" + workplaceId + ", name=" + name + ", waitingList=" + Arrays.toString(waitingList) + ", inWork=" + inWork
-				+ ", productionPlanList=" + Arrays.toString(productionPlanList) + "]";
+		return "Workplace [workplaceId=" + workplaceId + ", name=" + name + ", user=" + user + ", waitingList=" + Arrays.toString(waitingList) + ", inWork="
+				+ inWork + ", productionPlanList=" + Arrays.toString(productionPlanList) + "]";
 	}
+
+	
 
 }

@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 public class Capacity extends Model {
 
 	public int workplace;
+	public String user;
 
 	public int time;
 	public int setupTime;
@@ -18,14 +19,21 @@ public class Capacity extends Model {
 	public int totaltime;
 
 	public Item getWorkplaceAsObject() {
-		return Workplace.find("byWorkplaceId", this.workplace).first();
+		return Workplace.find("byWorkplaceIdAndUser", this.workplace, this.user).first();
 	}
 
 	public static void merge(List<Capacity> listToMerge) {
 		for (Capacity cap : listToMerge) {
-			Capacity c = Capacity.find("byWorkplace", cap.workplace).first();
+			Capacity c = Capacity.find("byWorkplaceAndUser", cap.workplace, cap.user).first();
 			c.merge(cap);
 			c.save();
+		}
+	}
+	
+	public static void deleteAll(String userName) {
+		List<Capacity> caps = Capacity.find("byUser", userName).fetch();
+		for (Capacity capacity : caps) {
+			capacity.delete();
 		}
 	}
 

@@ -30,37 +30,99 @@ public class ApplicationLogic {
 		Fixtures.loadModels("initial-items.yml", "initial-workplaces.yml", "ItemTime.yml", "initial-dispositionOrder.yml", "initial-productionPlan.yml",
 				"initial-components.yml");
 	}
+	
+	public static void resetUserData(String userName) {
+		Logger.info("resetUserData %s", userName);
+		Capacity.deleteAll(userName);
+		DispositionManufacture.deleteAll(userName);
+		DispositionOrder.deleteAll(userName);
+		DistributionWish.deleteAll(userName);
+		Item.deleteAll(userName);
+		OpenOrder.deleteAll(userName);
+		ProductionOrder.deleteAll(userName);
+		WaitingList.deleteAll(userName);
+		Workplace.deleteAll(userName);
+		User user = User.find("byName", userName).first();
+		if (user != null) {
+			user.isSimulatable = false;
+			user.save();
+		}	
+		cloneAllObjects(userName);
+	}
+	
+	public static void cloneAllObjects(String userName) {
+		Logger.info("cloneAllObjects %s", userName);
+		List<Workplace> wList = Workplace.find("byUserIsNull").fetch();
+		for (Workplace workplace : wList) {
+			Workplace w = workplace.clone();
+			w.user = userName;
+			w.save();
+		}
+//		List<Workplace> wList2 = Workplace.find("byUser", userName).fetch();
+//		Logger.info("wList2 %s", wList2);
+		
+		List<Item> iList = Item.find("byUserIsNull").fetch();
+		for (Item item : iList) {
+			Item i = item.clone();
+			i.user = userName;
+			i.save();
+		}
+		
+		List<DispositionManufacture> dList = DispositionManufacture.find("byUserIsNull").fetch();
+		for (DispositionManufacture dispositionManufacture : dList) {
+			DispositionManufacture d = dispositionManufacture.clone();
+			d.user = userName;
+			d.save();
+		}
+		
+		List<DispositionOrder> doList = DispositionOrder.find("byUserIsNull").fetch();
+		for (DispositionOrder dispositionOrder : doList) {
+			DispositionOrder d = dispositionOrder.clone();
+			d.user = userName;
+			d.save();
+		}
+		
+		List<DistributionWish> dwList = DistributionWish.find("byUserIsNull").fetch();
+		for (DistributionWish distributionWish : dwList) {
+			DistributionWish d = distributionWish.clone();
+			d.user = userName;
+			d.save();
+		}
+	}
 
-	public static void wishToPlan() {
-		List<DistributionWish> wishList = DistributionWish.findAll();
+	public static void wishToPlan(String userName) {
+		List<DistributionWish> wishList = DistributionWish.find("byUser", userName).fetch();
 		if (wishList == null || wishList.isEmpty()) {
 			wishList = new ArrayList<>();
-			List<Item> pItems = Item.find("byType", "P").fetch();
+			List<Item> pItems = Item.find("byTypeAndUser", "P", userName).fetch();
 			for (Item item : pItems) {
 				DistributionWish wish = new DistributionWish();
 				wish.item = item.itemId;
+				wish.user = userName;
 				wish.save();
 				wishList.add(wish);
 			}
 		}
 		for (DistributionWish wish : wishList) {
-			DispositionManufacture disp = DispositionManufacture.find("byItem", wish.item).first();
+			DispositionManufacture disp = DispositionManufacture.find("byItemAndUser", wish.item, userName).first();
 			disp.distributionWish = wish.period0 + wish.directSale;
 			disp.save();
-			// Logger.info("wishToPlan %s", disp);
+			Logger.info("wishToPlan %s", disp);
 		}
 		// calcProductionPlan();
 	}
 
-	public static void calcProductionPlan() {
+	public static void calcProductionPlan(String userName) {
 		// Logger.info("setDependencies");
-		List<DispositionManufacture> disps = DispositionManufacture.findAll();
+		List<DispositionManufacture> disps = DispositionManufacture.find("byUser", userName).fetch();
 		DispositionManufacture parent = new DispositionManufacture();
+		parent.user = userName;
 		for (int i = 0, length = disps.size(); i < length; i++) {
 			DispositionManufacture disp = disps.get(i);
-			Item item = Item.find("byItemId", disp.item).first();
+			Item item = Item.find("byItemIdAndUser", disp.item, userName).first();
 			if ("P".equals(item.type)) {
 				parent = new DispositionManufacture();
+				parent.user = userName;
 			} else {
 				disp.distributionWish = parent.production;
 			}
@@ -77,9 +139,9 @@ public class ApplicationLogic {
 			disp.parentWaitingList = parent.waitingList;
 			disp.inWork = 0;
 			disp.waitingList = 0;
-			List<WaitingList> wL = WaitingList.find("byItem", disp.item).fetch();
+			List<WaitingList> wL = WaitingList.find("byItemAndUser", disp.item, userName).fetch();
 			for (WaitingList waitingList : wL) {
-				Workplace wP = Workplace.find("byWorkplaceId", waitingList.workplace).first();
+				Workplace wP = Workplace.find("byWorkplaceIdAndUser", waitingList.workplace, userName).first();
 				if (wP.inWork != null && wP.inWork.equals(waitingList.waitingListId)) {
 					if (mulitpleItem) {
 						disp.inWork += waitingList.amount / 3;
@@ -106,16 +168,16 @@ public class ApplicationLogic {
 		}
 	}
 
-	public static void planToOrder() {
+	public static void planToOrder(String userName) {
 		
-		List<DispositionManufacture> plans = DispositionManufacture.find("order by itemNumber asc").fetch();
+		List<DispositionManufacture> plans = DispositionManufacture.find("user = ? order by itemNumber asc", userName).fetch();
 //		List<DispositionManufacture> plans = DispositionManufacture.findAll();
-		Workplace.deleteAllProductionPlanLists();
-		Logger.info("planToOrder %s", ProductionOrder.findAll().size());
-		ProductionOrder.deleteAll();
+		Workplace.deleteAllProductionPlanLists(userName);
+		Logger.info("planToOrder %s", ProductionOrder.find("byUser", userName).fetch().size());
+		ProductionOrder.deleteAll(userName);
 		int no = 0;
 		for (DispositionManufacture dispo : plans) {
-			ProductionOrder prodOrder = ProductionOrder.find("byItem", dispo.item).first();
+			ProductionOrder prodOrder = ProductionOrder.find("byItemAndUser", dispo.item, userName).first();
 			Item item = dispo.getItemAsObject();
 			if (prodOrder != null) {
 //				Logger.info("pOrder not null: %s", prodOrder);
@@ -123,6 +185,7 @@ public class ApplicationLogic {
 			} else {
 				prodOrder = new ProductionOrder();
 				prodOrder.item = item.itemId;
+				prodOrder.user = userName;
 //				prodOrder.itemNumber = item.itemNumber;
 				prodOrder.orderNumber = no;
 				no++;
@@ -136,21 +199,22 @@ public class ApplicationLogic {
 		}
 	}
 
-	public static void calculateCapacity() {
+	public static void calculateCapacity(String userName) {
 
 		//Gib mir alle Arbeitsplätze
-		List<Workplace> places = Workplace.findAll();
-		Capacity.deleteAll();
+		List<Workplace> places = Workplace.find("byUser", userName).fetch();
+		Capacity.deleteAll(userName);
 		Logger.info("calculateCapacity: %s", places.size());
 		
 		//Rechne für jeden Arbeitsplatz die Kapazität aus
 		for (Workplace workplace : places) {
 			
 			//Gibt es bereits ein Kapazitätsobjekt zu dem Arbeitsplatz
-			Capacity cap = Capacity.find("byWorkplace", workplace.workplaceId).first();
+			Capacity cap = Capacity.find("byWorkplaceAndUser", workplace.workplaceId, userName).first();
 			//Falls nicht, ein neues Anlegen
 			if (cap == null) {
 				cap = new Capacity();
+				cap.user = userName;
 				cap.workplace = workplace.workplaceId;
 //				Logger.info("create new capacity %s", cap);
 			}
@@ -232,17 +296,17 @@ public class ApplicationLogic {
 		}
 	}
 	
-	public static void calculateDisposition() {	
-		calculateConsumption();
-		List<User> users = User.findAll();
-		int actPeriod = Integer.valueOf(users.get(0).period);
-		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
+	public static void calculateDisposition(String userName) {	
+		calculateConsumption(userName);
+		User user = User.find("byName", userName).first();
+		int actPeriod = Integer.valueOf(user.period);
+		List<DispositionOrder> dispoOrders = DispositionOrder.find("byUser", userName).fetch();
 		for (DispositionOrder dispoOrder : dispoOrders) {
 			//TODO calculateExpectedArrival Methode dynamisch statt hardcoded
-			dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 5);
-			Item item = Item.find("byItemId", dispoOrder.item).first();
+			dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 5, userName);
+			Item item = Item.find("byItemIdAndUser", dispoOrder.item, userName).first();
 			dispoOrder.amount = item.amount;
-			calculateFutureStock(dispoOrder.item, "recommended");
+			calculateFutureStock(dispoOrder.item, "recommended", userName);
 			
 			int period = -1;
 			int quantity = 0;
@@ -278,7 +342,7 @@ public class ApplicationLogic {
 			
 			if (Math.ceil(dispoOrder.expectedArrival) > (period + actPeriod)) {
 				dispoOrder.mode = 4;
-				dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 4);
+				dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 4, userName);
 			} else {
 				dispoOrder.mode = 5;
 			}
@@ -287,21 +351,21 @@ public class ApplicationLogic {
 		}
 	}
 
-	public static void calculateConsumption() {
-		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
+	public static void calculateConsumption(String userName) {
+		List<DispositionOrder> dispoOrders = DispositionOrder.find("byUser", userName).fetch();
 		for (DispositionOrder dispoOrder : dispoOrders) {
 			// aktueller Verbrauch
 			List<Component> components = Component.find("byItem", dispoOrder.item).fetch();
 			int actConsumption = 0;
 			for (Component component : components) {
-				DispositionManufacture dm = DispositionManufacture.find("byItem", component.parent).first();
+				DispositionManufacture dm = DispositionManufacture.find("byItemAndUser", component.parent, userName).first();
 				if (dm != null) {
 					actConsumption += dm.production * component.amount;
 				}
 			}
 			dispoOrder.consumptionPeriod0 = actConsumption;
 
-			List<WaitingList> waitingLists = WaitingList.find("byItem", dispoOrder.item).fetch();
+			List<WaitingList> waitingLists = WaitingList.find("byItemAndUser", dispoOrder.item, userName).fetch();
 			if (waitingLists != null && waitingLists.size() > 0) {
 				for (WaitingList waiting : waitingLists) {
 					if (waiting.inWork == false) {
@@ -313,21 +377,21 @@ public class ApplicationLogic {
 
 			// Verbrauch Prognosen
 			if (dispoOrder.usedP1 > 0) {
-				DistributionWish wish = DistributionWish.find("byItem", "P1").first();
+				DistributionWish wish = DistributionWish.find("byItemAndUser", "P1", userName).first();
 				dispoOrder.consumptionPeriod1 = wish.period1 * dispoOrder.usedP1;
 				dispoOrder.consumptionPeriod2 = wish.period2 * dispoOrder.usedP1;
 				dispoOrder.consumptionPeriod3 = wish.period3 * dispoOrder.usedP1;
 			}
 
 			if (dispoOrder.usedP2 > 0) {
-				DistributionWish wish = DistributionWish.find("byItem", "P2").first();
+				DistributionWish wish = DistributionWish.find("byItemAndUser", "P2", userName).first();
 				dispoOrder.consumptionPeriod1 = wish.period1 * dispoOrder.usedP2;
 				dispoOrder.consumptionPeriod2 = wish.period2 * dispoOrder.usedP2;
 				dispoOrder.consumptionPeriod3 = wish.period3 * dispoOrder.usedP2;
 			}
 
 			if (dispoOrder.usedP3 > 0) {
-				DistributionWish wish = DistributionWish.find("byItem", "P3").first();
+				DistributionWish wish = DistributionWish.find("byItemAndUser", "P3", userName).first();
 				dispoOrder.consumptionPeriod1 = wish.period1 * dispoOrder.usedP3;
 				dispoOrder.consumptionPeriod2 = wish.period2 * dispoOrder.usedP3;
 				dispoOrder.consumptionPeriod3 = wish.period3 * dispoOrder.usedP3;
@@ -337,11 +401,11 @@ public class ApplicationLogic {
 		}
 	}
 	
-	public static double calculateExpectedArrival(String method, String itemId, int mode) {
-		List<User> users = User.findAll();
-		int period = Integer.valueOf(users.get(0).period);
+	public static double calculateExpectedArrival(String method, String itemId, int mode, String userName) {
+		User user = User.find("byName", userName).first();
+		int period = Integer.valueOf(user.period);
 		double expectedArrival = 0.0;
-		DispositionOrder dispoOrder = DispositionOrder.find("byItem", itemId).first();
+		DispositionOrder dispoOrder = DispositionOrder.find("byItemAndUser", itemId, userName).first();
 		expectedArrival = 0.2 + period;
 		//If express order half delivery time and no variance
 		if (mode == 0) {
@@ -361,12 +425,12 @@ public class ApplicationLogic {
 	}
 	
 	
-	public static void calculateFutureStock(String itemId, String method) {
-		List<User> users = User.findAll();
-		int actPeriod = Integer.valueOf(users.get(0).period);
+	public static void calculateFutureStock(String itemId, String method, String userName) {
+		User user = User.find("byName", userName).first();
+		int actPeriod = Integer.valueOf(user.period);
 		
 		//remove consumption from stock, add dispoOrders amount to expected period
-		DispositionOrder dispoOrder = DispositionOrder.find("byItem", itemId).first();
+		DispositionOrder dispoOrder = DispositionOrder.find("byItemAnduser", itemId, userName).first();
 		dispoOrder.futureStock0 = dispoOrder.amount - dispoOrder.consumptionPeriod0;
 		dispoOrder.futureStock1 = dispoOrder.futureStock0 - dispoOrder.consumptionPeriod1;
 		dispoOrder.futureStock2 = dispoOrder.futureStock1 -dispoOrder.consumptionPeriod2;
@@ -384,9 +448,9 @@ public class ApplicationLogic {
 		}
 				
 		//add openOrder amount to expected period
-		List<OpenOrder> openOrders = OpenOrder.find("byItem", itemId).fetch();
+		List<OpenOrder> openOrders = OpenOrder.find("byItemAndUser", itemId, userName).fetch();
 		for(OpenOrder oOrder : openOrders) {
-			oOrder.expectedArrival = calculateExpectedArrival(method, itemId, oOrder.mode);
+			oOrder.expectedArrival = calculateExpectedArrival(method, itemId, oOrder.mode, userName);
 			double deltaOpenOrder = oOrder.expectedArrival - actPeriod;
 			if (deltaOpenOrder <= 1) {
 				dispoOrder.futureStock0 += oOrder.amount;

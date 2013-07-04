@@ -15,12 +15,12 @@ public class ItemTime extends Model {
 	public int setupTime;
 	public int processTime;
 
-	public Item getItemAsObject() {
-		return Item.find("byItem", this.item).first();
+	public Item getItemAsObject(String userName) {
+		return Item.find("byItemAndUser", this.item, userName).first();
 	}
 
-	public Workplace getWorkplaceAsObject() {
-		return Workplace.find("byWorkplaceId", this.workplace).first();
+	public Workplace getWorkplaceAsObject(String userName) {
+		return Workplace.find("byWorkplaceIdAndUser", this.workplace, userName).first();
 	}
 
 	@Override
