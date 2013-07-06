@@ -116,15 +116,17 @@ public class ApplicationLogic {
 	public static void calcProductionPlan(String userName) {
 		// Logger.info("setDependencies");
 		Logger.info("calcProductionPlan");
-		List<DispositionManufacture> disps = DispositionManufacture.find("byUser", userName).fetch();
+//		List<DispositionManufacture> disps = DispositionManufacture.find("byUser", userName).fetch();
+		List<DispositionManufacture> disps = DispositionManufacture.find("user = ? order by productItem asc, itemNumber asc", userName).fetch();
 		DispositionManufacture parent = new DispositionManufacture();
-		parent.user = userName;
+//		parent.user = userName;
 		for (int i = 0, length = disps.size(); i < length; i++) {
 			DispositionManufacture disp = disps.get(i);
+			Logger.info("disp: %s", disp);
 			Item item = Item.find("byItemIdAndUser", disp.item, userName).first();
 			if ("P".equals(item.type)) {
 				parent = new DispositionManufacture();
-				parent.user = userName;
+//				parent.user = userName;
 			} else {
 				disp.distributionWish = parent.production;
 			}

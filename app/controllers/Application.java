@@ -377,12 +377,14 @@ public class Application extends Controller {
 	}
 
 	public static void checkUser(String userName) {
+		setHeader();
 		Logger.info("check User %s", userName);
 		User user = User.find("byName", userName).first();
 		if (user != null && user.isSimulatable) {
-			renderJSON(true);
+			renderText("{\"result\":true,\"period\":"+user.period+"}");
 		} else {
-			renderJSON(false);
+			renderText("{\"result\":false}");
+//			renderJSON(false);
 		}
 	}
 
