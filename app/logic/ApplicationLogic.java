@@ -91,6 +91,7 @@ public class ApplicationLogic {
 	}
 
 	public static void wishToPlan(String userName) {
+		Logger.info("wishToPLan");
 		List<DistributionWish> wishList = DistributionWish.find("byUser", userName).fetch();
 		if (wishList == null || wishList.isEmpty()) {
 			wishList = new ArrayList<>();
@@ -107,13 +108,14 @@ public class ApplicationLogic {
 			DispositionManufacture disp = DispositionManufacture.find("byItemAndUser", wish.item, userName).first();
 			disp.distributionWish = wish.period0 + wish.directSale;
 			disp.save();
-			Logger.info("wishToPlan %s", disp);
+//			Logger.info("wishToPlan %s", disp);
 		}
 		// calcProductionPlan();
 	}
 
 	public static void calcProductionPlan(String userName) {
 		// Logger.info("setDependencies");
+		Logger.info("calcProductionPlan");
 		List<DispositionManufacture> disps = DispositionManufacture.find("byUser", userName).fetch();
 		DispositionManufacture parent = new DispositionManufacture();
 		parent.user = userName;
@@ -169,7 +171,7 @@ public class ApplicationLogic {
 	}
 
 	public static void planToOrder(String userName) {
-		
+		Logger.info("planToOrder");
 		List<DispositionManufacture> plans = DispositionManufacture.find("user = ? order by itemNumber asc", userName).fetch();
 //		List<DispositionManufacture> plans = DispositionManufacture.findAll();
 		Workplace.deleteAllProductionPlanLists(userName);
@@ -200,7 +202,7 @@ public class ApplicationLogic {
 	}
 
 	public static void calculateCapacity(String userName) {
-
+//		Logger.info("planToOrder");
 		//Gib mir alle Arbeitsplätze
 		List<Workplace> places = Workplace.find("byUser", userName).fetch();
 		Capacity.deleteAll(userName);
@@ -263,9 +265,8 @@ public class ApplicationLogic {
 			}
 
 			cap.totaltime = cap.time + cap.setupTime;
-
-			if (cap.totaltime == 0) {
-				cap.shift = 0;
+			cap.shift = 1;
+			if (cap.totaltime == 0) {				
 				cap.overtime = 0;
 			} else if (cap.totaltime <= 3600) {
 				cap.shift = 1;
@@ -287,6 +288,9 @@ public class ApplicationLogic {
 					cap.overtime = 0;
 				} else {
 					cap.overtime = cap.totaltime - 7200;
+					if (cap.overtime >= 1200) {
+						cap.overtime = 1200;
+					}
 				}
 			}
 			//overtime per day
@@ -297,6 +301,7 @@ public class ApplicationLogic {
 	}
 	
 	public static void calculateDisposition(String userName) {	
+		Logger.info("calculateDisposition");
 		calculateConsumption(userName);
 		User user = User.find("byName", userName).first();
 		int actPeriod = Integer.valueOf(user.period);

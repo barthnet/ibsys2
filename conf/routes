@@ -6,7 +6,7 @@
 GET     /                                       Application.index
 
 # Test methods
-GET		/up										Application.uploadToSite
+
 GET		/test									Application.test
 GET		/test2									Application.test2
 GET		/test3									Application.test3
@@ -15,6 +15,7 @@ POST	/testLogin								Application.testLogin
 
 # methods
 POST	/login									Application.login
+GET		/upload/{userName}/{password}			Application.uploadToSite
 GET		/load/{userName}/{password}				Application.loadXmlFromSite
 POST	/upload/{userName}						Application.uploadXML
 GET		/download/{userName}					Application.downloadXML

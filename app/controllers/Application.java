@@ -143,8 +143,7 @@ public class Application extends Controller {
 		String body = getBodyAsString();
 		ArrayList<ProductionOrder> orders = new JSONDeserializer<ArrayList<ProductionOrder>>().use("values", ProductionOrder.class).deserialize(body);
 		if (orders != null && !orders.isEmpty()) {
-			// Logger.info("postProductionOrders: %s %s",
-			// ProductionOrder.find("byUser", params) .size(), orders.size());
+			Logger.info("postProductionOrders: %s %s", ProductionOrder.find("byUser", userName).fetch().size(), orders.size());
 			Workplace.deleteAllProductionPlanLists(orders.get(0).user);
 			ProductionOrder.deleteAll(userName);
 			ProductionOrder.saveAll(orders);
@@ -325,28 +324,29 @@ public class Application extends Controller {
 	public static void uploadToSite(String userName, String password) {
 		setHeader();
 		Logger.info("uploadToSite");
-		Document doc = Parser.parseInputXML(userName);
-
-		Source source = new DOMSource(doc);
-		StringWriter stringWriter = new StringWriter();
-		Result result = new StreamResult(stringWriter);
-		TransformerFactory factory = TransformerFactory.newInstance();
-		Transformer transformer;
-		String test = "";
-		try {
-			transformer = factory.newTransformer();
-			transformer.transform(source, result);
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		test = stringWriter.getBuffer().toString();
-
-		Crawler cr = new Crawler(userName, password);
-		User user = User.find("byName", userName).first();
+		User user = User.find("byName", userName).first();	
+		
 		boolean erg = false;
 		if (user != null && user.isSimulatable) {
+			Document doc = Parser.parseInputXML(userName);
+
+			Source source = new DOMSource(doc);
+			StringWriter stringWriter = new StringWriter();
+			Result result = new StreamResult(stringWriter);
+			TransformerFactory factory = TransformerFactory.newInstance();
+			Transformer transformer;
+			String test = "";
+			try {
+				transformer = factory.newTransformer();
+				transformer.transform(source, result);
+			} catch (TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			test = stringWriter.getBuffer().toString();
+
+			Crawler cr = new Crawler(userName, password);
 			erg = cr.exportFileToWeb(test);
 		}
 		renderJSON(erg);
@@ -420,10 +420,13 @@ public class Application extends Controller {
 	 * @param password
 	 */
 	public static void loadXmlFromSite(String userName, String password) {
+		setHeader();
 		Crawler cr = new Crawler(userName, password);
 		String file = cr.importFileFromWeb();
-		Logger.info("file:\n%s", file);
+		
 		// renderText(file);
+		file = file.trim();
+		Logger.info("file:\n%s", file);
 
 		InputStream in = IOUtils.toInputStream(file);
 		Parser p = new Parser(in);
@@ -435,6 +438,7 @@ public class Application extends Controller {
 		ApplicationLogic.calculateCapacity(userName);
 		ApplicationLogic.calculateDisposition(userName);
 		User user = User.find("byName", userName).first();
+		
 		int actPeriod = Integer.valueOf(user.period);
 		user.isSimulatable = true;
 		user.save();
