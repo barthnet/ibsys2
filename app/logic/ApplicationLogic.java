@@ -446,10 +446,16 @@ public class ApplicationLogic {
 		double deltaDispo = dispoOrder.expectedArrival - actPeriod;
 		if (deltaDispo <= 1) {
 			dispoOrder.futureStock0 += dispoOrder.amount;
+			dispoOrder.futureStock1 += dispoOrder.amount;
+			dispoOrder.futureStock2 += dispoOrder.amount;
+			dispoOrder.futureStock3 += dispoOrder.amount;
 		} else if (deltaDispo <= 2) {
 			dispoOrder.futureStock1 += dispoOrder.amount;
+			dispoOrder.futureStock2 += dispoOrder.amount;
+			dispoOrder.futureStock3 += dispoOrder.amount;
 		} else if (deltaDispo <= 3) {
 			dispoOrder.futureStock2 += dispoOrder.amount;
+			dispoOrder.futureStock3 += dispoOrder.amount;
 		} else {
 			dispoOrder.futureStock3 -= dispoOrder.amount;
 		}
@@ -461,10 +467,16 @@ public class ApplicationLogic {
 			double deltaOpenOrder = oOrder.expectedArrival - actPeriod;
 			if (deltaOpenOrder <= 1) {
 				dispoOrder.futureStock0 += oOrder.amount;
+				dispoOrder.futureStock1 += oOrder.amount;
+				dispoOrder.futureStock2 += oOrder.amount;
+				dispoOrder.futureStock3 += oOrder.amount;
 			} else if (deltaOpenOrder <= 2) {
 				dispoOrder.futureStock1 += oOrder.amount;
+				dispoOrder.futureStock2 += oOrder.amount;
+				dispoOrder.futureStock3 += oOrder.amount;
 			} else if (deltaOpenOrder <= 3) {
 				dispoOrder.futureStock2 += oOrder.amount;
+				dispoOrder.futureStock3 += oOrder.amount;
 			} else {
 				dispoOrder.futureStock3 -= oOrder.amount;
 			}
