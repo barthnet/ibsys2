@@ -354,7 +354,11 @@ public class ApplicationLogic {
 				dispoOrder.mode = 5;
 			}
 			
-			dispoOrder.save();			
+			dispoOrder.save();
+			
+			//Kalkuliere Bestände mit neuen DispoOrders neu
+			calculateFutureStock(dispoOrder.item, "recommended", userName);
+			
 		}
 	}
 
@@ -445,19 +449,19 @@ public class ApplicationLogic {
 		
 		double deltaDispo = dispoOrder.expectedArrival - actPeriod;
 		if (deltaDispo <= 1) {
-			dispoOrder.futureStock0 += dispoOrder.amount;
-			dispoOrder.futureStock1 += dispoOrder.amount;
-			dispoOrder.futureStock2 += dispoOrder.amount;
-			dispoOrder.futureStock3 += dispoOrder.amount;
+			dispoOrder.futureStock0 += dispoOrder.quantity;
+			dispoOrder.futureStock1 += dispoOrder.quantity;
+			dispoOrder.futureStock2 += dispoOrder.quantity;
+			dispoOrder.futureStock3 += dispoOrder.quantity;
 		} else if (deltaDispo <= 2) {
-			dispoOrder.futureStock1 += dispoOrder.amount;
-			dispoOrder.futureStock2 += dispoOrder.amount;
-			dispoOrder.futureStock3 += dispoOrder.amount;
+			dispoOrder.futureStock1 += dispoOrder.quantity;
+			dispoOrder.futureStock2 += dispoOrder.quantity;
+			dispoOrder.futureStock3 += dispoOrder.quantity;
 		} else if (deltaDispo <= 3) {
-			dispoOrder.futureStock2 += dispoOrder.amount;
-			dispoOrder.futureStock3 += dispoOrder.amount;
+			dispoOrder.futureStock2 += dispoOrder.quantity;
+			dispoOrder.futureStock3 += dispoOrder.quantity;
 		} else {
-			dispoOrder.futureStock3 -= dispoOrder.amount;
+			dispoOrder.futureStock3 -= dispoOrder.quantity;
 		}
 				
 		//add openOrder amount to expected period
