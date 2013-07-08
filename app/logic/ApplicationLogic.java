@@ -357,7 +357,7 @@ public class ApplicationLogic {
 			dispoOrder.save();
 			
 			//Kalkuliere Bestände mit neuen DispoOrders neu
-			calculateFutureStock(dispoOrder.item, "recommended", userName);
+			//calculateFutureStock(dispoOrder.item, "recommended", userName);
 			
 		}
 	}
