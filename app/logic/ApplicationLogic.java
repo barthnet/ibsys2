@@ -70,6 +70,7 @@ public class ApplicationLogic {
 		
 		List<DispositionManufacture> dList = DispositionManufacture.find("byUserIsNull").fetch();
 		for (DispositionManufacture dispositionManufacture : dList) {
+			Logger.info("clone: %s", dispositionManufacture);
 			DispositionManufacture d = dispositionManufacture.clone();
 			d.user = userName;
 			d.save();
@@ -117,12 +118,12 @@ public class ApplicationLogic {
 		// Logger.info("setDependencies");
 		Logger.info("calcProductionPlan");
 //		List<DispositionManufacture> disps = DispositionManufacture.find("byUser", userName).fetch();
-		List<DispositionManufacture> disps = DispositionManufacture.find("user = ? order by productItem asc, itemNumber asc", userName).fetch();
+		List<DispositionManufacture> disps = DispositionManufacture.find("user = ? order by productItem asc, ioNumber asc", userName).fetch();
 		DispositionManufacture parent = new DispositionManufacture();
 //		parent.user = userName;
 		for (int i = 0, length = disps.size(); i < length; i++) {
 			DispositionManufacture disp = disps.get(i);
-			Logger.info("disp: %s", disp);
+			Logger.info("calcPlan: %s", disp);
 			Item item = Item.find("byItemIdAndUser", disp.item, userName).first();
 			if ("P".equals(item.type)) {
 				parent = new DispositionManufacture();
@@ -139,7 +140,7 @@ public class ApplicationLogic {
 				
 			
 			// TODO in item model yml aufnehmen
-			disp.safetyStock = disp.safetyStock > 0 ? disp.safetyStock : 100;
+			disp.safetyStock = disp.safetyStock > 0 ? disp.safetyStock : 75;
 			disp.parentWaitingList = parent.waitingList;
 			disp.inWork = 0;
 			disp.waitingList = 0;

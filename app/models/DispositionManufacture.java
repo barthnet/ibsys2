@@ -18,6 +18,7 @@ public class DispositionManufacture extends Model {
 	public String item;
 	public String user;
 	public int itemNumber;
+	public int ioNumber;
 	public String productItem;
 	public String[] itemChilds;
 
@@ -32,6 +33,7 @@ public class DispositionManufacture extends Model {
 	public DispositionManufacture clone() {
 		DispositionManufacture d = new DispositionManufacture();
 		d.item = this.item;
+		d.ioNumber = this.ioNumber;
 		d.itemNumber = this.itemNumber;
 		d.productItem = this.productItem;
 		d.itemChilds = this.itemChilds;

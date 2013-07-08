@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
+import play.Logger;
 import play.db.jpa.Model;
 
 @Entity
@@ -68,7 +69,8 @@ public class DispositionOrder extends Model {
 	}
 
 	public Item getItemAsObject() {
-		return Item.find("byItemAndUser", this.item, this.user).first();
+		Logger.info("dispo item %s %s", this.item, this.user);
+		return Item.find("byItemIdAndUser", this.item, this.user).first();
 	}
 
 	public static void merge(List<DispositionOrder> listToMerge) {

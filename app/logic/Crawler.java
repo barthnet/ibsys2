@@ -46,14 +46,15 @@ public class Crawler {
 	
 	public Crawler(String username, String password) {
 		//TODO vorsichtshalber .....
-//		this.username = username;
-//		this.password = password;
-		this.username = "test005";
-		this.password = "snake";
+		this.username = username;
+		this.password = password;
+		
 		this.sessionId = getSessionId();
 	}
 	
 	public boolean exportFileToWeb(String dataStr) {
+		this.username = "test005";
+		this.password = "snake";
 		Logger.info("exportFileToWeb");
 		if (checkLogin()) {
 			Logger.info("loginCheck");

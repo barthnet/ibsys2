@@ -3,6 +3,7 @@
 DispositionManufacture(dm1):
     item: P1
     itemNumber: 1
+    ioNumber: 0
     itemChilds: 
         - E26
         - E51
@@ -10,11 +11,13 @@ DispositionManufacture(dm1):
 
 DispositionManufacture(dm26_P1):
     item: E26
+    ioNumber: 1
     itemNumber: 26
     productItem: P1
 
 DispositionManufacture(dm51):
     item: E51
+    ioNumber: 2
     itemNumber: 51
     itemChilds: 
         - E16
@@ -24,16 +27,19 @@ DispositionManufacture(dm51):
 
 DispositionManufacture(dm16_P1):
     item: E16
+    ioNumber: 3
     itemNumber: 16
     productItem: P1
 
 DispositionManufacture(dm17_P1):
     item: E17
+    ioNumber: 4
     itemNumber: 17
     productItem: P1
 
 DispositionManufacture(dm50):
     item: E50
+    ioNumber: 5
     itemNumber: 50
     itemChilds: 
         - E4
@@ -43,16 +49,19 @@ DispositionManufacture(dm50):
 
 DispositionManufacture(dm4):
     item: E4
+    ioNumber: 6
     itemNumber: 4
     productItem: P1
 
 DispositionManufacture(dm10):
     item: E10
+    ioNumber: 7
     itemNumber: 10
     productItem: P1
 
 DispositionManufacture(dm49):
     item: E49
+    ioNumber: 8
     itemNumber: 49
     itemChilds: 
         - E7
@@ -62,16 +71,19 @@ DispositionManufacture(dm49):
 
 DispositionManufacture(dm7):
     item: E7
+    ioNumber: 9
     itemNumber: 7
     productItem: P1
 
 DispositionManufacture(dm13):
     item: E13
+    ioNumber: 10
     itemNumber: 13
     productItem: P1
 
 DispositionManufacture(dm18):
     item: E18
+    ioNumber: 11
     itemNumber: 18
     productItem: P1
 
@@ -79,6 +91,7 @@ DispositionManufacture(dm18):
 
 DispositionManufacture(dm2):
     item: P2
+    ioNumber: 12
     itemNumber: 2
     itemChilds: 
         - E26
@@ -87,11 +100,13 @@ DispositionManufacture(dm2):
 
 DispositionManufacture(dm26_P2):
     item: E26
+    ioNumber: 13
     itemNumber: 26
     productItem: P2
 
 DispositionManufacture(dm56):
     item: E56
+    ioNumber: 14
     itemNumber: 56
     itemChilds: 
         - E16
@@ -101,16 +116,19 @@ DispositionManufacture(dm56):
 
 DispositionManufacture(dm16_P2):
     item: E16
+    ioNumber: 15
     itemNumber: 16
     productItem: P2
 
 DispositionManufacture(dm17_P2):
     item: E17
+    ioNumber: 16
     itemNumber: 17
     productItem: P2
 
 DispositionManufacture(dm55):
     item: E55
+    ioNumber: 17
     itemNumber: 55
     itemChilds: 
         - E5
@@ -120,16 +138,19 @@ DispositionManufacture(dm55):
 
 DispositionManufacture(dm5):
     item: E5
+    ioNumber: 18
     itemNumber: 5
     productItem: P2
 
 DispositionManufacture(dm11):
     item: E11
+    ioNumber: 19
     itemNumber: 11
     productItem: P2
 
 DispositionManufacture(dm54):
     item: E54
+    ioNumber: 20
     itemNumber: 54
     itemChilds: 
         - E8
@@ -139,16 +160,19 @@ DispositionManufacture(dm54):
 
 DispositionManufacture(dm8):
     item: E8
+    ioNumber: 21
     itemNumber: 8
     productItem: P2
 
 DispositionManufacture(dm14):
     item: E14
+    ioNumber: 22
     itemNumber: 14
     productItem: P2
 
 DispositionManufacture(dm19):
     item: E19
+    ioNumber: 23
     itemNumber: 19
     productItem: P2
 
@@ -156,6 +180,7 @@ DispositionManufacture(dm19):
 
 DispositionManufacture(dm3):
     item: P3
+    ioNumber: 24
     itemNumber: 3
     itemChilds: 
         - E26
@@ -164,11 +189,13 @@ DispositionManufacture(dm3):
 
 DispositionManufacture(dm26_P3):
     item: E26
+    ioNumber: 25
     itemNumber: 26
     productItem: P3
 
 DispositionManufacture(dm31):
     item: E31
+    ioNumber: 26
     itemNumber: 31
     itemChilds: 
         - E16
@@ -178,16 +205,19 @@ DispositionManufacture(dm31):
 
 DispositionManufacture(dm16_P3):
     item: E16
+    ioNumber: 27
     itemNumber: 16
     productItem: P3
 
 DispositionManufacture(dm17_P3):
     item: E17
+    ioNumber: 28
     itemNumber: 17
     productItem: P3
 
 DispositionManufacture(dm30):
     item: E30
+    ioNumber: 29
     itemNumber: 30
     itemChilds: 
         - E6
@@ -197,16 +227,19 @@ DispositionManufacture(dm30):
 
 DispositionManufacture(dm6):
     item: E6
+    ioNumber: 30
     itemNumber: 6
     productItem: P3
 
 DispositionManufacture(dm12):
     item: E12
+    ioNumber: 31
     itemNumber: 12
     productItem: P3
 
 DispositionManufacture(dm29):
     item: E29
+    ioNumber: 32
     itemNumber: 29
     itemChilds: 
         - E9
@@ -216,15 +249,18 @@ DispositionManufacture(dm29):
 
 DispositionManufacture(dm9):
     item: E9
+    ioNumber: 33
     itemNumber: 9
     productItem: P3
 
 DispositionManufacture(dm15):
     item: E15
+    ioNumber: 34
     itemNumber: 15
     productItem: P3
 
 DispositionManufacture(dm20):
     item: E20
+    ioNumber: 35
     itemNumber: 20
     productItem: P3
