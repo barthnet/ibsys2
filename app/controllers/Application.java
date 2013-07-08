@@ -259,6 +259,7 @@ public class Application extends Controller {
 	 */
 	public static void postUserMethod() {
 		setHeader();
+		Logger.info("postUserMethod");
 		String body = getBodyAsString();
 		User user = new JSONDeserializer<User>().deserialize(body);
 		Logger.info("postUserMethod: %s", user.method);
@@ -313,6 +314,7 @@ public class Application extends Controller {
 	 */
 	public static void downloadXML(String userName) {
 		setHeader();
+		Logger.info("downloadXML");
 		response.setContentTypeIfNotSet("application/x-download");
 		response.setHeader("Content-disposition", "attachment; filename=input.xml");
 
@@ -359,6 +361,7 @@ public class Application extends Controller {
 	 */
 	public static void uploadXML(String userName) {
 		setHeader();
+		Logger.info("uploadXML");
 		String xml = getBodyAsString();
 		InputStream in = IOUtils.toInputStream(xml);
 		Parser p = new Parser(in);
@@ -393,6 +396,7 @@ public class Application extends Controller {
 	 */
 	public static void login() {
 		setHeader();
+		Logger.info("login");
 		JSONObject json = getBodyAsJSON();
 		String username = null, password = null;
 		try {
@@ -423,12 +427,13 @@ public class Application extends Controller {
 	 */
 	public static void loadXmlFromSite(String userName, String password) {
 		setHeader();
+		Logger.info("loadXmlFromSite");
 		Crawler cr = new Crawler(userName, password);
 		String file = cr.importFileFromWeb();
 		
 		// renderText(file);
 		file = file.trim();
-		Logger.info("file:\n%s", file);
+//		Logger.info("file:\n%s", file);
 
 		InputStream in = IOUtils.toInputStream(file);
 		Parser p = new Parser(in);

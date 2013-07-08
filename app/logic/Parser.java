@@ -124,7 +124,7 @@ public class Parser {
 
 		Node wListNode = waitinglistworkstations.item(0);
 		NodeList workplaces = wListNode.getChildNodes();
-		StringUtils.printNote(workplaces);
+//		StringUtils.printNote(workplaces);
 		Logger.info("parseWaitingLists %s", workplaces.getLength());
 		for (int i = 0, lengthWP = workplaces.getLength(); i < lengthWP; i++) {
 			Node workplace = workplaces.item(i);
