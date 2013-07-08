@@ -341,9 +341,9 @@ public class ApplicationLogic {
 			
 			//Bestellmenge = Diskontmenge
 			if (quantity < dispoOrder.discount) {
-				dispoOrder.quantity = dispoOrder.discount;
+				dispoOrder.quantity = dispoOrder.discount + (int)(0.5 * dispoOrder.consumptionPeriod1);
 			} else {
-				dispoOrder.quantity = quantity;
+				dispoOrder.quantity = quantity + (int)(0.5 * dispoOrder.consumptionPeriod1);
 			}
 			
 			//Wenn Lieferzeit zu lang, dann Express Bestellung
@@ -448,7 +448,7 @@ public class ApplicationLogic {
 		dispoOrder.futureStock2 = dispoOrder.futureStock1 -dispoOrder.consumptionPeriod2;
 		dispoOrder.futureStock3 = dispoOrder.futureStock2 - dispoOrder.consumptionPeriod3;
 		
-		double deltaDispo = dispoOrder.expectedArrival - actPeriod;
+		/*double deltaDispo = dispoOrder.expectedArrival - actPeriod;
 		if (deltaDispo <= 1) {
 			dispoOrder.futureStock0 += dispoOrder.quantity;
 			dispoOrder.futureStock1 += dispoOrder.quantity;
@@ -463,7 +463,7 @@ public class ApplicationLogic {
 			dispoOrder.futureStock3 += dispoOrder.quantity;
 		} else {
 			dispoOrder.futureStock3 -= dispoOrder.quantity;
-		}
+		}*/
 				
 		//add openOrder amount to expected period
 		List<OpenOrder> openOrders = OpenOrder.find("byItemAndUser", itemId, userName).fetch();
