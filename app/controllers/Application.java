@@ -193,7 +193,7 @@ public class Application extends Controller {
 	public static void getDispositionOrders(String userName) {
 		setHeader();
 		Logger.info("getDispositionOrders");
-		List<DispositionOrder> orders = DispositionOrder.find("byUser", userName).fetch();
+		List<DispositionOrder> orders = DispositionOrder.find("user = ? order by item asc", userName).fetch();
 		renderJSON(new JSONSerializer().exclude("itemAsObject").serialize(orders));
 	}
 
@@ -204,7 +204,7 @@ public class Application extends Controller {
 		setHeader();
 		// ApplicationLogic.calculateCapacity();
 		Logger.info("getCapacity");
-		List<Capacity> capacities = Capacity.find("byUser", userName).fetch();
+		List<Capacity> capacities = Capacity.find("user = ? order by workplace asc", userName).fetch();
 		renderJSON(new JSONSerializer().exclude("workplaceAsObject").serialize(capacities));
 	}
 
@@ -326,8 +326,8 @@ public class Application extends Controller {
 	public static void uploadToSite(String userName, String password) {
 		setHeader();
 		Logger.info("uploadToSite");
-		User user = User.find("byName", userName).first();	
-		
+		User user = User.find("byName", userName).first();
+
 		boolean erg = false;
 		if (user != null && user.isSimulatable) {
 			Document doc = Parser.parseInputXML(userName);
@@ -384,10 +384,10 @@ public class Application extends Controller {
 		Logger.info("check User %s", userName);
 		User user = User.find("byName", userName).first();
 		if (user != null && user.isSimulatable) {
-			renderText("{\"result\":true,\"period\":"+user.period+"}");
+			renderText("{\"result\":true,\"period\":" + user.period + "}");
 		} else {
 			renderText("{\"result\":false}");
-//			renderJSON(false);
+			// renderJSON(false);
 		}
 	}
 
@@ -406,17 +406,21 @@ public class Application extends Controller {
 			error("Error on login check");
 		}
 		Crawler cr = new Crawler(username, password);
-
-		boolean check = cr.checkLogin();
-		if (check) {
-			User user = User.find("byName", username).first();
-			if (user == null) {
-				user = new User();
-				user.name = username;
-				user.save();
+		try {
+			boolean check = cr.checkLogin();
+			if (check) {
+				User user = User.find("byName", username).first();
+				if (user == null) {
+					user = new User();
+					user.name = username;
+					user.save();
+				}
 			}
+			renderJSON(check);
+		} catch (Exception e) {
+			error();
 		}
-		renderJSON(check);
+
 	}
 
 	/**
@@ -430,10 +434,10 @@ public class Application extends Controller {
 		Logger.info("loadXmlFromSite");
 		Crawler cr = new Crawler(userName, password);
 		String file = cr.importFileFromWeb();
-		
+
 		// renderText(file);
 		file = file.trim();
-//		Logger.info("file:\n%s", file);
+		// Logger.info("file:\n%s", file);
 
 		InputStream in = IOUtils.toInputStream(file);
 		Parser p = new Parser(in);
@@ -445,7 +449,7 @@ public class Application extends Controller {
 		ApplicationLogic.calculateCapacity(userName);
 		ApplicationLogic.calculateDisposition(userName);
 		User user = User.find("byName", userName).first();
-		
+
 		int actPeriod = Integer.valueOf(user.period);
 		user.isSimulatable = true;
 		user.save();

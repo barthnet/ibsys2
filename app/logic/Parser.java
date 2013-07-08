@@ -242,7 +242,7 @@ public class Parser {
 		for (DistributionWish distributionWish : dist_wish) {
 			Element sellwish = doc.createElement("item");
 
-			sellwish.setAttribute("article", distributionWish.item);
+			sellwish.setAttribute("article", String.valueOf(distributionWish.getItemAsObject().itemNumber));
 			sellwish.setAttribute("quantity", String.valueOf(distributionWish.period0));
 
 			sellwishes.appendChild(sellwish);
@@ -256,9 +256,9 @@ public class Parser {
 			Element selldirectItem = doc.createElement("item");
 
 			selldirectItem.setAttribute("article", String.valueOf(distributionWish.getItemAsObject().itemNumber));
+			selldirectItem.setAttribute("quantity", String.valueOf(distributionWish.directSale));
+			selldirectItem.setAttribute("price", String.valueOf(distributionWish.price));			
 			selldirectItem.setAttribute("penalty", String.valueOf(distributionWish.penalty));
-			selldirectItem.setAttribute("price", String.valueOf(distributionWish.price));
-			selldirectItem.setAttribute("quantity", String.valueOf(distributionWish.period0));
 
 			selldirect.appendChild(selldirectItem);
 		}
@@ -292,8 +292,9 @@ public class Parser {
 				Element order = doc.createElement("order");
 
 				order.setAttribute("article", String.valueOf(dispositionOrder.getItemAsObject().itemNumber));
-				order.setAttribute("quantity", String.valueOf(dispositionOrder.quantity));
 				order.setAttribute("modus", String.valueOf(dispositionOrder.mode));
+				order.setAttribute("quantity", String.valueOf(dispositionOrder.quantity));
+				
 
 				orderlist.appendChild(order);
 			}
@@ -323,10 +324,11 @@ public class Parser {
 		for (Capacity work : capa_list) {
 
 			Element workingtime = doc.createElement("workingtime");
+			workingtime.setAttribute("overtime", String.valueOf(work.overtime));
+			workingtime.setAttribute("shift", String.valueOf(work.shift));
+			
 			workingtime.setAttribute("station", String.valueOf(work.workplace));
 
-			workingtime.setAttribute("shift", String.valueOf(work.shift));
-			workingtime.setAttribute("overtime", String.valueOf(work.overtime));
 
 			workingtimelist.appendChild(workingtime);
 		}
