@@ -369,13 +369,16 @@ public class ApplicationLogic {
 			List<Component> components = Component.find("byItem", dispoOrder.item).fetch();
 			int actConsumption = 0;
 			for (Component component : components) {
-				DispositionManufacture dm = DispositionManufacture.find("byItemAndUser", component.parent, userName).first();
-				if (dm != null) {
-					actConsumption += dm.production * component.amount;
+				List<DispositionManufacture> dms = DispositionManufacture.find("byItemAndUser", component.parent, userName).fetch();				
+				for (DispositionManufacture dm : dms) {				
+					if (dm != null) {
+						actConsumption += dm.production * component.amount;
+					}					
 				}
 			}
 			dispoOrder.consumptionPeriod0 = actConsumption;
-
+			
+			
 			List<WaitingList> waitingLists = WaitingList.find("byItemAndUser", dispoOrder.item, userName).fetch();
 			if (waitingLists != null && waitingLists.size() > 0) {
 				for (WaitingList waiting : waitingLists) {
@@ -385,28 +388,34 @@ public class ApplicationLogic {
 				}
 
 			}
+			
+			dispoOrder.consumptionPeriod1 = 0;
+			dispoOrder.consumptionPeriod2 = 0;
+			dispoOrder.consumptionPeriod3 = 0;
 
 			// Verbrauch Prognosen
 			if (dispoOrder.usedP1 > 0) {
 				DistributionWish wish = DistributionWish.find("byItemAndUser", "P1", userName).first();
-				dispoOrder.consumptionPeriod1 = wish.period1 * dispoOrder.usedP1;
-				dispoOrder.consumptionPeriod2 = wish.period2 * dispoOrder.usedP1;
-				dispoOrder.consumptionPeriod3 = wish.period3 * dispoOrder.usedP1;
+				dispoOrder.consumptionPeriod1 += wish.period1 * dispoOrder.usedP1;
+				dispoOrder.consumptionPeriod2 += wish.period2 * dispoOrder.usedP1;
+				dispoOrder.consumptionPeriod3 += wish.period3 * dispoOrder.usedP1;
 			}
 
 			if (dispoOrder.usedP2 > 0) {
 				DistributionWish wish = DistributionWish.find("byItemAndUser", "P2", userName).first();
-				dispoOrder.consumptionPeriod1 = wish.period1 * dispoOrder.usedP2;
-				dispoOrder.consumptionPeriod2 = wish.period2 * dispoOrder.usedP2;
-				dispoOrder.consumptionPeriod3 = wish.period3 * dispoOrder.usedP2;
+				dispoOrder.consumptionPeriod1 += wish.period1 * dispoOrder.usedP2;
+				dispoOrder.consumptionPeriod2 += wish.period2 * dispoOrder.usedP2;
+				dispoOrder.consumptionPeriod3 += wish.period3 * dispoOrder.usedP2;
 			}
 
 			if (dispoOrder.usedP3 > 0) {
 				DistributionWish wish = DistributionWish.find("byItemAndUser", "P3", userName).first();
-				dispoOrder.consumptionPeriod1 = wish.period1 * dispoOrder.usedP3;
-				dispoOrder.consumptionPeriod2 = wish.period2 * dispoOrder.usedP3;
-				dispoOrder.consumptionPeriod3 = wish.period3 * dispoOrder.usedP3;
+				dispoOrder.consumptionPeriod1 += wish.period1 * dispoOrder.usedP3;
+				dispoOrder.consumptionPeriod2 += wish.period2 * dispoOrder.usedP3;
+				dispoOrder.consumptionPeriod3 += wish.period3 * dispoOrder.usedP3;
 			}
+			
+			Logger.info("Dispo: %s Con0: %s Con1: %s Con2: %s Con3: %s", dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1, dispoOrder.consumptionPeriod2, dispoOrder.consumptionPeriod3 );
 
 			dispoOrder.save();
 		}
