@@ -196,4 +196,96 @@ WorkplaceNode(node_13E12):
 WorkplaceNode(node_14E16):
     nodeId: node_14E16
     workplace: 14    
-    item: E16   
+    item: E16
+
+WorkplaceNode(node_9E14):
+    nodeId: node_9E14
+    workplace: 9
+    item: E14
+
+WorkplaceNode(node_7E14):
+    nodeId: node_7E14
+    workplace: 7
+    item: E14
+
+WorkplaceNode(node_8E14):
+    nodeId: node_8E14
+    workplace: 8
+    item: E14
+
+WorkplaceNode(node_12E14):
+    nodeId: node_12E14
+    workplace: 12
+    item: E14
+
+WorkplaceNode(node_13E14):
+    nodeId: node_13E14
+    workplace: 13
+    item: E14
+
+WorkplaceNode(node_9E19):
+    nodeId: node_9E19
+    workplace: 9
+    item: E19   
+
+WorkplaceNode(node_7E19):
+    nodeId: node_7E19
+    workplace: 7
+    item: E19
+
+WorkplaceNode(node_8E19):
+    nodeId: node_8E19
+    workplace: 8
+    item: E19
+
+WorkplaceNode(node_6E19):
+    nodeId: node_6E19
+    workplace: 6    
+    item: E19
+
+WorkplaceNode(node_11E8):
+    nodeId: node_11E8
+    workplace: 11    
+    item: E8
+
+WorkplaceNode(node_10E8):
+    nodeId: node_10E8
+    workplace: 10    
+    item: E8       
+
+WorkplaceNode(node_11E5):
+    nodeId: node_11E5
+    workplace: 11    
+    item: E5
+
+WorkplaceNode(node_10E5):
+    nodeId: node_10E5
+    workplace: 10    
+    item: E5    
+
+WorkplaceNode(node_9E11):
+    nodeId: node_9E11
+    workplace: 9    
+    item: E11
+
+WorkplaceNode(node_7E11):
+    nodeId: node_7E11
+    workplace: 7    
+    item: E11
+
+WorkplaceNode(node_8E11):
+    nodeId: node_8E11
+    workplace: 8    
+    item: E11
+
+WorkplaceNode(node_12E11):
+    nodeId: node_12E11
+    workplace: 12    
+    item: E11
+
+WorkplaceNode(node_13E11):
+    nodeId: node_13E11
+    workplace: 13    
+    item: E11
+
+   
