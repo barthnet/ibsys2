@@ -262,8 +262,13 @@ public class ApplicationLogic {
 				for (ProductionOrder productionOrder : pOrders) {
 					time += productionOrder.amount * ItemHelper.getProcessTime(cap.workplace, productionOrder.item);
 					cap.setupTime += ItemHelper.getSetupTime(cap.workplace, productionOrder.item);
+					if (workplace.workplaceId == 1) {
+						Logger.info("pOrder: %s %s",productionOrder.item, (productionOrder.amount * ItemHelper.getProcessTime(cap.workplace, productionOrder.item)));
+						Logger.info("times %s amount %s", ItemHelper.getProcessTime(cap.workplace, productionOrder.item), productionOrder.amount);
+					}
 				}
-				// Logger.info("pOrders: %s", time);
+				
+				Logger.info("pOrders: %s", time);
 				cap.time += time;
 			}
 
