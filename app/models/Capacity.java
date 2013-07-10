@@ -17,6 +17,9 @@ public class Capacity extends Model {
 	public int shift;
 	public int overtime;
 	public int totaltime;
+	
+	public int originalTime;
+	public int originalSetupTime;
 
 	public Item getWorkplaceAsObject() {
 		return Workplace.find("byWorkplaceIdAndUser", this.workplace, this.user).first();

@@ -61,6 +61,7 @@ public class Parser {
 		parseOpenOrders(userName);
 		parseWaitingLists(userName);
 		parseOrderInWorks(userName);
+		ApplicationLogic.calculateInitialCapacity(userName);
 		// ApplicationLogic.calcProductionPlan();
 	}
 

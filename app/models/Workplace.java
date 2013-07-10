@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 
 import play.Logger;
 import play.db.jpa.Model;
+import utils.ItemHelper;
 
 /**
  * 
@@ -36,8 +37,39 @@ public class Workplace extends Model {
 		return w;
 	}
 	
-	public int calculateTimeRequirement(){
-		return 0;
+	public int[] calculateTimeRequirement(String item, String userName){
+		WorkplaceNode node = null;
+		int needTotal[] = {0,0,0};
+		if (this.nodes != null && this.nodes.length > 0) {
+			for (int i = this.nodes.length-1; i >= 0; i--) {
+				int need[] = null;
+				node = WorkplaceNode.find("byNodeId", this.nodes[i]).first();
+				if (node != null && node.item.equals(item)) {
+					Workplace w = Workplace.find("byWorkplaceIdAndUser", node.workplace, userName).first();
+					need = w.calculateTimeRequirement(item, userName);
+					needTotal[0] += need[0];
+					needTotal[1] += need[1];
+					needTotal[2] += need[2];
+				}
+			}			
+		}
+		List<WaitingList> wList = WaitingList.find("byItemAndUserAndWorkplace", item, userName, this.workplaceId).fetch();
+		if (wList != null && !wList.isEmpty()) {
+			for (WaitingList wait : wList) {
+				needTotal[0] += wait.amount;
+//				needTotal[1] += wait.timeneed;				
+				needTotal[2] += ItemHelper.getSetupTime(this.workplaceId, wait.item);
+			}
+		}
+		
+		needTotal[1] += needTotal[0] * ItemHelper.getProcessTime(this.workplaceId, item);
+		
+		WaitingList inWork = this.getInWorkAsObject();
+		if (inWork != null) {
+			needTotal[0] += inWork.amount;
+			needTotal[1] += inWork.timeneed;
+		}
+		return needTotal;
 	}
 	
 	public static void deleteAll(String userName) {

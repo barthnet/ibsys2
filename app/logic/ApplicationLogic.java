@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.sql.Delete;
@@ -18,6 +19,7 @@ import models.ProductionOrder;
 import models.User;
 import models.WaitingList;
 import models.Workplace;
+import models.WorkplaceNode;
 import play.Logger;
 import play.test.Fixtures;
 import utils.ItemHelper;
@@ -203,6 +205,48 @@ public class ApplicationLogic {
 			
 		}
 	}
+	
+	public static void calculateInitialCapacity(String userName) {
+		List<Workplace> places = Workplace.find("byUser", userName).fetch();
+		for (Workplace workplace : places) {
+			Capacity cap = Capacity.find("byWorkplaceAndUser", workplace.workplaceId, userName).first();
+			if (cap == null) {
+				cap = new Capacity();
+				cap.user = userName;
+				cap.workplace = workplace.workplaceId;
+			}
+			
+			cap.originalSetupTime = 0;
+			cap.originalTime = 0;
+			
+			if (workplace.nodes != null && workplace.nodes.length > 0) {				
+				for (int i = workplace.nodes.length -1; i >= 0; i--) {
+					int need[] = {0,0,0};
+					WorkplaceNode n = WorkplaceNode.find("byNodeId", workplace.nodes[i]).first();
+					need = workplace.calculateTimeRequirement(n.item, userName);
+					cap.originalSetupTime = need[2];
+					cap.originalTime = need[1];
+				}
+			}
+			
+			List<WaitingList> wList = workplace.getWaitingListAsObjectList();
+			if (wList != null && !wList.isEmpty()) {
+				int time = 0;
+				int setup = 0;
+				for (WaitingList wait : wList) {			
+					time += wait.timeneed;
+					setup += ItemHelper.getSetupTime(cap.workplace, wait.item);
+				}
+				cap.originalTime += time;
+				cap.originalSetupTime += setup;
+			}
+
+			WaitingList inWork = workplace.getInWorkAsObject();
+			if (inWork != null) {
+				cap.originalTime += inWork.timeneed;
+			}
+		}
+	}
 
 	public static void calculateCapacity(String userName) {
 //		Logger.info("planToOrder");
@@ -231,28 +275,28 @@ public class ApplicationLogic {
 			cap.shift = 0;
 
 			//Die Zeiten für die Warteschlangen errechnen und hinzufügen, falls vorhanden
-			List<WaitingList> wList = workplace.getWaitingListAsObjectList();
-			if (wList != null && !wList.isEmpty()) {
-				// Logger.info("wList: %s", wList.size());
-				int time = 0;
-				int setup = 0;
-				//Für jedes Item in der Warteschlange Zeit und Rüstzeit hinzuaddieren
-				for (WaitingList wait : wList) {			
-					time += wait.timeneed;
-					setup += ItemHelper.getSetupTime(cap.workplace, wait.item);
-				}
-				// Logger.info("WaitL: %s", time);
-				cap.time += time;
-				cap.setupTime += setup;
-			}
-
-			//Zeit für das in Arbeit befindliche Item hinzuaddieren
-			WaitingList inWork = workplace.getInWorkAsObject();
-
-			if (inWork != null) {
-				// Logger.info("inWork: %s", inWork.amount);
-				cap.time += inWork.timeneed;
-			}
+//			List<WaitingList> wList = workplace.getWaitingListAsObjectList();
+//			if (wList != null && !wList.isEmpty()) {
+//				// Logger.info("wList: %s", wList.size());
+//				int time = 0;
+//				int setup = 0;
+//				//Für jedes Item in der Warteschlange Zeit und Rüstzeit hinzuaddieren
+//				for (WaitingList wait : wList) {			
+//					time += wait.timeneed;
+//					setup += ItemHelper.getSetupTime(cap.workplace, wait.item);
+//				}
+//				// Logger.info("WaitL: %s", time);
+//				cap.time += time;
+//				cap.setupTime += setup;
+//			}
+//
+//			//Zeit für das in Arbeit befindliche Item hinzuaddieren
+//			WaitingList inWork = workplace.getInWorkAsObject();
+//
+//			if (inWork != null) {
+//				// Logger.info("inWork: %s", inWork.amount);
+//				cap.time += inWork.timeneed;
+//			}
 
 			//Die Zeiten für die Produktionsaufträge errechnen und hinzufügen.
 			List<ProductionOrder> pOrders = workplace.getProductionPlanListAsObjectList();
@@ -262,17 +306,18 @@ public class ApplicationLogic {
 				for (ProductionOrder productionOrder : pOrders) {
 					time += productionOrder.amount * ItemHelper.getProcessTime(cap.workplace, productionOrder.item);
 					cap.setupTime += ItemHelper.getSetupTime(cap.workplace, productionOrder.item);
-					if (workplace.workplaceId == 1) {
-						Logger.info("pOrder: %s %s",productionOrder.item, (productionOrder.amount * ItemHelper.getProcessTime(cap.workplace, productionOrder.item)));
-						Logger.info("times %s amount %s", ItemHelper.getProcessTime(cap.workplace, productionOrder.item), productionOrder.amount);
-					}
+//					if (workplace.workplaceId == 1) {
+//						Logger.info("pOrder: %s %s",productionOrder.item, (productionOrder.amount * ItemHelper.getProcessTime(cap.workplace, productionOrder.item)));
+//						Logger.info("times %s amount %s", ItemHelper.getProcessTime(cap.workplace, productionOrder.item), productionOrder.amount);
+//					}
 				}
 				
-				Logger.info("pOrders: %s", time);
+//				Logger.info("pOrders: %s", time);
 				cap.time += time;
 			}
 
 			cap.totaltime = cap.time + cap.setupTime;
+			cap.totaltime += cap.originalSetupTime + cap.originalTime;
 			cap.shift = 1;
 			if (cap.totaltime == 0) {				
 				cap.overtime = 0;
