@@ -25,6 +25,7 @@ public class Workplace extends Model {
 	public String user;
 
 	public String[] waitingList;
+	public String[] nodes;
 	public String inWork;
 	public int[] productionPlanList;
 	
