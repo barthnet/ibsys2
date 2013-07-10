@@ -53,8 +53,9 @@ public class Crawler {
 	}
 	
 	public boolean exportFileToWeb(String dataStr) {
-		this.username = "test005";
-		this.password = "snake";
+		//TODO AUSKOMMENTIEREN!!!!!!!!!!!!!
+//		this.username = "test005";
+//		this.password = "snake";
 		Logger.info("exportFileToWeb");
 		if (checkLogin()) {
 			Logger.info("loginCheck");

@@ -262,8 +262,13 @@ public class ApplicationLogic {
 				for (ProductionOrder productionOrder : pOrders) {
 					time += productionOrder.amount * ItemHelper.getProcessTime(cap.workplace, productionOrder.item);
 					cap.setupTime += ItemHelper.getSetupTime(cap.workplace, productionOrder.item);
+					if (workplace.workplaceId == 1) {
+						Logger.info("pOrder: %s %s",productionOrder.item, (productionOrder.amount * ItemHelper.getProcessTime(cap.workplace, productionOrder.item)));
+						Logger.info("times %s amount %s", ItemHelper.getProcessTime(cap.workplace, productionOrder.item), productionOrder.amount);
+					}
 				}
-				// Logger.info("pOrders: %s", time);
+				
+				Logger.info("pOrders: %s", time);
 				cap.time += time;
 			}
 
@@ -311,7 +316,7 @@ public class ApplicationLogic {
 		List<DispositionOrder> dispoOrders = DispositionOrder.find("byUser", userName).fetch();
 		for (DispositionOrder dispoOrder : dispoOrders) {
 			//TODO calculateExpectedArrival Methode dynamisch statt hardcoded
-			dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 5, userName);
+			dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 5, actPeriod, userName);
 			Item item = Item.find("byItemIdAndUser", dispoOrder.item, userName).first();
 			dispoOrder.amount = item.amount;
 			calculateFutureStock(dispoOrder.item, "recommended", userName);
@@ -350,7 +355,7 @@ public class ApplicationLogic {
 			
 			if (Math.ceil(dispoOrder.expectedArrival) > (period + actPeriod)) {
 				dispoOrder.mode = 4;
-				dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 4, userName);
+				dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 4, actPeriod, userName);
 			} else {
 				dispoOrder.mode = 5;
 			}
@@ -422,12 +427,10 @@ public class ApplicationLogic {
 		}
 	}
 	
-	public static double calculateExpectedArrival(String method, String itemId, int mode, String userName) {
-		User user = User.find("byName", userName).first();
-		int period = Integer.valueOf(user.period);
+	public static double calculateExpectedArrival(String method, String itemId, int mode, int orderPeriod, String userName) {
 		double expectedArrival = 0.0;
 		DispositionOrder dispoOrder = DispositionOrder.find("byItemAndUser", itemId, userName).first();
-		expectedArrival = 0.2 + period;
+		expectedArrival = 0.2 + orderPeriod;
 		//If express order half delivery time and no variance
 		if (mode == 0) {
 			return 0; 
@@ -477,7 +480,7 @@ public class ApplicationLogic {
 		//add openOrder amount to expected period
 		List<OpenOrder> openOrders = OpenOrder.find("byItemAndUser", itemId, userName).fetch();
 		for(OpenOrder oOrder : openOrders) {
-			oOrder.expectedArrival = calculateExpectedArrival(method, itemId, oOrder.mode, userName);
+			oOrder.expectedArrival = calculateExpectedArrival(method, itemId, oOrder.mode, oOrder.orderPeriod, userName);
 			double deltaOpenOrder = oOrder.expectedArrival - actPeriod;
 			if (deltaOpenOrder <= 1) {
 				dispoOrder.futureStock0 += oOrder.amount;
