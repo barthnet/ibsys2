@@ -14,6 +14,7 @@ GET		/parse/{userName}						Application.parseXML
 POST	/testLogin								Application.testLogin
 
 # methods
+GET		/offline/{userName}						Application.offline
 POST	/login									Application.login
 GET		/upload/{userName}/{password}			Application.uploadToSite
 GET		/load/{userName}/{password}				Application.loadXmlFromSite

@@ -35,6 +35,10 @@ public class Workplace extends Model {
 		return w;
 	}
 	
+	public int calculateTimeRequirement(){
+		return 0;
+	}
+	
 	public static void deleteAll(String userName) {
 		List<Workplace> caps = Workplace.find("byUser", userName).fetch();
 		for (Workplace capacity : caps) {

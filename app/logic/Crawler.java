@@ -41,25 +41,22 @@ public class Crawler {
 	private String username;
 	private String password;
 	private String sessionId;
+	private Constants constants;
 	public String period;
 	private HttpClient client;
 	
 	public Crawler(String username, String password) {
-		//TODO vorsichtshalber .....
 		this.username = username;
 		this.password = password;
-		
+		this.constants = Constants.getInstance();
 		this.sessionId = getSessionId();
 	}
 	
 	public boolean exportFileToWeb(String dataStr) {
-		//TODO AUSKOMMENTIEREN!!!!!!!!!!!!!
-//		this.username = "test005";
-//		this.password = "snake";
 		Logger.info("exportFileToWeb");
 		if (checkLogin()) {
 			Logger.info("loginCheck");
-			HttpPost httppost = new HttpPost(Constants.simulate);
+			HttpPost httppost = new HttpPost(this.constants.simulate);
 			httppost.addHeader("Cookie", this.sessionId);			
 			
 			File fl = new File("input.xml");
@@ -96,7 +93,7 @@ public class Crawler {
 	 */
 	public String importFileFromWeb() {
 		if (checkLogin()) {
-			HttpPost httppost = new HttpPost(Constants.simulate);
+			HttpPost httppost = new HttpPost(this.constants.simulate);
 			httppost.addHeader("Cookie", this.sessionId);
 			StringBody res = null;
 			StringBody per = null;
@@ -114,7 +111,7 @@ public class Crawler {
 			String responseStr = StringUtils.toString(response);
 			if (responseStr.contains("<title>Simulation result</title>")) {
 				Logger.info("simulate erfolgreich", 0);
-				HttpGet httpget = new HttpGet(Constants.xmlFile);
+				HttpGet httpget = new HttpGet(this.constants.xmlFile);
 				httpget.setHeader("Cookie", sessionId);
 				HttpResponse fileResp = doRequest(httpget, false);
 				return StringUtils.toString(fileResp);
@@ -148,7 +145,7 @@ public class Crawler {
 	 * @return
 	 */
 	private String getSessionId() {
-		HttpGet httpget = new HttpGet(Constants.startPage);
+		HttpGet httpget = new HttpGet(this.constants.startPage);
 		HttpResponse response = doRequest(httpget, true);
 		String sessionId = response.getFirstHeader("Set-Cookie").getValue();
 		return sessionId.substring(0, sessionId.indexOf(";"));
@@ -185,7 +182,7 @@ public class Crawler {
 	 * @return
 	 */
 	private String buildLoginUrl() {
-		return Constants.authUrl + this.username + "&j_password=" + this.password + "&btnSubmit=Login";
+		return this.constants.authUrl + this.username + "&j_password=" + this.password + "&btnSubmit=Login";
 	}
 
 	/**

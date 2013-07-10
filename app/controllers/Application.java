@@ -422,6 +422,17 @@ public class Application extends Controller {
 		}
 
 	}
+	
+	public static void offline(String userName) {
+		setHeader();
+		User user = User.find("byName", userName).first();
+		if (user == null) {
+			user = new User();
+			user.name = userName;
+			user.save();
+		}
+		ok();
+	}
 
 	/**
 	 * crawling scsim.de to download the latest result xml file
