@@ -48,12 +48,13 @@ public class Workplace extends Model {
 				node = WorkplaceNode.find("byNodeId", this.nodes[i]).first();
 				if (node != null && node.item.equals(item)) {
 					Workplace w = Workplace.find("byWorkplaceIdAndUser", node.workplace, userName).first();
-
+					if (log) Logger.info("call iterate on workplace %s", w.workplaceId);
 					need = w.calculateTimeRequirement(item, userName, log);
-					if (log) Logger.info("iterate for item %s and wp %s amount: %S, timeneed: %s, setuptime: %s",item, w.workplaceId, need[0], need[1], need[2]);
+					if (log) Logger.info("get result from iterate on workplace %s for item %s and wp %s amount: %S, timeneed: %s, setuptime: %s",w.workplaceId ,item, w.workplaceId, need[0], need[1], need[2]);
 					needTotal[0] += need[0];
 					needTotal[1] += need[1];
 					needTotal[2] += need[2];
+					if (log) Logger.info("add iterate result to major result amount: %S, timeneed: %s, setuptime: %s",needTotal[0], needTotal[1], needTotal[2]);
 				}
 			}
 		}
@@ -61,8 +62,9 @@ public class Workplace extends Model {
 		List<WaitingList> wList = this.getWaitingListAsObjectList();
 		if (wList != null && !wList.isEmpty()) {
 			for (WaitingList wait : wList) {
+				if (!wait.item.equals(item)) continue;
 				if (log)
-					Logger.info("wList item %s", wait.amount);
+					Logger.info("wList item %s, workplace %s", wait.amount, wait.workplace);
 
 				needTotal[0] += wait.amount;
 				// needTotal[1] += wait.timeneed;
@@ -75,12 +77,12 @@ public class Workplace extends Model {
 		WaitingList inWork = this.getInWorkAsObject();
 		if (inWork != null) {
 			if (log)
-				Logger.info("inWork amount: %s, timeneed: %s", inWork.amount, inWork.timeneed);
+				Logger.info("inWork amount: %s, timeneed: %s, workplace: %s", inWork.amount, inWork.timeneed, inWork.workplace);
 			needTotal[0] += inWork.amount;
 			needTotal[1] += inWork.timeneed;
 		}
 		if (log)
-			Logger.info("amount: %s, timeneed: %s, setuptime: %s", needTotal[0], needTotal[1], needTotal[2]);
+			Logger.info(" workplace: %s, amount: %s, timeneed: %s, setuptime: %s", this.workplaceId, needTotal[0], needTotal[1], needTotal[2]);
 		return needTotal;
 	}
 

@@ -232,8 +232,10 @@ public class ApplicationLogic {
 					WorkplaceNode n = WorkplaceNode.find("byNodeId", workplace.nodes[i]).first();
 					boolean log = n.item.equals("E20") && workplace.workplaceId == 9 ? true : false;
 					need = workplace.calculateTimeRequirement(n.item, userName, log);
-					cap.originalSetupTime = need[2];
-					cap.originalTime = need[1];
+					
+					cap.originalSetupTime += need[2];
+					cap.originalTime += need[1];
+					if (log) Logger.info("W9 E20: %s", cap);
 				}
 			} else {
 
