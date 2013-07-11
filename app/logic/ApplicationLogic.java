@@ -30,9 +30,9 @@ public class ApplicationLogic {
 		Logger.info("reset Data");
 		Fixtures.deleteAllModels();
 		Fixtures.loadModels("initial-items.yml", "initial-workplaces.yml", "ItemTime.yml", "initial-dispositionOrder.yml", "initial-productionPlan.yml",
-				"initial-components.yml");
+				"initial-components.yml", "initial-workplaceNodes.yml");
 	}
-	
+
 	public static void resetUserData(String userName) {
 		Logger.info("resetUserData %s", userName);
 		Capacity.deleteAll(userName);
@@ -48,10 +48,10 @@ public class ApplicationLogic {
 		if (user != null) {
 			user.isSimulatable = false;
 			user.save();
-		}	
+		}
 		cloneAllObjects(userName);
 	}
-	
+
 	public static void cloneAllObjects(String userName) {
 		Logger.info("cloneAllObjects %s", userName);
 		List<Workplace> wList = Workplace.find("byUserIsNull").fetch();
@@ -60,31 +60,31 @@ public class ApplicationLogic {
 			w.user = userName;
 			w.save();
 		}
-//		List<Workplace> wList2 = Workplace.find("byUser", userName).fetch();
-//		Logger.info("wList2 %s", wList2);
-		
+		// List<Workplace> wList2 = Workplace.find("byUser", userName).fetch();
+		// Logger.info("wList2 %s", wList2);
+
 		List<Item> iList = Item.find("byUserIsNull").fetch();
 		for (Item item : iList) {
 			Item i = item.clone();
 			i.user = userName;
 			i.save();
 		}
-		
+
 		List<DispositionManufacture> dList = DispositionManufacture.find("byUserIsNull").fetch();
 		for (DispositionManufacture dispositionManufacture : dList) {
-			Logger.info("clone: %s", dispositionManufacture);
+//			Logger.info("clone: %s", dispositionManufacture);
 			DispositionManufacture d = dispositionManufacture.clone();
 			d.user = userName;
 			d.save();
 		}
-		
+
 		List<DispositionOrder> doList = DispositionOrder.find("byUserIsNull").fetch();
 		for (DispositionOrder dispositionOrder : doList) {
 			DispositionOrder d = dispositionOrder.clone();
 			d.user = userName;
 			d.save();
 		}
-		
+
 		List<DistributionWish> dwList = DistributionWish.find("byUserIsNull").fetch();
 		for (DistributionWish distributionWish : dwList) {
 			DistributionWish d = distributionWish.clone();
@@ -111,7 +111,7 @@ public class ApplicationLogic {
 			DispositionManufacture disp = DispositionManufacture.find("byItemAndUser", wish.item, userName).first();
 			disp.distributionWish = wish.period0 + wish.directSale;
 			disp.save();
-//			Logger.info("wishToPlan %s", disp);
+			// Logger.info("wishToPlan %s", disp);
 		}
 		// calcProductionPlan();
 	}
@@ -119,17 +119,18 @@ public class ApplicationLogic {
 	public static void calcProductionPlan(String userName) {
 		// Logger.info("setDependencies");
 		Logger.info("calcProductionPlan");
-//		List<DispositionManufacture> disps = DispositionManufacture.find("byUser", userName).fetch();
+		// List<DispositionManufacture> disps =
+		// DispositionManufacture.find("byUser", userName).fetch();
 		List<DispositionManufacture> disps = DispositionManufacture.find("user = ? order by productItem asc, ioNumber asc", userName).fetch();
 		DispositionManufacture parent = new DispositionManufacture();
-//		parent.user = userName;
+		// parent.user = userName;
 		for (int i = 0, length = disps.size(); i < length; i++) {
 			DispositionManufacture disp = disps.get(i);
-			Logger.info("calcPlan: %s", disp);
+//			Logger.info("calcPlan: %s", disp);
 			Item item = Item.find("byItemIdAndUser", disp.item, userName).first();
 			if ("P".equals(item.type)) {
 				parent = new DispositionManufacture();
-//				parent.user = userName;
+				// parent.user = userName;
 			} else {
 				disp.distributionWish = parent.production;
 			}
@@ -139,10 +140,10 @@ public class ApplicationLogic {
 			} else {
 				disp.stock = item.amount;
 			}
-				
-			
+
 			// TODO in item model yml aufnehmen
-			disp.safetyStock = disp.safetyStock > 0 ? disp.safetyStock : 75;
+//			disp.safetyStock = disp.safetyStock > 0 ? disp.safetyStock : 75;
+			disp.safetyStock = 0;
 			disp.parentWaitingList = parent.waitingList;
 			disp.inWork = 0;
 			disp.waitingList = 0;
@@ -171,14 +172,15 @@ public class ApplicationLogic {
 			if (disp.itemChilds != null && disp.itemChilds.length > 0) {
 				parent = disp;
 			}
-//			Logger.info("disp: %s", disp);
+			// Logger.info("disp: %s", disp);
 		}
 	}
 
 	public static void planToOrder(String userName) {
 		Logger.info("planToOrder");
 		List<DispositionManufacture> plans = DispositionManufacture.find("user = ? order by itemNumber asc", userName).fetch();
-//		List<DispositionManufacture> plans = DispositionManufacture.findAll();
+		// List<DispositionManufacture> plans =
+		// DispositionManufacture.findAll();
 		Workplace.deleteAllProductionPlanLists(userName);
 		Logger.info("planToOrder %s", ProductionOrder.find("byUser", userName).fetch().size());
 		ProductionOrder.deleteAll(userName);
@@ -187,26 +189,27 @@ public class ApplicationLogic {
 			ProductionOrder prodOrder = ProductionOrder.find("byItemAndUser", dispo.item, userName).first();
 			Item item = dispo.getItemAsObject();
 			if (prodOrder != null) {
-//				Logger.info("pOrder not null: %s", prodOrder);
+				// Logger.info("pOrder not null: %s", prodOrder);
 				prodOrder.amount += dispo.production;
 			} else {
 				prodOrder = new ProductionOrder();
 				prodOrder.item = item.itemId;
 				prodOrder.user = userName;
-//				prodOrder.itemNumber = item.itemNumber;
+				// prodOrder.itemNumber = item.itemNumber;
 				prodOrder.orderNumber = no;
 				no++;
 				prodOrder.amount = dispo.production;
 				prodOrder.assignToWorkplaces();
-//				Logger.info("pOrder null: %s", prodOrder);
+				// Logger.info("pOrder null: %s", prodOrder);
 			}
-			
+
 			prodOrder.save();
-			
+
 		}
 	}
-	
+
 	public static void calculateInitialCapacity(String userName) {
+//		Logger.info("calculateInitialCapacity %s", userName);
 		List<Workplace> places = Workplace.find("byUser", userName).fetch();
 		for (Workplace workplace : places) {
 			Capacity cap = Capacity.find("byWorkplaceAndUser", workplace.workplaceId, userName).first();
@@ -214,112 +217,142 @@ public class ApplicationLogic {
 				cap = new Capacity();
 				cap.user = userName;
 				cap.workplace = workplace.workplaceId;
+				cap.save();
+				if (workplace.workplaceId == 11) Logger.info("create new capacity initial %s", cap);
 			}
-			
+
 			cap.originalSetupTime = 0;
 			cap.originalTime = 0;
-			
-			if (workplace.nodes != null && workplace.nodes.length > 0) {				
-				for (int i = workplace.nodes.length -1; i >= 0; i--) {
-					int need[] = {0,0,0};
+
+			Logger.info("workplace %s", workplace);
+			if (workplace.nodes != null && workplace.nodes.length > 0) {
+				Logger.info("hasNodes");
+				for (int i = workplace.nodes.length - 1; i >= 0; i--) {
+					int need[] = { 0, 0, 0 };
 					WorkplaceNode n = WorkplaceNode.find("byNodeId", workplace.nodes[i]).first();
-					need = workplace.calculateTimeRequirement(n.item, userName);
+					boolean log = n.item.equals("E20") && workplace.workplaceId == 9 ? true : false;
+					need = workplace.calculateTimeRequirement(n.item, userName, log);
 					cap.originalSetupTime = need[2];
 					cap.originalTime = need[1];
 				}
-			}
-			
-			List<WaitingList> wList = workplace.getWaitingListAsObjectList();
-			if (wList != null && !wList.isEmpty()) {
-				int time = 0;
-				int setup = 0;
-				for (WaitingList wait : wList) {			
-					time += wait.timeneed;
-					setup += ItemHelper.getSetupTime(cap.workplace, wait.item);
-				}
-				cap.originalTime += time;
-				cap.originalSetupTime += setup;
-			}
+			} else {
 
-			WaitingList inWork = workplace.getInWorkAsObject();
-			if (inWork != null) {
-				cap.originalTime += inWork.timeneed;
+				List<WaitingList> wList = workplace.getWaitingListAsObjectList();
+				if (wList != null && !wList.isEmpty()) {
+					int time = 0;
+					int setup = 0;
+					for (WaitingList wait : wList) {
+						time += wait.timeneed;
+						setup += ItemHelper.getSetupTime(cap.workplace, wait.item);
+					}
+					cap.originalTime += time;
+					cap.originalSetupTime += setup;
+				}
+
+				WaitingList inWork = workplace.getInWorkAsObject();
+				if (inWork != null) {
+					cap.originalTime += inWork.timeneed;
+				}
 			}
+			cap.save();
+			Logger.info("cap: %s", cap);
 		}
+		
+		Logger.info("\n\nall Caps: %s", Capacity.findAll());
 	}
 
 	public static void calculateCapacity(String userName) {
-//		Logger.info("planToOrder");
-		//Gib mir alle Arbeitsplätze
+//		 Logger.info("calculateCapacity %s", userName);
+		// Gib mir alle Arbeitsplätze
 		List<Workplace> places = Workplace.find("byUser", userName).fetch();
-		Capacity.deleteAll(userName);
-		Logger.info("calculateCapacity: %s", places.size());
-		
-		//Rechne für jeden Arbeitsplatz die Kapazität aus
+//		Capacity.deleteAll(userName);
+		Logger.info("calculateCapacity: %s %s", places.size(), userName);
+
+		// Rechne für jeden Arbeitsplatz die Kapazität aus
 		for (Workplace workplace : places) {
+
+			// Gibt es bereits ein Kapazitätsobjekt zu dem Arbeitsplatz
+			if (workplace.workplaceId == 11) Logger.info("%s %s", workplace.workplaceId, userName);
 			
-			//Gibt es bereits ein Kapazitätsobjekt zu dem Arbeitsplatz
-			Capacity cap = Capacity.find("byWorkplaceAndUser", workplace.workplaceId, userName).first();
-			//Falls nicht, ein neues Anlegen
+			Capacity cap = Capacity.find("workplace = ? and user = ?", workplace.workplaceId, userName).first();
+			// Falls nicht, ein neues Anlegen
 			if (cap == null) {
+				Logger.info("null %s", cap);
 				cap = new Capacity();
 				cap.user = userName;
 				cap.workplace = workplace.workplaceId;
-//				Logger.info("create new capacity %s", cap);
+				if (workplace.workplaceId == 11) Logger.info("create new capacity %s", cap);
 			}
-			//Alles auf 0 setzen
+			// Alles auf 0 setzen
 			cap.time = 0;
 			cap.setupTime = 0;
 			cap.totaltime = 0;
 			cap.overtime = 0;
 			cap.shift = 0;
 
-			//Die Zeiten für die Warteschlangen errechnen und hinzufügen, falls vorhanden
-//			List<WaitingList> wList = workplace.getWaitingListAsObjectList();
-//			if (wList != null && !wList.isEmpty()) {
-//				// Logger.info("wList: %s", wList.size());
-//				int time = 0;
-//				int setup = 0;
-//				//Für jedes Item in der Warteschlange Zeit und Rüstzeit hinzuaddieren
-//				for (WaitingList wait : wList) {			
-//					time += wait.timeneed;
-//					setup += ItemHelper.getSetupTime(cap.workplace, wait.item);
-//				}
-//				// Logger.info("WaitL: %s", time);
-//				cap.time += time;
-//				cap.setupTime += setup;
-//			}
-//
-//			//Zeit für das in Arbeit befindliche Item hinzuaddieren
-//			WaitingList inWork = workplace.getInWorkAsObject();
-//
-//			if (inWork != null) {
-//				// Logger.info("inWork: %s", inWork.amount);
-//				cap.time += inWork.timeneed;
-//			}
+			// Die Zeiten für die Warteschlangen errechnen und hinzufügen, falls
+			// vorhanden
+			// List<WaitingList> wList = workplace.getWaitingListAsObjectList();
+			// if (wList != null && !wList.isEmpty()) {
+			// // Logger.info("wList: %s", wList.size());
+			// int time = 0;
+			// int setup = 0;
+			// //Für jedes Item in der Warteschlange Zeit und Rüstzeit
+			// hinzuaddieren
+			// for (WaitingList wait : wList) {
+			// time += wait.timeneed;
+			// setup += ItemHelper.getSetupTime(cap.workplace, wait.item);
+			// }
+			// // Logger.info("WaitL: %s", time);
+			// cap.time += time;
+			// cap.setupTime += setup;
+			// }
+			//
+			// //Zeit für das in Arbeit befindliche Item hinzuaddieren
+			// WaitingList inWork = workplace.getInWorkAsObject();
+			//
+			// if (inWork != null) {
+			// // Logger.info("inWork: %s", inWork.amount);
+			// cap.time += inWork.timeneed;
+			// }
 
-			//Die Zeiten für die Produktionsaufträge errechnen und hinzufügen.
+			// Die Zeiten für die Produktionsaufträge errechnen und hinzufügen.
 			List<ProductionOrder> pOrders = workplace.getProductionPlanListAsObjectList();
 			if (pOrders != null && !pOrders.isEmpty()) {
-				// Logger.info("pOrders: %s", pOrders.size());
+				if (workplace.workplaceId == 11) Logger.info("pOrders: %s", pOrders);
 				int time = 0;
 				for (ProductionOrder productionOrder : pOrders) {
-					time += productionOrder.amount * ItemHelper.getProcessTime(cap.workplace, productionOrder.item);
-					cap.setupTime += ItemHelper.getSetupTime(cap.workplace, productionOrder.item);
-//					if (workplace.workplaceId == 1) {
-//						Logger.info("pOrder: %s %s",productionOrder.item, (productionOrder.amount * ItemHelper.getProcessTime(cap.workplace, productionOrder.item)));
-//						Logger.info("times %s amount %s", ItemHelper.getProcessTime(cap.workplace, productionOrder.item), productionOrder.amount);
-//					}
+					if (productionOrder.amount > 0) {
+						time += productionOrder.amount * ItemHelper.getProcessTime(cap.workplace, productionOrder.item);
+						cap.setupTime += ItemHelper.getSetupTime(cap.workplace, productionOrder.item);
+					}
+					
+					// if (workplace.workplaceId == 1) {
+					// Logger.info("pOrder: %s %s",productionOrder.item,
+					// (productionOrder.amount *
+					// ItemHelper.getProcessTime(cap.workplace,
+					// productionOrder.item)));
+					// Logger.info("times %s amount %s",
+					// ItemHelper.getProcessTime(cap.workplace,
+					// productionOrder.item), productionOrder.amount);
+					// }
 				}
-				
-//				Logger.info("pOrders: %s", time);
+
+				// Logger.info("pOrders: %s", time);
 				cap.time += time;
 			}
 
+			if (workplace.workplaceId == 11) Logger.info("before %s", cap);
+			cap.time += cap.originalTime;
+			cap.setupTime += cap.originalSetupTime;
+			
 			cap.totaltime = cap.time + cap.setupTime;
-			cap.totaltime += cap.originalSetupTime + cap.originalTime;
+			
+//			cap.totaltime = cap.time + cap.setupTime;
+//			cap.totaltime += cap.originalSetupTime + cap.originalTime;
+			if (workplace.workplaceId == 11) Logger.info("after %s", cap);
 			cap.shift = 1;
-			if (cap.totaltime == 0) {				
+			if (cap.totaltime == 0) {
 				cap.overtime = 0;
 			} else if (cap.totaltime <= 3600) {
 				cap.shift = 1;
@@ -346,29 +379,29 @@ public class ApplicationLogic {
 					}
 				}
 			}
-			//overtime per day
-			cap.overtime = (int)Math.ceil(cap.overtime / 5);
+			// overtime per day
+			cap.overtime = (int) Math.ceil(cap.overtime / 5);
 			cap.save();
-//			Logger.info("capacity %s", cap);
+			// Logger.info("capacity %s", cap);
 		}
 	}
-	
-	public static void calculateDisposition(String userName) {	
+
+	public static void calculateDisposition(String userName) {
 		Logger.info("calculateDisposition");
 		calculateConsumption(userName);
 		User user = User.find("byName", userName).first();
 		int actPeriod = Integer.valueOf(user.period);
 		List<DispositionOrder> dispoOrders = DispositionOrder.find("byUser", userName).fetch();
 		for (DispositionOrder dispoOrder : dispoOrders) {
-			//TODO calculateExpectedArrival Methode dynamisch statt hardcoded
+			// TODO calculateExpectedArrival Methode dynamisch statt hardcoded
 			dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 5, actPeriod, userName);
 			Item item = Item.find("byItemIdAndUser", dispoOrder.item, userName).first();
 			dispoOrder.amount = item.amount;
 			calculateFutureStock(dispoOrder.item, "recommended", userName);
-			
+
 			int period = -1;
 			int quantity = 0;
-			//quantity anpassen?!
+			// quantity anpassen?!
 			if (item.amount == 0) {
 				period = 0;
 				quantity = dispoOrder.consumptionPeriod0;
@@ -385,31 +418,31 @@ public class ApplicationLogic {
 				period = 3;
 				quantity = dispoOrder.consumptionPeriod3 + dispoOrder.consumptionPeriod2 + dispoOrder.consumptionPeriod1 + dispoOrder.consumptionPeriod0;
 			}
-			
-			
-			if (period == -1) continue;
-			
-			//Bestellmenge = Diskontmenge
+
+			if (period == -1)
+				continue;
+
+			// Bestellmenge = Diskontmenge
 			if (quantity < dispoOrder.discount) {
-				dispoOrder.quantity = dispoOrder.discount + (int)(0.5 * dispoOrder.consumptionPeriod1);
+				dispoOrder.quantity = dispoOrder.discount + (int) (0.5 * dispoOrder.consumptionPeriod1);
 			} else {
-				dispoOrder.quantity = quantity + (int)(0.5 * dispoOrder.consumptionPeriod1);
+				dispoOrder.quantity = quantity + (int) (0.5 * dispoOrder.consumptionPeriod1);
 			}
-			
-			//Wenn Lieferzeit zu lang, dann Express Bestellung
-			
+
+			// Wenn Lieferzeit zu lang, dann Express Bestellung
+
 			if (Math.ceil(dispoOrder.expectedArrival) > (period + actPeriod)) {
 				dispoOrder.mode = 4;
 				dispoOrder.expectedArrival = calculateExpectedArrival("recommended", dispoOrder.item, 4, actPeriod, userName);
 			} else {
 				dispoOrder.mode = 5;
 			}
-			
+
 			dispoOrder.save();
-			
-			//Kalkuliere Bestände mit neuen DispoOrders neu
-			//calculateFutureStock(dispoOrder.item, "recommended", userName);
-			
+
+			// Kalkuliere Bestände mit neuen DispoOrders neu
+			// calculateFutureStock(dispoOrder.item, "recommended", userName);
+
 		}
 	}
 
@@ -420,16 +453,15 @@ public class ApplicationLogic {
 			List<Component> components = Component.find("byItem", dispoOrder.item).fetch();
 			int actConsumption = 0;
 			for (Component component : components) {
-				List<DispositionManufacture> dms = DispositionManufacture.find("byItemAndUser", component.parent, userName).fetch();				
-				for (DispositionManufacture dm : dms) {				
+				List<DispositionManufacture> dms = DispositionManufacture.find("byItemAndUser", component.parent, userName).fetch();
+				for (DispositionManufacture dm : dms) {
 					if (dm != null) {
 						actConsumption += dm.production * component.amount;
-					}					
+					}
 				}
 			}
 			dispoOrder.consumptionPeriod0 = actConsumption;
-			
-			
+
 			List<WaitingList> waitingLists = WaitingList.find("byItemAndUser", dispoOrder.item, userName).fetch();
 			if (waitingLists != null && waitingLists.size() > 0) {
 				for (WaitingList waiting : waitingLists) {
@@ -439,7 +471,7 @@ public class ApplicationLogic {
 				}
 
 			}
-			
+
 			dispoOrder.consumptionPeriod1 = 0;
 			dispoOrder.consumptionPeriod2 = 0;
 			dispoOrder.consumptionPeriod3 = 0;
@@ -465,66 +497,73 @@ public class ApplicationLogic {
 				dispoOrder.consumptionPeriod2 += wish.period2 * dispoOrder.usedP3;
 				dispoOrder.consumptionPeriod3 += wish.period3 * dispoOrder.usedP3;
 			}
-			
-			Logger.info("Dispo: %s Con0: %s Con1: %s Con2: %s Con3: %s", dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1, dispoOrder.consumptionPeriod2, dispoOrder.consumptionPeriod3 );
+
+//			Logger.info("Dispo: %s Con0: %s Con1: %s Con2: %s Con3: %s", dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1,
+//					dispoOrder.consumptionPeriod2, dispoOrder.consumptionPeriod3);
 
 			dispoOrder.save();
 		}
 	}
-	
+
 	public static double calculateExpectedArrival(String method, String itemId, int mode, int orderPeriod, String userName) {
 		double expectedArrival = 0.0;
 		DispositionOrder dispoOrder = DispositionOrder.find("byItemAndUser", itemId, userName).first();
 		expectedArrival = 0.2 + orderPeriod;
-		//If express order half delivery time and no variance
+		// If express order half delivery time and no variance
 		if (mode == 0) {
-			return 0; 
+			return 0;
 		} else if (mode == 5) {
 			expectedArrival += dispoOrder.deliveryTime;
 			switch (method) {
-				case "optimistic": {break;}
-				case "riskaverse": {expectedArrival += dispoOrder.deliveryVariance; break;}
-				case "recommended": {expectedArrival += (dispoOrder.deliveryVariance * 0.75); break;}
+			case "optimistic": {
+				break;
+			}
+			case "riskaverse": {
+				expectedArrival += dispoOrder.deliveryVariance;
+				break;
+			}
+			case "recommended": {
+				expectedArrival += (dispoOrder.deliveryVariance * 0.75);
+				break;
+			}
 			}
 		} else if (mode == 4) {
 			expectedArrival += (dispoOrder.deliveryTime / 2);
 		}
-//		Logger.info("Expected arrival for %s: %s", dispoOrder.item, expectedArrival);
+		// Logger.info("Expected arrival for %s: %s", dispoOrder.item,
+		// expectedArrival);
 		return expectedArrival;
 	}
-	
-	
+
 	public static void calculateFutureStock(String itemId, String method, String userName) {
 		User user = User.find("byName", userName).first();
 		int actPeriod = Integer.valueOf(user.period);
-		
-		//remove consumption from stock, add dispoOrders amount to expected period
+
+		// remove consumption from stock, add dispoOrders amount to expected
+		// period
 		DispositionOrder dispoOrder = DispositionOrder.find("byItemAnduser", itemId, userName).first();
 		dispoOrder.futureStock0 = dispoOrder.amount - dispoOrder.consumptionPeriod0;
 		dispoOrder.futureStock1 = dispoOrder.futureStock0 - dispoOrder.consumptionPeriod1;
-		dispoOrder.futureStock2 = dispoOrder.futureStock1 -dispoOrder.consumptionPeriod2;
+		dispoOrder.futureStock2 = dispoOrder.futureStock1 - dispoOrder.consumptionPeriod2;
 		dispoOrder.futureStock3 = dispoOrder.futureStock2 - dispoOrder.consumptionPeriod3;
-		
-		/*double deltaDispo = dispoOrder.expectedArrival - actPeriod;
-		if (deltaDispo <= 1) {
-			dispoOrder.futureStock0 += dispoOrder.quantity;
-			dispoOrder.futureStock1 += dispoOrder.quantity;
-			dispoOrder.futureStock2 += dispoOrder.quantity;
-			dispoOrder.futureStock3 += dispoOrder.quantity;
-		} else if (deltaDispo <= 2) {
-			dispoOrder.futureStock1 += dispoOrder.quantity;
-			dispoOrder.futureStock2 += dispoOrder.quantity;
-			dispoOrder.futureStock3 += dispoOrder.quantity;
-		} else if (deltaDispo <= 3) {
-			dispoOrder.futureStock2 += dispoOrder.quantity;
-			dispoOrder.futureStock3 += dispoOrder.quantity;
-		} else {
-			dispoOrder.futureStock3 -= dispoOrder.quantity;
-		}*/
-				
-		//add openOrder amount to expected period
+
+		/*
+		 * double deltaDispo = dispoOrder.expectedArrival - actPeriod; if
+		 * (deltaDispo <= 1) { dispoOrder.futureStock0 += dispoOrder.quantity;
+		 * dispoOrder.futureStock1 += dispoOrder.quantity;
+		 * dispoOrder.futureStock2 += dispoOrder.quantity;
+		 * dispoOrder.futureStock3 += dispoOrder.quantity; } else if (deltaDispo
+		 * <= 2) { dispoOrder.futureStock1 += dispoOrder.quantity;
+		 * dispoOrder.futureStock2 += dispoOrder.quantity;
+		 * dispoOrder.futureStock3 += dispoOrder.quantity; } else if (deltaDispo
+		 * <= 3) { dispoOrder.futureStock2 += dispoOrder.quantity;
+		 * dispoOrder.futureStock3 += dispoOrder.quantity; } else {
+		 * dispoOrder.futureStock3 -= dispoOrder.quantity; }
+		 */
+
+		// add openOrder amount to expected period
 		List<OpenOrder> openOrders = OpenOrder.find("byItemAndUser", itemId, userName).fetch();
-		for(OpenOrder oOrder : openOrders) {
+		for (OpenOrder oOrder : openOrders) {
 			oOrder.expectedArrival = calculateExpectedArrival(method, itemId, oOrder.mode, oOrder.orderPeriod, userName);
 			double deltaOpenOrder = oOrder.expectedArrival - actPeriod;
 			if (deltaOpenOrder <= 1) {

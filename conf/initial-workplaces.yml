@@ -21,14 +21,44 @@ Workplace(W6):
 Workplace(W7):
      workplaceId:     7
      name: Welding station
+     nodes:
+         - node_8E13
+         - node_8E14
+         - node_8E15
+         - node_8E18
+         - node_8E19
+         - node_8E20
+         - node_8E10
+         - node_8E11
+         - node_8E12
     
 Workplace(W8):
      workplaceId:     8
      name: Punching machine
+     nodes: 
+         - node_12E13
+         - node_12E14
+         - node_12E15
+         - node_6E18
+         - node_6E19
+         - node_6E20
+         - node_12E10
+         - node_12E11
+         - node_12E12
     
 Workplace(W9):
      workplaceId:     9
      name: Finishing station
+     nodes:
+         - node_7E13
+         - node_7E14
+         - node_7E15
+         - node_7E18
+         - node_7E19
+         - node_7E20
+         - node_7E10
+         - node_7E11
+         - node_7E12
     
 Workplace(W10):
      workplaceId: 10
@@ -37,10 +67,24 @@ Workplace(W10):
 Workplace(W11):
      workplaceId: 11
      name: Hub assembly
+     nodes:
+         - node_10E7
+         - node_10E8
+         - node_10E9
+         - node_10E4
+         - node_10E5
+         - node_10E6
    
 Workplace(W12):
      workplaceId: 12
      name: Sheet forming machine
+     nodes:
+         - node_13E13
+         - node_13E14
+         - node_13E15
+         - node_13E10
+         - node_13E11
+         - node_13E12
     
 Workplace(W13):
      workplaceId: 13
@@ -49,7 +93,11 @@ Workplace(W13):
 Workplace(W14):
      workplaceId: 14
      name: Handle bars installation
+     nodes:
+         - node_6E16
     
 Workplace(W15):
      workplaceId: 15
      name: Assembly
+     nodes:
+         - node_7E26

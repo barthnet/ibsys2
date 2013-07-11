@@ -1,8 +1,3 @@
-WorkplaceNode(node_9E13):
-    nodeId: node_9E13
-    workplace: 9
-    item: E13
-     
 WorkplaceNode(node_7E13):
     nodeId: node_7E13
     workplace: 7
@@ -22,11 +17,6 @@ WorkplaceNode(node_13E13):
     nodeId: node_13E13
     workplace: 13
     item: E13
-    
-WorkplaceNode(node_9E18):
-    nodeId: node_9E18
-    workplace: 9
-    item: E18   
 
 WorkplaceNode(node_7E18):
     nodeId: node_7E18

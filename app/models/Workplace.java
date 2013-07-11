@@ -29,49 +29,61 @@ public class Workplace extends Model {
 	public String[] nodes;
 	public String inWork;
 	public int[] productionPlanList;
-	
+
 	public Workplace clone() {
 		Workplace w = new Workplace();
 		w.workplaceId = this.workplaceId;
 		w.name = this.name;
+		w.nodes = this.nodes;
 		return w;
 	}
-	
-	public int[] calculateTimeRequirement(String item, String userName){
+
+	public int[] calculateTimeRequirement(String item, String userName, boolean log) {
+		Logger.info("calculateTimeRequirement %s %s %s", item, userName, log);
 		WorkplaceNode node = null;
-		int needTotal[] = {0,0,0};
+		int needTotal[] = { 0, 0, 0 };
 		if (this.nodes != null && this.nodes.length > 0) {
-			for (int i = this.nodes.length-1; i >= 0; i--) {
+			for (int i = this.nodes.length - 1; i >= 0; i--) {
 				int need[] = null;
 				node = WorkplaceNode.find("byNodeId", this.nodes[i]).first();
 				if (node != null && node.item.equals(item)) {
 					Workplace w = Workplace.find("byWorkplaceIdAndUser", node.workplace, userName).first();
-					need = w.calculateTimeRequirement(item, userName);
+
+					need = w.calculateTimeRequirement(item, userName, log);
+					if (log) Logger.info("iterate for item %s and wp %s amount: %S, timeneed: %s, setuptime: %s",item, w.workplaceId, need[0], need[1], need[2]);
 					needTotal[0] += need[0];
 					needTotal[1] += need[1];
 					needTotal[2] += need[2];
 				}
-			}			
+			}
 		}
-		List<WaitingList> wList = WaitingList.find("byItemAndUserAndWorkplace", item, userName, this.workplaceId).fetch();
+//		List<WaitingList> wList = WaitingList.find("byItemAndUserAndWorkplace", item, userName, this.workplaceId).fetch();
+		List<WaitingList> wList = this.getWaitingListAsObjectList();
 		if (wList != null && !wList.isEmpty()) {
 			for (WaitingList wait : wList) {
+				if (log)
+					Logger.info("wList item %s", wait.amount);
+
 				needTotal[0] += wait.amount;
-//				needTotal[1] += wait.timeneed;				
+				// needTotal[1] += wait.timeneed;
 				needTotal[2] += ItemHelper.getSetupTime(this.workplaceId, wait.item);
 			}
 		}
-		
+
 		needTotal[1] += needTotal[0] * ItemHelper.getProcessTime(this.workplaceId, item);
-		
+
 		WaitingList inWork = this.getInWorkAsObject();
 		if (inWork != null) {
+			if (log)
+				Logger.info("inWork amount: %s, timeneed: %s", inWork.amount, inWork.timeneed);
 			needTotal[0] += inWork.amount;
 			needTotal[1] += inWork.timeneed;
 		}
+		if (log)
+			Logger.info("amount: %s, timeneed: %s, setuptime: %s", needTotal[0], needTotal[1], needTotal[2]);
 		return needTotal;
 	}
-	
+
 	public static void deleteAll(String userName) {
 		List<Workplace> caps = Workplace.find("byUser", userName).fetch();
 		for (Workplace capacity : caps) {
@@ -105,11 +117,12 @@ public class Workplace extends Model {
 			return null;
 		}
 		for (int count = 0, length = this.waitingList.length; count < length; count++) {
-//			Logger.info("workplace getWaitingListAsObjectList %s %s", this.user, this.waitingList[count]);
+			// Logger.info("workplace getWaitingListAsObjectList %s %s",
+			// this.user, this.waitingList[count]);
 			WaitingList wL = WaitingList.find("byWaitingListIdAndUser", this.waitingList[count], this.user).first();
 			wList.add(wL);
 		}
-//		Logger.info("%s", wList);
+		// Logger.info("%s", wList);
 		return wList;
 	}
 
@@ -139,10 +152,15 @@ public class Workplace extends Model {
 
 	@Override
 	public String toString() {
-		return "Workplace [workplaceId=" + workplaceId + ", name=" + name + ", user=" + user + ", waitingList=" + Arrays.toString(waitingList) + ", inWork="
-				+ inWork + ", productionPlanList=" + Arrays.toString(productionPlanList) + "]";
+		return "Workplace [workplaceId=" + workplaceId + ", name=" + name + ", user=" + user + ", waitingList=" + Arrays.toString(waitingList) + ", nodes="
+				+ Arrays.toString(nodes) + ", inWork=" + inWork + ", productionPlanList=" + Arrays.toString(productionPlanList) + "]";
 	}
 
+//	@Override
+//	public String toString() {
+//		return "Workplace [workplaceId=" + workplaceId + ", name=" + name + ", user=" + user + ", waitingList=" + Arrays.toString(waitingList) + ", inWork="
+//				+ inWork + ", productionPlanList=" + Arrays.toString(productionPlanList) + "]";
+//	}
 	
 
 }

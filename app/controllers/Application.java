@@ -54,8 +54,8 @@ public class Application extends Controller {
 	}
 
 	public static void test2() {
-		List<DispositionManufacture> disps = DispositionManufacture.find("byItem", "E26").fetch();
-		renderJSON(disps);
+		Capacity cap = Capacity.find("byWorkplaceAndUser", 11, "offlineUser").first();
+		renderJSON(cap);
 	}
 
 	public static void test3(String userName) {
@@ -203,7 +203,7 @@ public class Application extends Controller {
 	public static void getCapacity(String userName) {
 		setHeader();
 		// ApplicationLogic.calculateCapacity();
-		Logger.info("getCapacity");
+		Logger.info("getCapacity %s", userName);
 		List<Capacity> capacities = Capacity.find("user = ? order by workplace asc", userName).fetch();
 		renderJSON(new JSONSerializer().exclude("workplaceAsObject").serialize(capacities));
 	}
@@ -361,7 +361,7 @@ public class Application extends Controller {
 	 */
 	public static void uploadXML(String userName) {
 		setHeader();
-		Logger.info("uploadXML");
+		Logger.info("uploadXML %s", userName);
 		String xml = getBodyAsString();
 		InputStream in = IOUtils.toInputStream(xml);
 		Parser p = new Parser(in);

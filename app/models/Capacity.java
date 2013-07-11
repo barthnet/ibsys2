@@ -50,8 +50,9 @@ public class Capacity extends Model {
 
 	@Override
 	public String toString() {
-		return "Capacity [workplace=" + workplace + ", time=" + time + ", setupTime=" + setupTime + ", shift=" + shift + ", overtime=" + overtime
-				+ ", totaltime=" + totaltime + "]";
+		return "Capacity [workplace=" + workplace + ", user=" + user + ", time=" + time + ", setupTime=" + setupTime + ", shift=" + shift + ", overtime="
+				+ overtime + ", totaltime=" + totaltime + ", originalTime=" + originalTime + ", originalSetupTime=" + originalSetupTime + "]";
 	}
 
+	
 }
