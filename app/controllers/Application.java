@@ -48,68 +48,6 @@ public class Application extends Controller {
 		render();
 	}
 
-	public static void test() {
-		List<ItemTime> places = ItemTime.findAll();
-		renderText(places);
-	}
-
-	public static void test2() {
-		Capacity cap = Capacity.find("byWorkplaceAndUser", 11, "offlineUser").first();
-		renderJSON(cap);
-	}
-
-	public static void test3(String userName) {
-		DistributionWish wish1 = DistributionWish.find("byItem", "P1").first();
-		wish1.period0 = 100;
-		wish1.period1 = 50;
-		wish1.period2 = 90;
-		wish1.period3 = 120;
-		DistributionWish wish2 = DistributionWish.find("byItem", "P2").first();
-		wish2.period0 = 70;
-		wish2.period1 = 20;
-		wish2.period2 = 90;
-		wish2.period3 = 100;
-		DistributionWish wish3 = DistributionWish.find("byItem", "P3").first();
-		wish3.period0 = 10;
-		wish3.period1 = 50;
-		wish3.period2 = 100;
-		wish3.period3 = 150;
-
-		ApplicationLogic.calculateDisposition(userName);
-
-		List<DispositionOrder> orders = DispositionOrder.findAll();
-		for (DispositionOrder order : orders) {
-			Logger.info("Order: %s", order.item);
-		}
-
-		List<DispositionOrder> dispoOrders = DispositionOrder.findAll();
-		for (DispositionOrder dispoOrder : dispoOrders) {
-			Item item = Item.find("byItemId", dispoOrder.item).first();
-			Logger.info("Disposition Order: %s Consumption0: %s Consumption1: %s Consumption2: %s Consumption3: %s Quantity: %s Mode: %s Stock: %s",
-					dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1, dispoOrder.consumptionPeriod2,
-					dispoOrder.consumptionPeriod3, dispoOrder.quantity, dispoOrder.mode, item.amount);
-		}
-	}
-
-	public static void testLogin() {
-		setHeader();
-		JSONObject json = getBodyAsJSON();
-		String username = null, password = null;
-		try {
-			username = json.getString("username");
-			password = json.getString("password");
-		} catch (JSONException e) {
-			error("Error on login check");
-		}
-		User user = User.find("byName", username).first();
-		if (user == null) {
-			user = new User();
-			user.name = username;
-			user.save();
-		}
-		renderJSON(true);
-	}
-
 	/**
 	 * save disposition orders
 	 */
@@ -326,32 +264,36 @@ public class Application extends Controller {
 	public static void uploadToSite(String userName, String password) {
 		setHeader();
 		Logger.info("uploadToSite");
-		User user = User.find("byName", userName).first();
+		try {
+			User user = User.find("byName", userName).first();
 
-		boolean erg = false;
-		if (user != null && user.isSimulatable) {
-			Document doc = Parser.parseInputXML(userName);
+			boolean erg = false;
+			if (user != null && user.isSimulatable) {
+				Document doc = Parser.parseInputXML(userName);
 
-			Source source = new DOMSource(doc);
-			StringWriter stringWriter = new StringWriter();
-			Result result = new StreamResult(stringWriter);
-			TransformerFactory factory = TransformerFactory.newInstance();
-			Transformer transformer;
-			String test = "";
-			try {
-				transformer = factory.newTransformer();
-				transformer.transform(source, result);
-			} catch (TransformerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Source source = new DOMSource(doc);
+				StringWriter stringWriter = new StringWriter();
+				Result result = new StreamResult(stringWriter);
+				TransformerFactory factory = TransformerFactory.newInstance();
+				Transformer transformer;
+				String test = "";
+				try {
+					transformer = factory.newTransformer();
+					transformer.transform(source, result);
+				} catch (TransformerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				test = stringWriter.getBuffer().toString();
+
+				Crawler cr = new Crawler(userName, password);
+				erg = cr.exportFileToWeb(test);
 			}
-
-			test = stringWriter.getBuffer().toString();
-
-			Crawler cr = new Crawler(userName, password);
-			erg = cr.exportFileToWeb(test);
+			renderJSON(erg);
+		} catch (Exception e) {
+			renderJSON(false);
 		}
-		renderJSON(erg);
 	}
 
 	/**
@@ -362,21 +304,26 @@ public class Application extends Controller {
 	public static void uploadXML(String userName) {
 		setHeader();
 		Logger.info("uploadXML %s", userName);
-		String xml = getBodyAsString();
-		InputStream in = IOUtils.toInputStream(xml);
-		Parser p = new Parser(in);
-		p.parseDoc(userName);
+		int actPeriod;
+		try {
+			String xml = getBodyAsString();
+			InputStream in = IOUtils.toInputStream(xml);
+			Parser p = new Parser(in);
+			p.parseDoc(userName);
 
-		ApplicationLogic.wishToPlan(userName);
-		ApplicationLogic.calcProductionPlan(userName);
-		ApplicationLogic.planToOrder(userName);
-		ApplicationLogic.calculateCapacity(userName);
-		ApplicationLogic.calculateDisposition(userName);
-		User user = User.find("byName", userName).first();
-		int actPeriod = Integer.valueOf(user.period);
-		user.isSimulatable = true;
-		user.save();
-		renderJSON(actPeriod);
+			ApplicationLogic.wishToPlan(userName);
+			ApplicationLogic.calcProductionPlan(userName);
+			ApplicationLogic.planToOrder(userName);
+			ApplicationLogic.calculateCapacity(userName);
+			ApplicationLogic.calculateDisposition(userName);
+			User user = User.find("byName", userName).first();
+			actPeriod = Integer.valueOf(user.period);
+			user.isSimulatable = true;
+			user.save();
+			renderText("{\"result\":true,\"period\":" + actPeriod + "}");
+		} catch (Exception e) {
+			renderText("{\"result\":false}");
+		}
 	}
 
 	public static void checkUser(String userName) {
@@ -402,11 +349,9 @@ public class Application extends Controller {
 		try {
 			username = json.getString("username");
 			password = json.getString("password");
-		} catch (JSONException e) {
-			error("Error on login check");
-		}
-		Crawler cr = new Crawler(username, password);
-		try {
+
+			Crawler cr = new Crawler(username, password);
+
 			boolean check = cr.checkLogin();
 			if (check) {
 				User user = User.find("byName", username).first();
@@ -416,13 +361,14 @@ public class Application extends Controller {
 					user.save();
 				}
 			}
-			renderJSON(check);
+			renderText("{\"success\":true, \"result\":" + check + "}");
+
 		} catch (Exception e) {
-			error();
+			renderText("{\"success\":false}");
 		}
 
 	}
-	
+
 	public static void offline(String userName) {
 		setHeader();
 		User user = User.find("byName", userName).first();
@@ -443,28 +389,32 @@ public class Application extends Controller {
 	public static void loadXmlFromSite(String userName, String password) {
 		setHeader();
 		Logger.info("loadXmlFromSite");
-		Crawler cr = new Crawler(userName, password);
-		String file = cr.importFileFromWeb();
+		try {
+			Crawler cr = new Crawler(userName, password);
+			String file = cr.importFileFromWeb();
 
-		// renderText(file);
-		file = file.trim();
-		// Logger.info("file:\n%s", file);
+			// renderText(file);
+			file = file.trim();
+			// Logger.info("file:\n%s", file);
 
-		InputStream in = IOUtils.toInputStream(file);
-		Parser p = new Parser(in);
-		p.parseDoc(userName);
+			InputStream in = IOUtils.toInputStream(file);
+			Parser p = new Parser(in);
+			p.parseDoc(userName);
 
-		ApplicationLogic.wishToPlan(userName);
-		ApplicationLogic.calcProductionPlan(userName);
-		ApplicationLogic.planToOrder(userName);
-		ApplicationLogic.calculateCapacity(userName);
-		ApplicationLogic.calculateDisposition(userName);
-		User user = User.find("byName", userName).first();
+			ApplicationLogic.wishToPlan(userName);
+			ApplicationLogic.calcProductionPlan(userName);
+			ApplicationLogic.planToOrder(userName);
+			ApplicationLogic.calculateCapacity(userName);
+			ApplicationLogic.calculateDisposition(userName);
+			User user = User.find("byName", userName).first();
 
-		int actPeriod = Integer.valueOf(user.period);
-		user.isSimulatable = true;
-		user.save();
-		renderJSON(actPeriod);
+			int actPeriod = Integer.valueOf(user.period);
+			user.isSimulatable = true;
+			user.save();
+			renderText("{\"success\":true, \"result\":" + actPeriod + "}");
+		} catch (Exception e) {
+			renderText("{\"success\":false}");
+		}
 	}
 
 	/**

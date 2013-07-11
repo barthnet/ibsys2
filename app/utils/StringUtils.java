@@ -1,7 +1,9 @@
 package utils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 
 import javax.xml.transform.OutputKeys;
@@ -12,35 +14,78 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.util.EntityUtils;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class StringUtils {
 
-	public static String toString(InputStream stream) {
-		StringWriter writer = new StringWriter();
-		try {
-			IOUtils.copy(stream, writer);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return writer.toString();
-	}
+//	public static String toString(InputStream stream) {
+//		StringWriter writer = new StringWriter();
+//		try {
+//			IOUtils.copy(stream, writer);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		return writer.toString();
+//	}
+	
 	
 	public static String toString(HttpResponse response) {
-		String result = null;
+		HttpEntity entity = response.getEntity();
+		String responseString = null;
 		try {
-			InputStream in = response.getEntity().getContent();
-			result = toString(in);
-			in.close();
-		} catch (IllegalStateException | IOException e) {
+			responseString = EntityUtils.toString(entity, "UTF-8");
+		} catch (ParseException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return result;
+		return responseString;
+//		String result = null;
+//		try {
+//			InputStream in = response.getEntity().getContent();
+////			result = toString(in);
+//			result = getStringFromInputStream(in);
+//			in.close();
+//		} catch (IllegalStateException | IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return result;
 		
+	}
+	
+	private static String getStringFromInputStream(InputStream is) {
+		 
+		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder();
+ 
+		String line;
+		try {
+ 
+			br = new BufferedReader(new InputStreamReader(is));
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+ 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+ 
+		return sb.toString();
+ 
 	}
 	
 	public static String nodeToString(Node node) {

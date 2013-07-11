@@ -5,15 +5,8 @@
 # Home page
 GET     /                                       Application.index
 
-# Test methods
-
-GET		/test									Application.test
-GET		/test2									Application.test2
-GET		/test3									Application.test3
-GET		/parse/{userName}						Application.parseXML
-POST	/testLogin								Application.testLogin
-
 # methods
+GET		/parse/{userName}						Application.parseXML
 GET		/offline/{userName}						Application.offline
 POST	/login									Application.login
 GET		/upload/{userName}/{password}			Application.uploadToSite

@@ -308,12 +308,14 @@ public class Parser {
 		// production
 		List<ProductionOrder> prod_list = ProductionOrder.find("byUser", userName).fetch();
 		for (ProductionOrder productionOrder : prod_list) {
-			Element production = doc.createElement("production");
+			if (productionOrder.amount > 0) {
+				Element production = doc.createElement("production");
 
-			production.setAttribute("article", String.valueOf(productionOrder.getItemAsObject().itemNumber));
-			production.setAttribute("quantity", String.valueOf(productionOrder.amount));
+				production.setAttribute("article", String.valueOf(productionOrder.getItemAsObject().itemNumber));
+				production.setAttribute("quantity", String.valueOf(productionOrder.amount));
 
-			productionlist.appendChild(production);
+				productionlist.appendChild(production);
+			}			
 		}
 
 		// workingtimelist

@@ -38,8 +38,8 @@ public class Workplace extends Model {
 		return w;
 	}
 
-	public int[] calculateTimeRequirement(String item, String userName, boolean log) {
-		Logger.info("calculateTimeRequirement %s %s %s", item, userName, log);
+	public int[] calculateTimeRequirement(String item, String userName, boolean log, boolean root) {
+//		Logger.info("calculateTimeRequirement %s %s %s", item, userName, log);
 		WorkplaceNode node = null;
 		int needTotal[] = { 0, 0, 0 };
 		if (this.nodes != null && this.nodes.length > 0) {
@@ -48,41 +48,60 @@ public class Workplace extends Model {
 				node = WorkplaceNode.find("byNodeId", this.nodes[i]).first();
 				if (node != null && node.item.equals(item)) {
 					Workplace w = Workplace.find("byWorkplaceIdAndUser", node.workplace, userName).first();
-					if (log) Logger.info("call iterate on workplace %s", w.workplaceId);
-					need = w.calculateTimeRequirement(item, userName, log);
-					if (log) Logger.info("get result from iterate on workplace %s for item %s and wp %s amount: %S, timeneed: %s, setuptime: %s",w.workplaceId ,item, w.workplaceId, need[0], need[1], need[2]);
+//					if (log)
+//						Logger.info("call iterate on workplace %s", w.workplaceId);
+					need = w.calculateTimeRequirement(item, userName, log, false);
+//					if (log)
+//						Logger.info("get result from iterate on workplace %s for item %s and wp %s amount: %S, timeneed: %s, setuptime: %s", w.workplaceId,
+//								item, w.workplaceId, need[0], need[1], need[2]);
 					needTotal[0] += need[0];
-					needTotal[1] += need[1];
-					needTotal[2] += need[2];
-					if (log) Logger.info("add iterate result to major result amount: %S, timeneed: %s, setuptime: %s",needTotal[0], needTotal[1], needTotal[2]);
+					// needTotal[1] += need[1];
+					// needTotal[2] += need[2];
+//					if (log)
+//						Logger.info("add iterate result to major result amount: %S, timeneed: %s, setuptime: %s", needTotal[0], needTotal[1], needTotal[2]);
 				}
 			}
 		}
-//		List<WaitingList> wList = WaitingList.find("byItemAndUserAndWorkplace", item, userName, this.workplaceId).fetch();
+		// List<WaitingList> wList =
+		// WaitingList.find("byItemAndUserAndWorkplace", item, userName,
+		// this.workplaceId).fetch();
 		List<WaitingList> wList = this.getWaitingListAsObjectList();
+		boolean found = false;
 		if (wList != null && !wList.isEmpty()) {
-			for (WaitingList wait : wList) {
-				if (!wait.item.equals(item)) continue;
-				if (log)
-					Logger.info("wList item %s, workplace %s", wait.amount, wait.workplace);
+//			Logger.info("wList not Empty");
 
+			for (WaitingList wait : wList) {
+				if (!wait.item.equals(item)) {
+					continue;
+				}
+//				if (log)
+//					Logger.info("wList item %s, workplace %s", wait.amount, wait.workplace);
 				needTotal[0] += wait.amount;
+				found = true;
 				// needTotal[1] += wait.timeneed;
 				needTotal[2] += ItemHelper.getSetupTime(this.workplaceId, wait.item);
 			}
 		}
 
+		if (!found && needTotal[0] > 0)
+			needTotal[2] += ItemHelper.getSetupTime(this.workplaceId, item);
+
 		needTotal[1] += needTotal[0] * ItemHelper.getProcessTime(this.workplaceId, item);
 
 		WaitingList inWork = this.getInWorkAsObject();
-		if (inWork != null) {
-			if (log)
-				Logger.info("inWork amount: %s, timeneed: %s, workplace: %s", inWork.amount, inWork.timeneed, inWork.workplace);
+		if (inWork != null && !root && inWork.item.equals(item)) {
+//			if (log)
+//				Logger.info("inWork amount: %s, timeneed: %s, workplace: %s", inWork.amount, inWork.timeneed, inWork.workplace);
 			needTotal[0] += inWork.amount;
-			needTotal[1] += inWork.timeneed;
 		}
-		if (log)
-			Logger.info(" workplace: %s, amount: %s, timeneed: %s, setuptime: %s", this.workplaceId, needTotal[0], needTotal[1], needTotal[2]);
+
+		if (root) {
+			needTotal[1] = needTotal[0] * ItemHelper.getProcessTime(this.workplaceId, item);
+			if (inWork != null && inWork.item.equals(item))
+				needTotal[1] += inWork.timeneed;
+		}
+		// if (log)
+		// Logger.info(" workplace: %s, amount: %s, timeneed: %s, setuptime: %s", this.workplaceId, needTotal[0], needTotal[1], needTotal[2]);
 		return needTotal;
 	}
 
@@ -158,11 +177,13 @@ public class Workplace extends Model {
 				+ Arrays.toString(nodes) + ", inWork=" + inWork + ", productionPlanList=" + Arrays.toString(productionPlanList) + "]";
 	}
 
-//	@Override
-//	public String toString() {
-//		return "Workplace [workplaceId=" + workplaceId + ", name=" + name + ", user=" + user + ", waitingList=" + Arrays.toString(waitingList) + ", inWork="
-//				+ inWork + ", productionPlanList=" + Arrays.toString(productionPlanList) + "]";
-//	}
-	
+	// @Override
+	// public String toString() {
+	// return "Workplace [workplaceId=" + workplaceId + ", name=" + name +
+	// ", user=" + user + ", waitingList=" + Arrays.toString(waitingList) +
+	// ", inWork="
+	// + inWork + ", productionPlanList=" + Arrays.toString(productionPlanList)
+	// + "]";
+	// }
 
 }

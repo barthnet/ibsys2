@@ -72,7 +72,7 @@ public class ApplicationLogic {
 
 		List<DispositionManufacture> dList = DispositionManufacture.find("byUserIsNull").fetch();
 		for (DispositionManufacture dispositionManufacture : dList) {
-//			Logger.info("clone: %s", dispositionManufacture);
+			// Logger.info("clone: %s", dispositionManufacture);
 			DispositionManufacture d = dispositionManufacture.clone();
 			d.user = userName;
 			d.save();
@@ -126,7 +126,7 @@ public class ApplicationLogic {
 		// parent.user = userName;
 		for (int i = 0, length = disps.size(); i < length; i++) {
 			DispositionManufacture disp = disps.get(i);
-//			Logger.info("calcPlan: %s", disp);
+			// Logger.info("calcPlan: %s", disp);
 			Item item = Item.find("byItemIdAndUser", disp.item, userName).first();
 			if ("P".equals(item.type)) {
 				parent = new DispositionManufacture();
@@ -142,8 +142,8 @@ public class ApplicationLogic {
 			}
 
 			// TODO in item model yml aufnehmen
-//			disp.safetyStock = disp.safetyStock > 0 ? disp.safetyStock : 75;
-			disp.safetyStock = 0;
+			disp.safetyStock = disp.safetyStock > 0 ? disp.safetyStock : 75;
+			// disp.safetyStock = 0;
 			disp.parentWaitingList = parent.waitingList;
 			disp.inWork = 0;
 			disp.waitingList = 0;
@@ -177,7 +177,7 @@ public class ApplicationLogic {
 	}
 
 	public static void planToOrder(String userName) {
-		Logger.info("planToOrder");
+		// Logger.info("planToOrder");
 		List<DispositionManufacture> plans = DispositionManufacture.find("user = ? order by itemNumber asc", userName).fetch();
 		// List<DispositionManufacture> plans =
 		// DispositionManufacture.findAll();
@@ -209,7 +209,7 @@ public class ApplicationLogic {
 	}
 
 	public static void calculateInitialCapacity(String userName) {
-//		Logger.info("calculateInitialCapacity %s", userName);
+		// Logger.info("calculateInitialCapacity %s", userName);
 		List<Workplace> places = Workplace.find("byUser", userName).fetch();
 		for (Workplace workplace : places) {
 			Capacity cap = Capacity.find("byWorkplaceAndUser", workplace.workplaceId, userName).first();
@@ -218,24 +218,49 @@ public class ApplicationLogic {
 				cap.user = userName;
 				cap.workplace = workplace.workplaceId;
 				cap.save();
-				if (workplace.workplaceId == 11) Logger.info("create new capacity initial %s", cap);
+				// if (workplace.workplaceId == 11)
+				// Logger.info("create new capacity initial %s", cap);
 			}
 
 			cap.originalSetupTime = 0;
 			cap.originalTime = 0;
 
-			Logger.info("workplace %s", workplace);
+			// Logger.info("workplace %s", workplace);
 			if (workplace.nodes != null && workplace.nodes.length > 0) {
-				Logger.info("hasNodes");
+				// Logger.info("hasNodes");
 				for (int i = workplace.nodes.length - 1; i >= 0; i--) {
 					int need[] = { 0, 0, 0 };
 					WorkplaceNode n = WorkplaceNode.find("byNodeId", workplace.nodes[i]).first();
-					boolean log = n.item.equals("E20") && workplace.workplaceId == 9 ? true : false;
-					need = workplace.calculateTimeRequirement(n.item, userName, log);
-					
+					boolean log = (n.item.equals("E26")) && workplace.workplaceId == 7 ? true : false;
+					need = workplace.calculateTimeRequirement(n.item, userName, log, true);
+					// if (log)
+					// Logger.info("%s item: %s, time: %s, setup: %s",
+					// workplace.workplaceId, n.item, need[1], need[2]);
 					cap.originalSetupTime += need[2];
 					cap.originalTime += need[1];
-					if (log) Logger.info("W9 E20: %s", cap);
+					// if (log)
+					// Logger.info("%s %s: %s", workplace.workplaceId, n.item,
+					// cap);
+				}
+				if (workplace.workplaceId == 7) {
+					List<WaitingList> wList = workplace.getWaitingListAsObjectList();
+					if (wList != null && !wList.isEmpty()) {
+						int time = 0;
+						int setup = 0;
+						for (WaitingList wait : wList) {
+							if (wait.item.equals("E26")) {
+								time += wait.timeneed;
+								setup += ItemHelper.getSetupTime(cap.workplace, wait.item);
+							}
+						}
+						cap.originalTime += time;
+						cap.originalSetupTime += setup;
+					}
+
+					WaitingList inWork = workplace.getInWorkAsObject();
+					if (inWork != null && inWork.item.equals("E26")) {
+						cap.originalTime += inWork.timeneed;
+					}
 				}
 			} else {
 
@@ -257,33 +282,35 @@ public class ApplicationLogic {
 				}
 			}
 			cap.save();
-			Logger.info("cap: %s", cap);
+			// Logger.info("cap: %s", cap);
 		}
-		
-		Logger.info("\n\nall Caps: %s", Capacity.findAll());
+
+		// Logger.info("\n\nall Caps: %s", Capacity.findAll());
 	}
 
 	public static void calculateCapacity(String userName) {
-//		 Logger.info("calculateCapacity %s", userName);
+		// Logger.info("calculateCapacity %s", userName);
 		// Gib mir alle Arbeitsplätze
 		List<Workplace> places = Workplace.find("byUser", userName).fetch();
-//		Capacity.deleteAll(userName);
+		// Capacity.deleteAll(userName);
 		Logger.info("calculateCapacity: %s %s", places.size(), userName);
 
 		// Rechne für jeden Arbeitsplatz die Kapazität aus
 		for (Workplace workplace : places) {
 
 			// Gibt es bereits ein Kapazitätsobjekt zu dem Arbeitsplatz
-			if (workplace.workplaceId == 11) Logger.info("%s %s", workplace.workplaceId, userName);
-			
+			// if (workplace.workplaceId == 11)
+			// Logger.info("%s %s", workplace.workplaceId, userName);
+
 			Capacity cap = Capacity.find("workplace = ? and user = ?", workplace.workplaceId, userName).first();
 			// Falls nicht, ein neues Anlegen
 			if (cap == null) {
-				Logger.info("null %s", cap);
+				// Logger.info("null %s", cap);
 				cap = new Capacity();
 				cap.user = userName;
 				cap.workplace = workplace.workplaceId;
-				if (workplace.workplaceId == 11) Logger.info("create new capacity %s", cap);
+				// if (workplace.workplaceId == 11)
+				// Logger.info("create new capacity %s", cap);
 			}
 			// Alles auf 0 setzen
 			cap.time = 0;
@@ -321,14 +348,15 @@ public class ApplicationLogic {
 			// Die Zeiten für die Produktionsaufträge errechnen und hinzufügen.
 			List<ProductionOrder> pOrders = workplace.getProductionPlanListAsObjectList();
 			if (pOrders != null && !pOrders.isEmpty()) {
-				if (workplace.workplaceId == 11) Logger.info("pOrders: %s", pOrders);
+				// if (workplace.workplaceId == 11)
+				// Logger.info("pOrders: %s", pOrders);
 				int time = 0;
 				for (ProductionOrder productionOrder : pOrders) {
 					if (productionOrder.amount > 0) {
 						time += productionOrder.amount * ItemHelper.getProcessTime(cap.workplace, productionOrder.item);
 						cap.setupTime += ItemHelper.getSetupTime(cap.workplace, productionOrder.item);
 					}
-					
+
 					// if (workplace.workplaceId == 1) {
 					// Logger.info("pOrder: %s %s",productionOrder.item,
 					// (productionOrder.amount *
@@ -344,15 +372,17 @@ public class ApplicationLogic {
 				cap.time += time;
 			}
 
-			if (workplace.workplaceId == 11) Logger.info("before %s", cap);
+			// if (workplace.workplaceId == 11)
+			// Logger.info("before %s", cap);
 			cap.time += cap.originalTime;
 			cap.setupTime += cap.originalSetupTime;
-			
+
 			cap.totaltime = cap.time + cap.setupTime;
-			
-//			cap.totaltime = cap.time + cap.setupTime;
-//			cap.totaltime += cap.originalSetupTime + cap.originalTime;
-			if (workplace.workplaceId == 11) Logger.info("after %s", cap);
+
+			// cap.totaltime = cap.time + cap.setupTime;
+			// cap.totaltime += cap.originalSetupTime + cap.originalTime;
+			// if (workplace.workplaceId == 11)
+			// Logger.info("after %s", cap);
 			cap.shift = 1;
 			if (cap.totaltime == 0) {
 				cap.overtime = 0;
@@ -500,8 +530,10 @@ public class ApplicationLogic {
 				dispoOrder.consumptionPeriod3 += wish.period3 * dispoOrder.usedP3;
 			}
 
-//			Logger.info("Dispo: %s Con0: %s Con1: %s Con2: %s Con3: %s", dispoOrder.item, dispoOrder.consumptionPeriod0, dispoOrder.consumptionPeriod1,
-//					dispoOrder.consumptionPeriod2, dispoOrder.consumptionPeriod3);
+			// Logger.info("Dispo: %s Con0: %s Con1: %s Con2: %s Con3: %s",
+			// dispoOrder.item, dispoOrder.consumptionPeriod0,
+			// dispoOrder.consumptionPeriod1,
+			// dispoOrder.consumptionPeriod2, dispoOrder.consumptionPeriod3);
 
 			dispoOrder.save();
 		}
